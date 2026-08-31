@@ -13,15 +13,19 @@ export interface EditorialData {
 }
 
 export function esPublicable(data: EditorialData): boolean {
-  if (data.fuentes.length === 0 || !data.proximaRevision) return false;
-
-  if (data.revisionRequerida === 'fuentes') {
-    return data.estadoEditorial === 'verificado-con-fuentes' && Boolean(data.verificadoEl);
+  if (!data.fuentes || data.fuentes.length === 0 || !data.proximaRevision) {
+    return false;
   }
 
-  return (
-    data.estadoEditorial === 'revisado-clinicamente' && Boolean(data.revisadoPor && data.revisadoEl)
-  );
+  if (data.estadoEditorial === 'revisado-clinicamente') {
+    return Boolean(data.revisadoPor && data.revisadoEl);
+  }
+
+  if (data.estadoEditorial === 'verificado-con-fuentes') {
+    return data.revisionRequerida === 'fuentes' && Boolean(data.verificadoEl);
+  }
+
+  return false;
 }
 
 export function visibleEnEntorno(data: EditorialData, production = import.meta.env.PROD): boolean {

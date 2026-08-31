@@ -96,7 +96,7 @@ Inter debe alojarse localmente en formato WOFF2, idealmente como fuente variable
 --text-base: 1.0625rem;
 --text-lg: 1.25rem;
 --text-xl: clamp(1.5rem, 2vw, 1.875rem);
---text-2xl: clamp(2rem, 4vw, 3.25rem);
+--text-2xl: clamp(2.5rem, 2.5vw + 1rem, 3.25rem);
 ```
 
 ### Reglas tipográficas
