@@ -1,0 +1,206 @@
+---
+import ButtonLink from '@components/ButtonLink.astro';
+import Card from '@components/Card.astro';
+import Notice from '@components/Notice.astro';
+import Base from '@layouts/Base.astro';
+---
+
+<Base
+  title="orientame.cl"
+  description="Orientación independiente y sin fines de lucro para entender opciones de ayuda en salud mental en Chile."
+>
+  <section class="hero">
+    <div class="page-shell hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Orientación en salud mental para Chile</p>
+        <h1>Una ruta clara en un momento confuso.</h1>
+        <p class="lede">
+          No tienes que saber qué te pasa para empezar. Este proyecto busca ayudarte a entender tus
+          opciones y encontrar un siguiente paso posible, si decides darlo.
+        </p>
+        <div class="actions">
+          <ButtonLink href="/metodologia">Conoce cómo trabajamos</ButtonLink>
+          <ButtonLink href="/sobre" variant="secondary">Sobre el proyecto</ButtonLink>
+        </div>
+      </div>
+
+      <div class="route" aria-label="Ruta de orientación: entender, prepararme y contactar">
+        <p>Una decisión a la vez</p>
+        <ol>
+          <li class="active"><span aria-hidden="true"></span>Entender</li>
+          <li><span aria-hidden="true"></span>Prepararme</li>
+          <li><span aria-hidden="true"></span>Contactar</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="foundation page-shell" aria-labelledby="base-titulo">
+    <div class="section-heading">
+      <p class="eyebrow">Primera etapa</p>
+      <h2 id="base-titulo">La base antes que las herramientas</h2>
+      <p>
+        Esta versión inicial establece una forma segura y transparente de construir. Las rutas de
+        orientación y búsqueda se incorporarán en las siguientes etapas.
+      </p>
+    </div>
+    <div class="card-grid">
+      <Card title="Qué es orientame.cl" href="/sobre">
+        <p>Propósito, límites y principios de una iniciativa comunitaria sin fines de lucro.</p>
+      </Card>
+      <Card title="Cómo revisamos el contenido" href="/metodologia">
+        <p>Fuentes, uso de IA, estados editoriales y cuándo se necesita revisión clínica.</p>
+      </Card>
+      <Card title="Privacidad por diseño" href="/legal/privacidad">
+        <p>Sin cuentas, perfiles, publicidad ni almacenamiento de respuestas sensibles.</p>
+      </Card>
+    </div>
+  </section>
+
+  <section class="safety reading-shell">
+    <Notice title="Este sitio no es un servicio de emergencia">
+      <p>
+        Si tú o alguien cercano corre peligro ahora, revisa los canales oficiales disponibles en
+        Chile. La página funciona incluso con JavaScript deshabilitado.
+      </p>
+      <p><a href="/urgencia">Ver ayuda inmediata →</a></p>
+    </Notice>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: clamp(var(--space-12), 9vw, var(--space-24));
+    background: var(--color-mist-100);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 0.7fr);
+    align-items: end;
+    gap: clamp(var(--space-12), 8vw, var(--space-24));
+  }
+
+  .hero-copy {
+    max-width: 48rem;
+  }
+
+  .hero-copy > * + * {
+    margin-top: var(--space-6);
+  }
+
+  .hero-copy .eyebrow + h1 {
+    margin-top: var(--space-3);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-top: var(--space-2);
+  }
+
+  .route {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--color-paper) 92%, transparent);
+  }
+
+  .route > p {
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .route ol {
+    position: relative;
+    display: grid;
+    gap: var(--space-6);
+    padding: var(--space-6) 0 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .route ol::before {
+    position: absolute;
+    content: '';
+    width: 2px;
+    inset: calc(var(--space-6) + 0.45rem) auto 0 0.45rem;
+    background: var(--color-sage-400);
+  }
+
+  .route li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-ink-600);
+    font-weight: 600;
+  }
+
+  .route li span {
+    z-index: 1;
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+    border: 2px solid var(--color-green-700);
+    border-radius: 50%;
+    background: var(--color-paper);
+  }
+
+  .route li.active {
+    color: var(--color-green-900);
+  }
+
+  .route li.active span {
+    background: var(--color-green-900);
+    box-shadow: inset 0 0 0 3px var(--color-paper);
+  }
+
+  .foundation {
+    padding-block: var(--space-24);
+  }
+
+  .section-heading {
+    max-width: 42rem;
+  }
+
+  .section-heading > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .section-heading .eyebrow + h2 {
+    margin-top: var(--space-2);
+  }
+
+  .section-heading p:last-child {
+    color: var(--color-ink-600);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-12);
+  }
+
+  .safety {
+    padding-bottom: var(--space-24);
+  }
+
+  @media (max-width: 48rem) {
+    .hero-grid,
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .route {
+      max-width: 30rem;
+    }
+
+    .foundation {
+      padding-block: var(--space-16);
+    }
+  }
+</style>

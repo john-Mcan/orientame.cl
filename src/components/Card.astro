@@ -1,0 +1,63 @@
+---
+interface Props {
+  title: string;
+  href?: string;
+  tone?: 'default' | 'soft';
+}
+
+const { title, href, tone = 'default' } = Astro.props;
+---
+
+<article class:list={['card', tone]}>
+  <h3>{href ? <a href={href}>{title}</a> : title}</h3>
+  <div class="card-body"><slot /></div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+  }
+
+  .card.soft {
+    background: var(--color-mist-50);
+  }
+
+  h3 a {
+    color: var(--color-green-900);
+    text-decoration: none;
+  }
+
+  h3 a::after {
+    position: absolute;
+    content: '';
+    inset: 0;
+    border-radius: var(--radius-md);
+  }
+
+  h3 a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .card:has(h3 a):hover {
+    border-color: var(--color-sage-400);
+    transform: translateY(-1px);
+  }
+
+  .card-body {
+    margin-top: var(--space-3);
+    color: var(--color-ink-600);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card {
+      transition:
+        border-color 150ms ease,
+        transform 150ms ease;
+    }
+  }
+</style>

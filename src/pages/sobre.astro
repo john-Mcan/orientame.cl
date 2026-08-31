@@ -1,0 +1,102 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Card from '@components/Card.astro';
+import Notice from '@components/Notice.astro';
+import PageIntro from '@components/PageIntro.astro';
+import Base from '@layouts/Base.astro';
+---
+
+<Base
+  title="Sobre el proyecto"
+  description="Conoce el propósito, los principios y las personas detrás de orientame.cl."
+>
+  <div class="reading-shell">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Sobre el proyecto' }]} />
+  </div>
+  <PageIntro
+    eyebrow="Sobre orientame.cl"
+    title="Menos barreras antes de pedir ayuda"
+    description="orientame.cl es una iniciativa independiente y sin fines de lucro, creada para aportar a la comunidad en Chile."
+  />
+
+  <div class="reading-shell">
+    <section class="content-section">
+      <h2>Qué intentamos resolver</h2>
+      <p>
+        Antes de recibir ayuda suelen aparecer dudas muy concretas: no saber si vale la pena
+        consultar, no saber dónde ir, sentir incomodidad al hablar del tema, desconocer cuánto
+        cuesta o no estar preparado para dar un paso grande.
+      </p>
+      <p>
+        Nuestro propósito es ayudar a entender opciones y facilitar un siguiente paso apropiado. Ese
+        paso también puede ser informarse mejor y decidir más adelante.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Principios que no negociamos</h2>
+      <div class="principles">
+        <Card title="La decisión sigue siendo tuya" tone="soft">
+          <p>
+            Informamos y facilitamos. No presionamos, culpamos ni asumimos que toda persona necesita
+            terapia.
+          </p>
+        </Card>
+        <Card title="No diagnosticamos" tone="soft">
+          <p>
+            Explicamos posibilidades y rutas de acceso sin concluir qué condición tiene una persona.
+          </p>
+        </Card>
+        <Card title="Privacidad por arquitectura" tone="soft">
+          <p>
+            La v1 no incluye cuentas, perfiles, fichas clínicas ni una base de datos de usuarios.
+          </p>
+        </Card>
+        <Card title="Sin incentivos ocultos" tone="soft">
+          <p>
+            No cobramos comisiones por derivaciones ni ordenamos recursos por acuerdos comerciales.
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Quién mantiene el proyecto</h2>
+      <p>
+        La primera versión está siendo construida como una iniciativa comunitaria. Los nombres,
+        profesiones, credenciales y responsabilidades de quienes participen se publicarán aquí sólo
+        después de contar con su autorización.
+      </p>
+      <Notice title="Transparencia durante la construcción">
+        <p>
+          El contenido inicial puede ser redactado con asistencia de IA. Eso queda registrado en sus
+          metadatos y no reemplaza la verificación por fuentes ni la revisión clínica cuando
+          corresponde.
+        </p>
+      </Notice>
+    </section>
+
+    <section class="content-section">
+      <h2>Lo que este proyecto no es</h2>
+      <p>
+        orientame.cl no presta psicoterapia, no es un servicio de crisis, no reemplaza profesionales
+        y no es un directorio comercial. Puedes revisar la lista completa en
+        <a href="/legal/alcance">nuestro alcance y límites</a>.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 38rem) {
+    .principles {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

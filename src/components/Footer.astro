@@ -1,0 +1,101 @@
+---
+import AccessUrgency from './AccessUrgency.astro';
+---
+
+<footer class="site-footer">
+  <div class="footer-inner page-shell">
+    <div class="footer-intro">
+      <a class="footer-brand" href="/">orientame.cl</a>
+      <p>
+        Orientación independiente y sin fines de lucro para encontrar un siguiente paso en Chile.
+      </p>
+      <AccessUrgency />
+    </div>
+    <nav aria-label="Información del proyecto">
+      <p>Proyecto</p>
+      <a href="/sobre">Sobre el proyecto</a>
+      <a href="/metodologia">Metodología</a>
+    </nav>
+    <nav aria-label="Información legal">
+      <p>Información legal</p>
+      <a href="/legal/privacidad">Privacidad</a>
+      <a href="/legal/alcance">Alcance</a>
+      <a href="/legal/terminos">Términos de uso</a>
+    </nav>
+  </div>
+  <div class="footer-note page-shell">
+    <p>orientame.cl no presta atención psicológica ni reemplaza una evaluación profesional.</p>
+    <p>© {new Date().getFullYear()} orientame.cl</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-12) var(--space-6);
+    border-top: 1px solid var(--color-line);
+    background: var(--color-mist-100);
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) repeat(2, minmax(9rem, 0.7fr));
+    gap: var(--space-12);
+  }
+
+  .footer-intro {
+    max-width: 32rem;
+  }
+
+  .footer-intro > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .footer-brand {
+    color: var(--color-green-900);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  nav p {
+    margin-bottom: var(--space-2);
+    color: var(--color-ink-900);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  nav a {
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  .footer-note {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-line);
+    color: var(--color-ink-600);
+    font-size: var(--text-xs);
+  }
+
+  @media (max-width: 44rem) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+
+    .footer-note {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+  }
+</style>

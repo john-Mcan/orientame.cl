@@ -1,0 +1,15 @@
+---
+import ButtonLink from '@components/ButtonLink.astro';
+import PageIntro from '@components/PageIntro.astro';
+import Base from '@layouts/Base.astro';
+---
+
+<Base title="Página no encontrada" description="La página solicitada no existe en orientame.cl.">
+  <PageIntro
+    eyebrow="Error 404"
+    title="No encontramos esta página"
+    description="Puede que la dirección esté incompleta o que esta ruta todavía no forme parte de la etapa actual."
+  >
+    <ButtonLink href="/">Volver al inicio</ButtonLink>
+  </PageIntro>
+</Base>

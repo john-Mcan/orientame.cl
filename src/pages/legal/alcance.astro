@@ -1,0 +1,72 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Notice from '@components/Notice.astro';
+import PageIntro from '@components/PageIntro.astro';
+import Base from '@layouts/Base.astro';
+---
+
+<Base
+  title="Alcance y límites"
+  description="Lo que orientame.cl puede ofrecer y los servicios clínicos o de emergencia que no presta."
+>
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Información legal', href: '/legal' },
+        { label: 'Alcance y límites' },
+      ]}
+    />
+  </div>
+  <PageIntro
+    eyebrow="Alcance"
+    title="Orientación, no atención clínica"
+    description="Este sitio ayuda a comprender opciones y rutas de acceso. No puede evaluar tu situación individual ni reemplazar a una persona profesional."
+  />
+
+  <div class="reading-shell">
+    <Notice title="Si existe peligro ahora" tone="urgent">
+      <p>
+        orientame.cl no presta atención de emergencia. Revisa los canales oficiales de
+        <a href="/urgencia">ayuda inmediata en Chile</a>.
+      </p>
+    </Notice>
+
+    <section class="content-section">
+      <h2>Lo que orientame.cl sí hace</h2>
+      <ul class="plain-list">
+        <li>explica conceptos y experiencias en lenguaje claro;</li>
+        <li>muestra opciones de ayuda y cómo acceder a ellas;</li>
+        <li>ayuda a prepararse para pedir información o solicitar atención;</li>
+        <li>presenta recursos públicos, gratuitos y de bajo costo como rutas principales;</li>
+        <li>permite decidir entre avanzar, explorar o volver después.</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2>Lo que orientame.cl no hace</h2>
+      <p>orientame.cl no:</p>
+      <ul class="plain-list">
+        <li>diagnostica enfermedades o trastornos;</li>
+        <li>reemplaza una evaluación profesional;</li>
+        <li>ofrece psicoterapia;</li>
+        <li>prescribe tratamientos o medicamentos;</li>
+        <li>realiza evaluación clínica de riesgo;</li>
+        <li>presta atención de emergencia;</li>
+        <li>almacena fichas clínicas ni realiza seguimiento de pacientes;</li>
+        <li>garantiza disponibilidad, horarios o resultados de servicios externos;</li>
+        <li>recomienda profesionales porque hayan pagado ni recibe comisión por derivaciones;</li>
+        <li>determina automáticamente qué tratamiento requiere una persona.</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2>Sobre la información publicada</h2>
+      <p>
+        Procuramos mantener fuentes y fechas visibles. La información general no considera tus
+        antecedentes, condiciones médicas ni contexto completo. Si una situación afecta tu vida o te
+        preocupa, puede ser razonable conversarla con un profesional de salud.
+      </p>
+    </section>
+  </div>
+</Base>

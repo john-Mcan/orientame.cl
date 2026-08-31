@@ -1,0 +1,224 @@
+:root {
+  color-scheme: light;
+  --color-green-900: #004d37;
+  --color-green-700: #176b55;
+  --color-sage-400: #86ad9d;
+  --color-mist-100: #e4eeea;
+  --color-mist-50: #f3f7f5;
+  --color-paper: #fcfdfc;
+  --color-ink-900: #16211d;
+  --color-ink-600: #4b5b54;
+  --color-line: #c8d7d1;
+  --color-focus: #c4511d;
+  --color-urgent-700: #9b2c2c;
+  --color-urgent-50: #fff1f1;
+  --color-white: #ffffff;
+
+  --font-heading: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SFMono-Regular', monospace;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.5rem, 2vw, 1.875rem);
+  --text-2xl: clamp(2.25rem, 6vw, 4.5rem);
+
+  --page-max: 75rem;
+  --reading-max: 45rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --focus-ring: 0 0 0 3px var(--color-focus);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-paper);
+}
+
+body {
+  margin: 0;
+  min-width: 20rem;
+  color: var(--color-ink-900);
+  background: var(--color-paper);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  margin-block: 0;
+  color: var(--color-ink-900);
+  font-family: var(--font-heading);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.045em;
+}
+
+h2 {
+  font-size: var(--text-xl);
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: var(--text-lg);
+}
+
+p,
+ul,
+ol,
+blockquote {
+  margin-block: 0;
+}
+
+p + p,
+p + ul,
+p + ol,
+ul + p,
+ol + p {
+  margin-top: var(--space-4);
+}
+
+a {
+  color: var(--color-green-700);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--color-green-900);
+  text-decoration-thickness: 0.13em;
+}
+
+:where(a, button, summary, input, select, textarea):focus-visible {
+  border-radius: var(--radius-sm);
+  outline: 2px solid transparent;
+  box-shadow: var(--focus-ring);
+}
+
+::selection {
+  color: var(--color-ink-900);
+  background: var(--color-mist-100);
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  inset: var(--space-3) auto auto var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  background: var(--color-green-900);
+  font-weight: 700;
+  transform: translateY(-180%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.page-shell {
+  width: min(100% - (2 * var(--gutter)), var(--page-max));
+  margin-inline: auto;
+}
+
+.reading-shell {
+  width: min(100% - (2 * var(--gutter)), var(--reading-max));
+  margin-inline: auto;
+}
+
+.eyebrow {
+  color: var(--color-green-700);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lede {
+  max-width: 42rem;
+  color: var(--color-ink-600);
+  font-size: var(--text-lg);
+  line-height: 1.55;
+}
+
+.stack > * + * {
+  margin-top: var(--space-6);
+}
+
+.content-section {
+  padding-block: var(--space-12);
+  border-top: 1px solid var(--color-line);
+}
+
+.content-section > * + * {
+  margin-top: var(--space-6);
+}
+
+.plain-list {
+  padding-left: 1.25rem;
+}
+
+.plain-list li + li {
+  margin-top: var(--space-2);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

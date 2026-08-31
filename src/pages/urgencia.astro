@@ -1,0 +1,201 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import ButtonLink from '@components/ButtonLink.astro';
+import EditorialStatus from '@components/EditorialStatus.astro';
+import Notice from '@components/Notice.astro';
+import SourceList from '@components/SourceList.astro';
+import Base from '@layouts/Base.astro';
+
+const sources = [
+  {
+    name: 'Línea de atención *4141 — Ministerio de Salud',
+    url: 'https://www.minsal.cl/linea-de-atencion-4141-no-estas-solo-no-estas-sola/',
+    note: 'consulta realizada el 31 de agosto de 2026',
+  },
+  {
+    name: 'Salud Responde — ChileAtiende',
+    url: 'https://www.chileatiende.gob.cl/fichas/2467-salud-responde',
+    note: 'consulta realizada el 31 de agosto de 2026',
+  },
+  {
+    name: 'Preguntas frecuentes — SAMU Metropolitano',
+    url: 'https://www.samu.cl/preguntas-frecuentes/',
+    note: 'consulta realizada el 31 de agosto de 2026',
+  },
+];
+---
+
+<Base
+  title="Ayuda inmediata en Chile"
+  description="Canales oficiales de ayuda inmediata, prevención del suicidio y orientación de salud disponibles en Chile."
+>
+  <div class="reading-shell">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Ayuda inmediata' }]} />
+  </div>
+
+  <header class="urgent-hero">
+    <div class="reading-shell">
+      <p class="eyebrow">Ayuda inmediata en Chile</p>
+      <h1>Si hay peligro ahora, contacta ayuda directa</h1>
+      <p class="lede">
+        orientame.cl no atiende emergencias ni monitorea esta página. Estos canales pertenecen a
+        servicios oficiales y puedes contactarlos sin completar ningún formulario aquí.
+      </p>
+    </div>
+  </header>
+
+  <div class="reading-shell urgency-content">
+    <section class="emergency-card" aria-labelledby="emergencia-medica">
+      <div>
+        <p class="card-label">Emergencia médica</p>
+        <h2 id="emergencia-medica">SAMU · 131</h2>
+        <p>
+          Llama si tú o una persona cercana enfrenta una situación en la que podría perder la vida o
+          quedar con secuelas si no recibe ayuda pronto. Funciona las 24 horas y la llamada es
+          gratuita.
+        </p>
+      </div>
+      <ButtonLink href="tel:131" variant="urgent">Llamar al 131</ButtonLink>
+    </section>
+
+    <section class="service-card" aria-labelledby="linea-4141">
+      <div>
+        <p class="card-label">Crisis de salud mental asociada al suicidio</p>
+        <h2 id="linea-4141">Línea *4141</h2>
+        <p>
+          Atención gratuita y confidencial con profesionales de psicología, disponible las 24 horas,
+          todos los días. Se llama desde celulares de cualquier compañía.
+        </p>
+      </div>
+      <ButtonLink href="tel:*4141">Llamar al *4141</ButtonLink>
+    </section>
+
+    <section class="service-card" aria-labelledby="salud-responde">
+      <div>
+        <p class="card-label">Orientación de salud</p>
+        <h2 id="salud-responde">Salud Responde · 600 360 7777</h2>
+        <p>
+          Profesionales del Ministerio de Salud entregan orientación por teléfono durante todo el
+          año, las 24 horas. La llamada tiene el costo de una llamada local.
+        </p>
+      </div>
+      <ButtonLink href="tel:+566003607777" variant="secondary">Llamar a Salud Responde</ButtonLink>
+    </section>
+
+    <Notice title="Si no puedes llamar" tone="urgent">
+      <p>
+        Ve al servicio de urgencia más cercano o pide a una persona cercana que llame por ti. Si
+        llamas al 131, indica qué ocurre y entrega la dirección y referencias del lugar.
+      </p>
+    </Notice>
+
+    <section class="outside" aria-labelledby="fuera-chile">
+      <h2 id="fuera-chile">Si estás fuera de Chile</h2>
+      <p>
+        Los números de esta página corresponden a Chile. Contacta el número de emergencias o una
+        línea de crisis de tu país.
+      </p>
+    </section>
+
+    <div class="verification">
+      <EditorialStatus status="sources" date="31 ago 2026" />
+      <p>
+        Esta página reproduce información operativa de fuentes oficiales. No contiene un
+        cuestionario ni intenta determinar el nivel de riesgo. Cualquier protocolo que reaccione a
+        respuestas requerirá revisión clínica antes de publicarse.
+      </p>
+    </div>
+
+    <SourceList sources={sources} />
+  </div>
+</Base>
+
+<style>
+  .urgent-hero {
+    margin-top: var(--space-6);
+    padding-block: clamp(var(--space-12), 8vw, var(--space-16));
+    border-block: 1px solid color-mix(in srgb, var(--color-urgent-700) 35%, var(--color-line));
+    background: var(--color-urgent-50);
+  }
+
+  .urgent-hero .reading-shell > * + * {
+    margin-top: var(--space-6);
+  }
+
+  .urgent-hero .eyebrow + h1 {
+    margin-top: var(--space-3);
+  }
+
+  .urgent-hero .eyebrow {
+    color: var(--color-urgent-700);
+  }
+
+  .urgency-content {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-12) var(--space-24);
+  }
+
+  .emergency-card,
+  .service-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-8);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+  }
+
+  .emergency-card {
+    border: 2px solid var(--color-urgent-700);
+    background: var(--color-urgent-50);
+  }
+
+  .emergency-card h2,
+  .service-card h2 {
+    margin-top: var(--space-2);
+  }
+
+  .emergency-card p:last-child,
+  .service-card p:last-child {
+    margin-top: var(--space-3);
+    color: var(--color-ink-600);
+  }
+
+  .card-label {
+    color: var(--color-green-700);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .emergency-card .card-label {
+    color: var(--color-urgent-700);
+  }
+
+  .outside {
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .outside p,
+  .verification p {
+    margin-top: var(--space-3);
+    color: var(--color-ink-600);
+  }
+
+  .verification {
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-line);
+  }
+
+  @media (max-width: 39rem) {
+    .emergency-card,
+    .service-card {
+      grid-template-columns: 1fr;
+      align-items: stretch;
+      padding: var(--space-6);
+    }
+  }
+</style>

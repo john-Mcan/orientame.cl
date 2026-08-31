@@ -1,0 +1,182 @@
+---
+import AccessUrgency from './AccessUrgency.astro';
+
+const path = Astro.url.pathname;
+const links = [
+  { href: '/metodologia', label: 'Metodología' },
+  { href: '/sobre', label: 'Sobre el proyecto' },
+];
+
+const isCurrent = (href: string) => path === href;
+---
+
+<header class="site-header">
+  <div class="header-inner page-shell">
+    <a class="brand" href="/" aria-label="orientame.cl, ir al inicio">
+      <img src="/orientame-logo.svg" width="42" height="42" alt="" />
+      <span>orientame.cl</span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Navegación principal">
+      {
+        links.map((link) => (
+          <a href={link.href} aria-current={isCurrent(link.href) ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="urgent-desktop"><AccessUrgency /></div>
+    <div class="urgent-mobile"><AccessUrgency compact /></div>
+
+    <details class="mobile-menu">
+      <summary>Menú</summary>
+      <nav aria-label="Navegación móvil">
+        {
+          links.map((link) => (
+            <a href={link.href} aria-current={isCurrent(link.href) ? 'page' : undefined}>
+              {link.label}
+            </a>
+          ))
+        }
+        <a href="/legal">Información legal</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 10;
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-line);
+    background: color-mix(in srgb, var(--color-mist-100) 88%, var(--color-paper));
+  }
+
+  .header-inner {
+    display: flex;
+    min-height: 3.25rem;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .brand {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-green-900);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .brand img {
+    width: 2.625rem;
+    height: 2.625rem;
+  }
+
+  .desktop-nav {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .desktop-nav a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-ink-900);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .desktop-nav a:hover,
+  .desktop-nav a[aria-current='page'] {
+    color: var(--color-green-900);
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
+  }
+
+  .urgent-mobile,
+  .mobile-menu {
+    display: none;
+  }
+
+  .mobile-menu summary {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-green-900);
+    border-radius: var(--radius-sm);
+    color: var(--color-green-900);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mobile-menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-menu nav {
+    position: absolute;
+    inset: calc(100% + 1px) 0 auto 0;
+    display: grid;
+    padding: var(--space-4) var(--gutter) var(--space-6);
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-paper);
+    box-shadow: 0 0.5rem 1.5rem rgb(22 33 29 / 10%);
+  }
+
+  .mobile-menu nav a {
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-ink-900);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  @media (max-width: 52rem) {
+    .header-inner {
+      gap: var(--space-3);
+    }
+
+    .desktop-nav,
+    .urgent-desktop {
+      display: none;
+    }
+
+    .urgent-mobile {
+      display: block;
+      margin-left: auto;
+    }
+
+    .mobile-menu {
+      display: block;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .brand span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+
+    .header-inner {
+      gap: var(--space-2);
+    }
+  }
+</style>

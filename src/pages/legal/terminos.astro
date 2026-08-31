@@ -1,0 +1,67 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import PageIntro from '@components/PageIntro.astro';
+import Base from '@layouts/Base.astro';
+---
+
+<Base title="Términos de uso" description="Condiciones de uso del preview de orientame.cl.">
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Información legal', href: '/legal' },
+        { label: 'Términos de uso' },
+      ]}
+    />
+  </div>
+  <PageIntro
+    eyebrow="Términos · Actualizados el 31 de agosto de 2026"
+    title="Condiciones para usar este preview"
+    description="Estos términos son un borrador operativo para la primera etapa y deberán revisarse jurídicamente antes del lanzamiento público."
+  />
+
+  <div class="reading-shell">
+    <section class="content-section">
+      <h2>Uso informativo</h2>
+      <p>
+        Puedes usar orientame.cl para informarte sobre opciones y rutas de acceso. El contenido es
+        general, no constituye una evaluación, diagnóstico, tratamiento ni relación profesional de
+        salud.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Emergencias</h2>
+      <p>
+        El sitio no monitorea solicitudes ni presta atención en tiempo real. Si existe una
+        emergencia, utiliza los <a href="/urgencia">canales oficiales de ayuda inmediata</a>.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Fuentes y servicios externos</h2>
+      <p>
+        Enlazamos recursos administrados por terceros. Registramos fuente y fecha de verificación
+        cuando corresponde, pero sus horarios, requisitos, disponibilidad y políticas pueden
+        cambiar. Confirma la información directamente con el servicio.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Uso responsable</h2>
+      <p>
+        No debes intentar dañar, interferir o acceder de manera no autorizada a la infraestructura
+        del sitio. No puedes presentar el contenido como una recomendación clínica personalizada ni
+        atribuir a orientame.cl una certificación que no ha otorgado.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Cambios</h2>
+      <p>
+        Podemos corregir y actualizar contenido, rutas y estos términos para mejorar precisión,
+        seguridad y cumplimiento. La fecha visible permite reconocer la versión vigente.
+      </p>
+    </section>
+  </div>
+</Base>

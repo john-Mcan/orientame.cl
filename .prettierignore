@@ -1,0 +1,8 @@
+dist/
+.astro/
+node_modules/
+public/orientame-logo.svg
+package-lock.json
+docs/plan/descripcion-inicial.md
+docs/plan/estilos.md
+docs/plan/plan-desarrollo-v1.md

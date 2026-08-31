@@ -1,0 +1,71 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'urgent';
+  external?: boolean;
+}
+
+const { href, variant = 'primary', external = false } = Astro.props;
+---
+
+<a
+  class:list={['button', variant]}
+  href={href}
+  rel={external ? 'external noopener noreferrer' : undefined}
+  referrerpolicy={external ? 'no-referrer' : undefined}
+>
+  <slot />
+</a>
+
+<style>
+  .button {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    border: 2px solid var(--color-green-900);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .primary {
+    color: var(--color-white);
+    background: var(--color-green-900);
+  }
+
+  .primary:hover {
+    border-color: var(--color-green-700);
+    color: var(--color-white);
+    background: var(--color-green-700);
+  }
+
+  .secondary {
+    color: var(--color-green-900);
+    background: transparent;
+  }
+
+  .secondary:hover {
+    color: var(--color-green-900);
+    background: var(--color-mist-100);
+  }
+
+  .urgent {
+    border-color: var(--color-urgent-700);
+    color: var(--color-white);
+    background: var(--color-urgent-700);
+  }
+
+  .urgent:hover {
+    border-color: #7d2020;
+    color: var(--color-white);
+    background: #7d2020;
+  }
+</style>

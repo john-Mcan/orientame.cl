@@ -1,0 +1,93 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Notice from '@components/Notice.astro';
+import PageIntro from '@components/PageIntro.astro';
+import Base from '@layouts/Base.astro';
+---
+
+<Base
+  title="Privacidad"
+  description="Cómo orientame.cl limita la recopilación y el almacenamiento de datos en su primera versión."
+>
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Información legal', href: '/legal' },
+        { label: 'Privacidad' },
+      ]}
+    />
+  </div>
+  <PageIntro
+    eyebrow="Privacidad · Actualizado el 31 de agosto de 2026"
+    title="Recopilar menos es proteger mejor"
+    description="La primera versión se diseña sin cuentas, perfiles ni una base de datos de usuarios. Esta política describe el preview actual y se revisará antes del lanzamiento público."
+  />
+
+  <div class="reading-shell">
+    <section class="content-section">
+      <h2>Qué ocurre al navegar</h2>
+      <p>
+        Como en cualquier sitio web, al solicitar una página la infraestructura de alojamiento puede
+        procesar datos técnicos necesarios para entregarla, como dirección IP, fecha y hora, página
+        solicitada, tipo de navegador y registros de seguridad. No afirmamos que navegar no implique
+        ninguna solicitud fuera de tu dispositivo.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Qué no recopilamos en esta etapa</h2>
+      <ul class="plain-list">
+        <li>no existen cuentas, perfiles ni fichas clínicas;</li>
+        <li>no hay formularios que envíen respuestas sensibles a nuestros servidores;</li>
+        <li>no usamos cookies publicitarias, Meta Pixel ni seguimiento entre sitios;</li>
+        <li>no cargamos fuentes, videos, mapas ni scripts remotos de terceros;</li>
+        <li>no vendemos información ni la usamos para ordenar recomendaciones comerciales.</li>
+      </ul>
+      <Notice title="Herramientas futuras">
+        <p>
+          Cuando se incorporen orientadores o autoevaluaciones, sus respuestas deberán procesarse en
+          el dispositivo y orientame.cl no las almacenará en sus servidores. Esta política se
+          actualizará antes de habilitarlas.
+        </p>
+      </Notice>
+    </section>
+
+    <section class="content-section">
+      <h2>Analítica y almacenamiento local</h2>
+      <p>
+        Este preview no incorpora analítica ni almacenamiento local. En una etapa posterior se
+        podría habilitar medición agregada de rendimiento y uso, sin asociarla a respuestas,
+        resultados clínicos ni identificadores persistentes. Cualquier cambio se documentará aquí.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Enlaces a servicios externos</h2>
+      <p>
+        La página de urgencia enlaza a sitios oficiales. Esos servicios aplican sus propias
+        políticas. Los enlaces externos se configuran para no enviar la dirección de la página de
+        origen mediante el encabezado de referencia.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Contacto y ejercicio de derechos</h2>
+      <p>
+        Antes del lanzamiento público se publicará el responsable y un canal formal para consultas,
+        solicitudes de acceso, rectificación, supresión u oposición cuando correspondan. Mientras
+        este sitio sea un preview técnico, no recibe datos mediante formularios ni mantiene una base
+        de datos de personas usuarias.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Revisión jurídica pendiente</h2>
+      <p>
+        Esta política es un borrador operativo y no sustituye la revisión jurídica previa al
+        lanzamiento, incluida la normativa chilena sobre protección de datos y derechos en salud
+        mental.
+      </p>
+    </section>
+  </div>
+</Base>

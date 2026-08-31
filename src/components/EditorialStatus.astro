@@ -1,0 +1,46 @@
+---
+interface Props {
+  status: 'draft' | 'sources' | 'clinical';
+  date?: string;
+}
+
+const { status, date } = Astro.props;
+const labels = {
+  draft: 'Borrador',
+  sources: 'Verificado con fuentes',
+  clinical: 'Revisado clínicamente',
+};
+---
+
+<p class:list={['status', status]}>
+  <span aria-hidden="true" class="marker"></span>
+  <span>{labels[status]}{date ? ` · ${date}` : ''}</span>
+</p>
+
+<style>
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .marker {
+    width: 0.65rem;
+    height: 0.65rem;
+    flex: none;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+  }
+
+  .sources,
+  .clinical {
+    color: var(--color-green-700);
+  }
+
+  .clinical .marker {
+    background: var(--color-green-700);
+  }
+</style>

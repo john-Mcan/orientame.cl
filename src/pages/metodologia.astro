@@ -1,0 +1,169 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import EditorialStatus from '@components/EditorialStatus.astro';
+import Notice from '@components/Notice.astro';
+import PageIntro from '@components/PageIntro.astro';
+import Base from '@layouts/Base.astro';
+---
+
+<Base
+  title="Metodología"
+  description="Cómo seleccionamos fuentes, usamos IA, verificamos contenidos y validamos recursos en orientame.cl."
+>
+  <div class="reading-shell">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Metodología' }]} />
+  </div>
+  <PageIntro
+    eyebrow="Metodología editorial"
+    title="Cada afirmación debe poder rastrearse"
+    description="La confianza no depende de un sello decorativo. Depende de fuentes identificables, límites claros y un proceso de revisión proporcional al riesgo."
+  />
+
+  <div class="reading-shell">
+    <section class="content-section">
+      <h2>Cómo elegimos fuentes</h2>
+      <p>Priorizamos, según el tema:</p>
+      <ul class="plain-list">
+        <li>organismos oficiales como el Ministerio de Salud de Chile y la OMS;</li>
+        <li>guías clínicas y organizaciones profesionales o científicas reconocidas;</li>
+        <li>fuentes primarias y revisiones sistemáticas pertinentes;</li>
+        <li>información oficial del servicio cuando describimos una ruta de acceso.</li>
+      </ul>
+      <p>
+        La fuerza del texto debe ser proporcional al alcance de la evidencia. No inventamos
+        referencias, credenciales, cifras ni consensos, y señalamos las incertidumbres relevantes.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Cómo usamos IA</h2>
+      <p>
+        Agentes de IA pueden ayudar a investigar, ordenar y redactar borradores. El conocimiento
+        general de una IA no se considera una fuente de publicación. Cada pieza registra
+        internamente si fue creada con esa asistencia y qué revisión necesita.
+      </p>
+      <Notice title="La IA no toma decisiones de crisis">
+        <p>
+          La capa de urgencia usa información previamente definida. No existe un chatbot de crisis
+          ni se intenta determinar el estado de una persona a partir de palabras escritas en un
+          buscador.
+        </p>
+      </Notice>
+    </section>
+
+    <section class="content-section">
+      <h2>Dos vías de verificación</h2>
+      <div class="review-route" aria-label="Proceso editorial">
+        <div>
+          <EditorialStatus status="sources" />
+          <h3>Verificación por fuentes</h3>
+          <p>
+            Para adaptaciones fieles y en lenguaje claro que no diagnostican, prescriben ni
+            introducen una conclusión clínica original.
+          </p>
+        </div>
+        <div>
+          <EditorialStatus status="clinical" />
+          <h3>Revisión clínica</h3>
+          <p>
+            Para protocolos de urgencia, respuestas a señales de riesgo, cambios de scoring,
+            recomendaciones personalizadas y otras piezas de mayor riesgo definidas en el plan.
+          </p>
+        </div>
+      </div>
+      <p>
+        Una pieza pendiente se mantiene como <EditorialStatus status="draft" /> y queda fuera de la publicación
+        sin bloquear contenidos que sí cumplen su revisión.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Cómo revisamos y actualizamos</h2>
+      <ol class="steps">
+        <li>
+          <strong>Borrador:</strong> se agregan fuentes, metadatos y trazabilidad de afirmaciones.
+        </li>
+        <li><strong>Clasificación:</strong> se decide si requiere fuentes o revisión clínica.</li>
+        <li>
+          <strong>Verificación:</strong> se comprueba que la fuente respalde realmente el texto.
+        </li>
+        <li>
+          <strong>Publicación:</strong> sólo se genera la ruta pública si alcanza el estado requerido.
+        </li>
+        <li>
+          <strong>Revisión:</strong> cada pieza registra una próxima fecha según su riesgo y estabilidad.
+        </li>
+      </ol>
+      <p>
+        Los recursos de acceso se contrastan con su fuente oficial, incluyendo canal, requisitos,
+        costo conocido y fecha. La información vencida debe advertirse y programarse para
+        confirmación.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Orientar no es diagnosticar</h2>
+      <p>
+        Podemos explicar conceptos, describir experiencias y mostrar opciones. No concluimos qué
+        trastorno tiene una persona ni qué tratamiento necesita. Cuando corresponde atención
+        profesional, ayudamos a encontrar la ruta; la decisión continúa en manos de la persona.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .review-route {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+    margin-block: var(--space-4);
+  }
+
+  .review-route::before {
+    position: absolute;
+    content: '';
+    height: 2px;
+    inset: 0.45rem 25% auto;
+    background: var(--color-sage-400);
+  }
+
+  .review-route > div {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-paper);
+  }
+
+  .review-route h3 {
+    margin-top: var(--space-4);
+  }
+
+  .review-route p {
+    margin-top: var(--space-3);
+    color: var(--color-ink-600);
+  }
+
+  .steps {
+    padding-left: 1.5rem;
+  }
+
+  .steps li + li {
+    margin-top: var(--space-3);
+  }
+
+  @media (max-width: 38rem) {
+    .review-route {
+      grid-template-columns: 1fr;
+    }
+
+    .review-route::before {
+      width: 2px;
+      height: auto;
+      inset: 0.45rem auto 0.45rem 1.25rem;
+    }
+  }
+</style>
