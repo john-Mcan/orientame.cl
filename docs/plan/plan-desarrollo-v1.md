@@ -138,13 +138,16 @@ Una persona puede llegar sin saber qué le ocurre, elegir la barrera que enfrent
 ### Portada
 
 * presentar la propuesta central sin diagnosticar ni asumir que toda persona necesita terapia;
-* incorporar búsqueda visible por lo que la persona siente;
+* la búsqueda por lo que la persona siente se incorpora en la etapa 4, junto con Pagefind y el
+  contenido `/siento/` que le da sentido. No se muestra un control con forma de buscador antes de
+  que exista búsqueda real (ver [decisión D2](./fase-2-decisiones.md#d2-la-portada-no-muestra-un-buscador-mientras-no-exista-búsqueda));
 * mostrar rutas por barrera: no saber si pedir ayuda, dificultad para pedirla, dónde acudir, costo, preocupación por otra persona y urgencia;
 * priorizar un único mensaje principal y evitar bloques promocionales propios de un producto comercial.
 
 ### `/empezar` y `Orientador`
 
-* construir `Orientador.tsx` como island client-side;
+* construir el orientador como rutas estáticas `/empezar` y `/empezar/[...ruta]`, utilizables sin
+  JavaScript (ver [decisión D1](./fase-2-decisiones.md#d1-el-orientador-se-construye-como-rutas-estáticas-no-como-island-de-preact));
 * limitar cada recorrido a una a cuatro decisiones antes de ofrecer algo útil;
 * trabajar con barreras, no con scoring clínico;
 * mantener el estado local y no emitir solicitudes de red al responder;
@@ -154,10 +157,12 @@ Una persona puede llegar sin saber qué le ocurre, elegir la barrera que enfrent
 ### Componentes compartidos
 
 * `AccesoUrgencia.astro`;
-* `BloqueSiguientePaso.astro`;
 * `GuionCopiable.astro` básico;
 * breadcrumbs y navegación contextual;
 * estados vacíos y mensajes de error en lenguaje claro.
+
+`BloqueSiguientePaso.astro` se pospone a la etapa 3, cuando exista su segundo consumidor
+(ver [decisión D6](./fase-2-decisiones.md#d6-componentes-previstos-que-no-se-construyeron)).
 
 ### Preparación de medición
 
@@ -207,9 +212,22 @@ El producto deja de ser una estructura vacía: responde búsquedas reales, expli
 
 ### Piloto de `/donde/`
 
+Los recursos se publican en dos niveles con requisitos distintos, definidos en
+[decisión D9](./fase-2-decisiones.md#d9-enriquecimiento-posterior-de-los-resultados-dos-niveles-de-recursos):
+
+* **Nivel A — qué existe en tu comuna.** Cobertura nacional reproducida del registro oficial de
+  establecimientos de DEIS, con su fecha de consulta y previa confirmación de licencia y
+  atribución. Se marca como `requiere-revision`: indica qué existe, no cómo se accede;
+* **Nivel B — cómo consigues hora ahí.** `pasosAcceso` verificados a mano. En la v1 se limita a las
+  tres comunas piloto; su expansión queda condicionada a capacidad real de revisión humana.
+
+Una entrada de Nivel A nunca se presenta como si estuviera verificada. Alcance de la etapa:
+
 * modelar recursos nacionales y tres comunas piloto;
 * incluir CESFAM, COSAM, clínicas universitarias, ONG y líneas pertinentes cuando existan fuentes verificables;
 * registrar costo, requisitos, canales, pasos reales de acceso, fuente y fecha de verificación;
+* enlazar los resultados de `/empezar` a las rutas nuevas, según la tabla de puntos de
+  enriquecimiento de D9, agregándolas a `RUTAS_ESTATICAS` en `tests/orientador.test.ts`;
 * construir `FichaRecurso.astro` y `SelloRevision.astro`;
 * construir `ResourceFinder.tsx` con filtros locales por comuna, tipo, costo, audiencia y modalidad;
 * evitar geolocalización obligatoria, mapas embebidos y ordenamiento comercial.
@@ -388,3 +406,14 @@ directorio masivo de profesionales privados
 ```
 
 Su incorporación futura requiere una nueva evaluación de necesidad, privacidad, seguridad, mantenimiento y coherencia con el propósito de orientame.cl.
+
+## Diferido a una v2
+
+**Cobertura nacional de Nivel B**, es decir `pasosAcceso` verificados a mano para establecimientos
+fuera de las comunas piloto. No es una limitación técnica: el schema, las rutas y los componentes lo
+soportan desde la v1. La restricción es de capacidad, porque cada ficha exige verificación humana y
+reverificación periódica según su `proximaRevision`.
+
+Se integra cuando exista financiamiento que permita sostener esa revisión. Mientras tanto, el Nivel
+A cubre el resto del país indicando qué existe, sin afirmar cómo se accede. Ver
+[decisión D9](./fase-2-decisiones.md#d9-enriquecimiento-posterior-de-los-resultados-dos-niveles-de-recursos).

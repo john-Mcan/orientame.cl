@@ -1,0 +1,88 @@
+---
+import AccessUrgency from '@components/AccessUrgency.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Icon from '@components/Icon.astro';
+import PasoOrientador from '@components/PasoOrientador.astro';
+import ResultadoOrientador from '@components/ResultadoOrientador.astro';
+import Base from '@layouts/Base.astro';
+import {
+  descripcionDe,
+  getNodo,
+  migasDe,
+  nodosConRutaPropia,
+  rutaDe,
+  RUTA_BASE,
+  type Nodo,
+} from '@/lib/orientador';
+
+// Todo el recorrido se genera en el build. Ninguna decisión requiere JavaScript:
+// cada opción es un enlace y cada estado tiene su propia URL.
+export function getStaticPaths() {
+  return nodosConRutaPropia().map((nodo) => ({
+    params: { ruta: rutaDe(nodo.id).slice(`${RUTA_BASE}/`.length) },
+    props: { nodo },
+  }));
+}
+
+const { nodo } = Astro.props as { nodo: Nodo };
+
+const padre = nodo.padre ? getNodo(nodo.padre) : undefined;
+const preguntaAnterior = padre?.tipo === 'paso' ? padre.pregunta : undefined;
+---
+
+<Base title={nodo.tipo === 'paso' ? nodo.etiqueta : nodo.titulo} description={descripcionDe(nodo)}>
+  <div class="reading-shell">
+    <Breadcrumbs items={migasDe(nodo.id)} />
+  </div>
+
+  <div class="nodo reading-shell">
+    {
+      nodo.tipo === 'paso' ? (
+        <>
+          <PasoOrientador paso={nodo} nivel="h1" />
+          {padre && (
+            <nav class="paso-nav" aria-label="Navegación del orientador">
+              <a href={rutaDe(padre.id)}>
+                <Icon name="flecha-izquierda" size={18} />
+                <span>
+                  {preguntaAnterior ? `Volver a: ${preguntaAnterior}` : 'Volver al paso anterior'}
+                </span>
+              </a>
+            </nav>
+          )}
+        </>
+      ) : (
+        <ResultadoOrientador resultado={nodo} preguntaAnterior={preguntaAnterior} />
+      )
+    }
+  </div>
+
+  <aside class="nodo-cierre reading-shell">
+    <AccessUrgency />
+  </aside>
+</Base>
+
+<style>
+  .nodo {
+    padding-block: var(--space-12) var(--space-16);
+  }
+
+  .paso-nav {
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .paso-nav a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .nodo-cierre {
+    padding-bottom: var(--space-24);
+  }
+</style>

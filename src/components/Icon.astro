@@ -1,0 +1,47 @@
+---
+// Set de iconos propios, en línea y monocromos. Nunca se usan emojis en la interfaz.
+// Todos comparten grilla de 24 px y trazo de 1.75, y heredan el color con `currentColor`.
+
+export type IconName =
+  'flecha-derecha' | 'flecha-izquierda' | 'chevron-derecha' | 'telefono' | 'copiar' | 'alerta';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 20, class: className } = Astro.props;
+
+const paths: Record<IconName, string> = {
+  'flecha-derecha': '<path d="M4 12h15m0 0-5.5-5.5M19 12l-5.5 5.5"/>',
+  'flecha-izquierda': '<path d="M20 12H5m0 0 5.5-5.5M5 12l5.5 5.5"/>',
+  'chevron-derecha': '<path d="m9.5 5.5 6.5 6.5-6.5 6.5"/>',
+  telefono:
+    '<path d="M6.6 3.5h2.6l1.4 4-2 1.3a11 11 0 0 0 4.6 4.6l1.3-2 4 1.4v2.6a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"/>',
+  copiar:
+    '<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 5.5v-1a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h1"/>',
+  alerta: '<circle cx="12" cy="12" r="9.25"/><path d="M12 7v6m0 3v.75"/>',
+};
+---
+
+<svg
+  class={className}
+  aria-hidden="true"
+  focusable="false"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  set:html={paths[name]}
+/>
+
+<style>
+  svg {
+    flex: none;
+  }
+</style>

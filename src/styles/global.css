@@ -47,7 +47,9 @@
   --radius-sm: 0.5rem;
   --radius-md: 0.875rem;
   --radius-lg: 1.25rem;
-  --focus-ring: 0 0 0 3px var(--color-focus);
+  /* Anillo de foco con separación visible: un halo del color de fondo antes del acento,
+     para que se distinga sobre superficies claras y sobre las bandas mist. */
+  --focus-ring: 0 0 0 2px var(--color-paper), 0 0 0 5px var(--color-focus);
 }
 
 *,
@@ -191,6 +193,54 @@ a:hover {
 
 .content-section > * + * {
   margin-top: var(--space-6);
+}
+
+/* Línea de orientación.
+   Elemento distintivo del proyecto: un trazo con nodos que conecta opciones o etapas
+   reales de un recorrido. Cada nodo debe corresponder a una opción real; nunca se usa
+   como decoración. El conector se dibuja por elemento para tolerar alturas distintas. */
+.linea-orientacion {
+  --nodo: 1rem;
+  --nodo-offset: 1.65rem;
+
+  display: grid;
+  gap: var(--space-4);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.linea-orientacion > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--nodo) minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.linea-orientacion > li::before {
+  z-index: 1;
+  width: var(--nodo);
+  height: var(--nodo);
+  margin-top: var(--nodo-offset);
+  border: 2px solid var(--color-green-700);
+  border-radius: 50%;
+  background: var(--color-paper);
+  content: '';
+}
+
+.linea-orientacion > li::after {
+  position: absolute;
+  top: calc(var(--nodo-offset) + (var(--nodo) / 2));
+  bottom: calc(-1 * var(--space-4));
+  left: calc((var(--nodo) / 2) - 1px);
+  width: 2px;
+  background: var(--color-sage-400);
+  content: '';
+}
+
+.linea-orientacion > li:last-child::after {
+  display: none;
 }
 
 .plain-list {

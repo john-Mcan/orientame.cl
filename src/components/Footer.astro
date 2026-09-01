@@ -9,7 +9,7 @@ import AccessUrgency from './AccessUrgency.astro';
       <p>
         Orientación independiente y sin fines de lucro para encontrar un siguiente paso en Chile.
       </p>
-      <AccessUrgency />
+      <div class="footer-urgencia"><AccessUrgency /></div>
     </div>
     <nav aria-label="Información del proyecto">
       <p>Proyecto</p>
@@ -48,6 +48,14 @@ import AccessUrgency from './AccessUrgency.astro';
 
   .footer-intro > * + * {
     margin-top: var(--space-4);
+  }
+
+  /* El acceso a urgencia es `inline-flex`: alineado a la línea base queda ópticamente
+     pegado al párrafo de arriba, porque el interlineado agrega el aire por debajo.
+     El contenedor flex lo saca del flujo de línea y el espacio queda donde se ve. */
+  .footer-intro > .footer-urgencia {
+    display: flex;
+    margin-top: var(--space-6);
   }
 
   .footer-brand {

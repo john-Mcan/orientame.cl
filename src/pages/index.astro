@@ -1,206 +1,161 @@
 ---
-import ButtonLink from '@components/ButtonLink.astro';
 import Card from '@components/Card.astro';
 import Notice from '@components/Notice.astro';
+import PasoOrientador from '@components/PasoOrientador.astro';
 import Base from '@layouts/Base.astro';
+import { getNodo } from '@/lib/orientador';
+
+// La portada y `/empezar` muestran exactamente las mismas puertas de entrada porque leen
+// el mismo nodo del orientador. No hay una lista paralela que pueda quedar desactualizada.
+const inicio = getNodo('inicio');
+
+if (!inicio || inicio.tipo !== 'paso') {
+  throw new Error('La portada necesita el paso "inicio" del orientador.');
+}
 ---
 
 <Base
   title="orientame.cl"
-  description="Orientación independiente y sin fines de lucro para entender opciones de ayuda en salud mental en Chile."
+  description="Orientación independiente y sin fines de lucro para entender tus opciones de salud mental en Chile y encontrar un siguiente paso posible."
 >
-  <section class="hero">
-    <div class="page-shell hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Orientación en salud mental para Chile</p>
-        <h1>Una ruta clara en un momento confuso.</h1>
+  <section class="portada">
+    <div class="page-shell portada-inner">
+      <div class="portada-copia">
+        <h1>No tienes que saber qué te pasa para empezar.</h1>
         <p class="lede">
-          No tienes que saber qué te pasa para empezar. Este proyecto busca ayudarte a entender tus
-          opciones y encontrar un siguiente paso posible, si decides darlo.
+          Te ayudamos a entender qué opciones existen en Chile y a encontrar un siguiente paso
+          posible, si decides darlo. No damos diagnósticos ni reemplazamos a un profesional.
         </p>
-        <div class="actions">
-          <ButtonLink href="/metodologia">Conoce cómo trabajamos</ButtonLink>
-          <ButtonLink href="/sobre" variant="secondary">Sobre el proyecto</ButtonLink>
-        </div>
+        <p class="portada-nota">
+          Proyecto sin fines de lucro. Sin cuentas, sin publicidad y sin recomendaciones pagadas.
+        </p>
       </div>
 
-      <div class="route" aria-label="Ruta de orientación: entender, prepararme y contactar">
-        <p>Una decisión a la vez</p>
-        <ol>
-          <li class="active"><span aria-hidden="true"></span>Entender</li>
-          <li><span aria-hidden="true"></span>Prepararme</li>
-          <li><span aria-hidden="true"></span>Contactar</li>
-        </ol>
+      <div class="portada-entrada">
+        <PasoOrientador paso={inicio} nivel="h2" />
       </div>
     </div>
   </section>
 
-  <section class="foundation page-shell" aria-labelledby="base-titulo">
-    <div class="section-heading">
-      <p class="eyebrow">Primera etapa</p>
-      <h2 id="base-titulo">La base antes que las herramientas</h2>
-      <p>
-        Esta versión inicial establece una forma segura y transparente de construir. Las rutas de
-        orientación y búsqueda se incorporarán en las siguientes etapas.
-      </p>
+  <section class="proyecto page-shell" aria-labelledby="proyecto-titulo">
+    <div class="proyecto-encabezado">
+      <p class="eyebrow">Qué es orientame.cl</p>
+      <h2 id="proyecto-titulo">Un sitio de orientación, no un servicio clínico</h2>
     </div>
-    <div class="card-grid">
-      <Card title="Qué es orientame.cl" href="/sobre">
-        <p>Propósito, límites y principios de una iniciativa comunitaria sin fines de lucro.</p>
+    <div class="proyecto-tarjetas">
+      <Card title="Sin cuentas ni registro" href="/legal/privacidad">
+        <p>
+          No necesitas identificarte. Lo que eliges dentro de nuestras herramientas no se almacena
+          en los servidores de orientame.cl.
+        </p>
       </Card>
-      <Card title="Cómo revisamos el contenido" href="/metodologia">
-        <p>Fuentes, uso de IA, estados editoriales y cuándo se necesita revisión clínica.</p>
+      <Card title="Cada dato con su fuente" href="/metodologia">
+        <p>
+          Las afirmaciones sobre el sistema de salud citan la fuente oficial y la fecha en que la
+          consultamos, para que puedas comprobarlas.
+        </p>
       </Card>
-      <Card title="Privacidad por diseño" href="/legal/privacidad">
-        <p>Sin cuentas, perfiles, publicidad ni almacenamiento de respuestas sensibles.</p>
+      <Card title="La red pública primero" href="/sobre">
+        <p>
+          Las alternativas gratuitas y de bajo costo son la ruta principal. No recibimos pagos ni
+          comisiones por derivar a nadie.
+        </p>
       </Card>
     </div>
   </section>
 
-  <section class="safety reading-shell">
+  <section class="alcance reading-shell">
     <Notice title="Este sitio no es un servicio de emergencia">
       <p>
-        Si tú o alguien cercano corre peligro ahora, revisa los canales oficiales disponibles en
-        Chile. La página funciona incluso con JavaScript deshabilitado.
+        No monitoreamos esta página ni respondemos mensajes. Si tú o alguien cercano corre peligro
+        ahora, en <a href="/urgencia">ayuda inmediata</a> están los canales oficiales disponibles en Chile,
+        con sus horarios y su costo.
       </p>
-      <p><a href="/urgencia">Ver ayuda inmediata →</a></p>
     </Notice>
   </section>
 </Base>
 
 <style>
-  .hero {
-    padding-block: clamp(var(--space-12), 9vw, var(--space-24));
+  /* Portada: el mensaje y las puertas de entrada comparten la primera pantalla. */
+
+  .portada {
+    padding-block: clamp(var(--space-12), 7vw, var(--space-24));
     background: var(--color-mist-100);
   }
 
-  .hero-grid {
+  .portada-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 0.7fr);
-    align-items: end;
-    gap: clamp(var(--space-12), 8vw, var(--space-24));
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: start;
+    gap: clamp(var(--space-8), 6vw, var(--space-24));
   }
 
-  .hero-copy {
-    max-width: 48rem;
+  /* En la portada el título es el foco principal, así que la pregunta del orientador
+     entra un escalón por debajo del `h1`. */
+  .portada-entrada :global(.paso-pregunta) {
+    font-size: var(--text-lg);
   }
 
-  .hero-copy > * + * {
+  .portada-copia {
+    max-width: 34rem;
+  }
+
+  .portada-copia .lede {
     margin-top: var(--space-6);
   }
 
-  .hero-copy .eyebrow + h1 {
-    margin-top: var(--space-3);
-  }
-
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    padding-top: var(--space-2);
-  }
-
-  .route {
-    padding: var(--space-6);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-lg);
-    background: color-mix(in srgb, var(--color-paper) 92%, transparent);
-  }
-
-  .route > p {
+  .portada-nota {
+    max-width: 30rem;
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-line);
     color: var(--color-ink-600);
     font-size: var(--text-sm);
-    font-weight: 700;
   }
 
-  .route ol {
-    position: relative;
-    display: grid;
-    gap: var(--space-6);
-    padding: var(--space-6) 0 0;
-    margin: 0;
-    list-style: none;
-  }
+  /* Qué es orientame.cl */
 
-  .route ol::before {
-    position: absolute;
-    content: '';
-    width: 2px;
-    inset: calc(var(--space-6) + 0.45rem) auto 0 0.45rem;
-    background: var(--color-sage-400);
-  }
-
-  .route li {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    color: var(--color-ink-600);
-    font-weight: 600;
-  }
-
-  .route li span {
-    z-index: 1;
-    width: 1rem;
-    height: 1rem;
-    flex: none;
-    border: 2px solid var(--color-green-700);
-    border-radius: 50%;
-    background: var(--color-paper);
-  }
-
-  .route li.active {
-    color: var(--color-green-900);
-  }
-
-  .route li.active span {
-    background: var(--color-green-900);
-    box-shadow: inset 0 0 0 3px var(--color-paper);
-  }
-
-  .foundation {
+  .proyecto {
     padding-block: var(--space-24);
   }
 
-  .section-heading {
+  .proyecto-encabezado {
     max-width: 42rem;
   }
 
-  .section-heading > * + * {
-    margin-top: var(--space-4);
-  }
-
-  .section-heading .eyebrow + h2 {
+  .proyecto-encabezado .eyebrow + h2 {
     margin-top: var(--space-2);
   }
 
-  .section-heading p:last-child {
-    color: var(--color-ink-600);
-  }
-
-  .card-grid {
+  .proyecto-tarjetas {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-4);
     margin-top: var(--space-12);
   }
 
-  .safety {
+  .alcance {
     padding-bottom: var(--space-24);
   }
 
-  @media (max-width: 48rem) {
-    .hero-grid,
-    .card-grid {
+  @media (max-width: 64rem) {
+    .portada-inner {
       grid-template-columns: 1fr;
+      gap: var(--space-12);
     }
 
-    .route {
-      max-width: 30rem;
+    .portada-copia {
+      max-width: 40rem;
     }
+  }
 
-    .foundation {
+  @media (max-width: 48rem) {
+    .proyecto {
       padding-block: var(--space-16);
+    }
+
+    .proyecto-tarjetas {
+      grid-template-columns: 1fr;
     }
   }
 </style>

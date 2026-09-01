@@ -3,11 +3,13 @@ import AccessUrgency from './AccessUrgency.astro';
 
 const path = Astro.url.pathname;
 const links = [
+  { href: '/empezar', label: 'Empezar' },
   { href: '/metodologia', label: 'Metodología' },
   { href: '/sobre', label: 'Sobre el proyecto' },
 ];
 
-const isCurrent = (href: string) => path === href;
+// `/empezar` sigue siendo la sección actual mientras se recorre el orientador.
+const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
 ---
 
 <header class="site-header">
@@ -64,6 +66,7 @@ const isCurrent = (href: string) => path === href;
 
   .brand {
     display: inline-flex;
+    min-height: 2.75rem;
     flex: none;
     align-items: center;
     gap: var(--space-3);

@@ -1,0 +1,55 @@
+---
+import AccessUrgency from '@components/AccessUrgency.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import PasoOrientador from '@components/PasoOrientador.astro';
+import Base from '@layouts/Base.astro';
+import { descripcionDe, getNodo, migasDe } from '@/lib/orientador';
+
+const inicio = getNodo('inicio');
+
+if (!inicio || inicio.tipo !== 'paso') {
+  throw new Error('El orientador necesita un paso con id "inicio".');
+}
+---
+
+<Base title="Empezar" description={descripcionDe(inicio)}>
+  <div class="reading-shell">
+    <Breadcrumbs items={migasDe('inicio')} />
+  </div>
+
+  <div class="empezar reading-shell">
+    <p class="eyebrow">Orientación paso a paso</p>
+    <PasoOrientador paso={inicio} nivel="h1" />
+
+    <p class="empezar-nota">
+      Son una o dos preguntas. No guardamos lo que elijas ni lo enviamos a nadie, y puedes salir en
+      cualquier momento.
+    </p>
+
+    <div class="empezar-cierre">
+      <AccessUrgency />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .empezar {
+    padding-block: var(--space-12) var(--space-24);
+  }
+
+  .eyebrow {
+    margin-bottom: var(--space-3);
+  }
+
+  .empezar-nota {
+    margin-top: var(--space-8);
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  .empezar-cierre {
+    margin-top: var(--space-12);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-line);
+  }
+</style>

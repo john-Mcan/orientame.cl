@@ -401,13 +401,18 @@ La portada funciona como puerta de entrada a todos ellos.
 
 # 6. Orientador de primer paso
 
-Una herramienta client-side permite ayudar a quien no sabe por dónde comenzar.
+Un recorrido guiado ayuda a quien no sabe por dónde comenzar.
 
-Nombre técnico provisional:
+Se implementa como rutas estáticas y funciona sin JavaScript:
 
 ```text
-Orientador.tsx
+/empezar
+/empezar/[...ruta]
 ```
+
+Cada opción es un enlace, cada paso y cada resultado tiene su propia URL, y el botón “atrás” del navegador retrocede un paso.
+
+El árbol de decisión vive en `src/lib/orientador.ts`. Las rutas se derivan de él durante el build.
 
 No realiza scoring clínico.
 
@@ -445,7 +450,9 @@ El resultado puede ser:
 * un guion;
 * una línea de orientación.
 
-No necesita guardar estado en servidor.
+No guarda estado en servidor ni en el navegador.
+
+La decisión de construirlo como rutas estáticas en lugar de un island está registrada en [`fase-2-decisiones.md`](./fase-2-decisiones.md), D1. No es una regla general contra los islands: ver §23.
 
 ---
 
@@ -827,6 +834,27 @@ Dirección Y
 El dato importante es:
 
 > **¿Qué debe hacer una persona para conseguir atención allí?**
+
+## 13.3 Dos niveles de recurso
+
+Responder esa pregunta exige verificación humana por establecimiento, lo que limita cuántas comunas
+se pueden cubrir. Para no dejar sin nada al resto del país, los recursos se publican en dos niveles
+que nunca se presentan como equivalentes.
+
+**Nivel A — qué existe en tu comuna.** Cobertura nacional reproducida del registro oficial de
+establecimientos del Ministerio de Salud, con su fecha de consulta. Indica qué hay, no cómo se
+accede, y se marca como `requiere-revision`. No sustituye la respuesta a la pregunta de 13.2: es un
+punto de partida verificable acompañado de las vías de orientación disponibles.
+
+**Nivel B — cómo consigues hora ahí.** `pasosAcceso`, requisitos, canales y horarios verificados a
+mano, con fuente y `proximaRevision`. Es el nivel que efectivamente reduce la barrera.
+
+Una entrada de Nivel A nunca se muestra como si estuviera verificada. La distinción se sostiene en
+el campo `estado` del modelo de la sección 14.
+
+En la v1 el Nivel B se limita a las comunas piloto. Su expansión nacional queda diferida a una v2 y
+condicionada a que exista financiamiento para sostener la revisión humana y su reverificación
+periódica.
 
 ---
 
@@ -1268,10 +1296,15 @@ La regla es:
 
 > **usar JavaScript sólo cuando la interacción aporta valor.**
 
-Componentes probables:
+Esa evaluación se hace componente por componente, cuando llega su etapa, y puede resolverse en cualquiera de los dos sentidos.
+
+Un recorrido que sólo cambia de contenido según lo que la persona elige se resuelve mejor con rutas estáticas: un enlace hace exactamente lo mismo, funciona sin JavaScript y deja cada estado con URL propia.
+
+Un island se justifica cuando existe estado real que debe responder sin recargar la página: filtrar una lista mientras se escribe, puntuar un instrumento a medida que se responde, mostrar resultados de búsqueda.
+
+Componentes que probablemente sí lo requieran:
 
 ```text
-Orientador.tsx
 Test.tsx
 ResourceFinder.tsx
 Buscador.tsx
@@ -1279,13 +1312,15 @@ Buscador.tsx
 
 Puede existir algún componente adicional si realmente simplifica el producto.
 
-## 23.1 `Orientador.tsx`
+## 23.1 Orientador
 
 Ruta de primer paso.
 
-Estado enteramente local.
+Resuelto como rutas estáticas bajo `/empezar`, sin JavaScript. El recorrido no mantiene estado propio: cada decisión sólo determina qué contenido mostrar a continuación.
 
 No scoring clínico.
+
+Ver §6 y la decisión D1 en [`fase-2-decisiones.md`](./fase-2-decisiones.md).
 
 ## 23.2 `Test.tsx`
 
@@ -1368,13 +1403,13 @@ src/
     guias/
 
   data/
+    fuentes.ts
     recursos.json
     lineas.json
     comunas.json
 
   components/
     islands/
-      Orientador.tsx
       Test.tsx
       ResourceFinder.tsx
       Buscador.tsx
@@ -1392,12 +1427,15 @@ src/
 
   lib/
     crisis.ts
+    orientador.ts
     scoring.ts
     resources.ts
 
   pages/
     index.astro
-    empezar.astro
+    empezar/
+      index.astro
+      [...ruta].astro
     urgencia.astro
     sobre.astro
     metodologia.astro

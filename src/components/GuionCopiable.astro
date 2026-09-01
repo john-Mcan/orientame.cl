@@ -1,0 +1,157 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  titulo: string;
+  texto: string;
+}
+
+const { titulo, texto } = Astro.props;
+---
+
+<div class="guion">
+  <p class="guion-titulo">{titulo}</p>
+  <blockquote class="guion-texto"><p>{texto}</p></blockquote>
+  <div class="guion-acciones">
+    {
+      /* Sin JavaScript el botón no puede copiar, así que sólo aparece cuando el script se
+        ejecuta. El texto siempre queda visible y seleccionable. */
+    }
+    <button
+      type="button"
+      class="guion-copiar"
+      data-copiar={texto}
+      data-siguiente-paso="guion"
+      hidden
+    >
+      <Icon name="copiar" size={18} />
+      <span class="guion-copiar-etiqueta">Copiar mensaje</span>
+    </button>
+    <p class="guion-estado" role="status"></p>
+  </div>
+</div>
+
+<style>
+  .guion {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+  }
+
+  .guion-titulo {
+    color: var(--color-ink-900);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .guion-texto {
+    /* `blockquote` trae un margen lateral del navegador que desalinea el texto. */
+    margin: var(--space-3) 0 0;
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius-sm);
+    background: var(--color-mist-50);
+    color: var(--color-ink-900);
+    line-height: 1.6;
+  }
+
+  .guion-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .guion-copiar {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-green-900);
+    border-radius: var(--radius-sm);
+    color: var(--color-green-900);
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .guion-copiar:hover {
+    background: var(--color-mist-100);
+  }
+
+  .guion-copiar[hidden] {
+    display: none;
+  }
+
+  .guion-estado {
+    color: var(--color-green-700);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .guion-copiar {
+      transition: background-color 150ms ease;
+    }
+  }
+</style>
+
+<script>
+  const ETIQUETA_INICIAL = 'Copiar mensaje';
+
+  function seleccionarTexto(guion: Element): void {
+    const cita = guion.querySelector('.guion-texto');
+    if (!cita) return;
+
+    const rango = document.createRange();
+    rango.selectNodeContents(cita);
+    const seleccion = window.getSelection();
+    seleccion?.removeAllRanges();
+    seleccion?.addRange(rango);
+  }
+
+  function activarBotones(): void {
+    for (const boton of document.querySelectorAll<HTMLButtonElement>('.guion-copiar')) {
+      boton.hidden = false;
+    }
+  }
+
+  activarBotones();
+
+  document.addEventListener('click', async (evento) => {
+    const objetivo = evento.target;
+    if (!(objetivo instanceof Element)) return;
+
+    const boton = objetivo.closest<HTMLButtonElement>('.guion-copiar');
+    const texto = boton?.dataset.copiar;
+    if (!boton || !texto) return;
+
+    const guion = boton.closest('.guion');
+    const etiqueta = boton.querySelector('.guion-copiar-etiqueta');
+    const estado = guion?.querySelector('.guion-estado');
+
+    try {
+      await navigator.clipboard.writeText(texto);
+
+      if (etiqueta) etiqueta.textContent = 'Mensaje copiado';
+      if (estado) estado.textContent = 'Mensaje copiado al portapapeles.';
+
+      window.setTimeout(() => {
+        if (etiqueta) etiqueta.textContent = ETIQUETA_INICIAL;
+        if (estado) estado.textContent = '';
+      }, 4000);
+    } catch {
+      // El portapapeles puede estar bloqueado por permisos o por el contexto de la página.
+      // En ese caso se selecciona el texto para que la persona pueda copiarlo a mano.
+      if (guion) seleccionarTexto(guion);
+      if (estado) {
+        estado.textContent =
+          'No pudimos copiarlo. Dejamos el mensaje seleccionado para que lo copies.';
+      }
+    }
+  });
+</script>

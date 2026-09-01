@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 interface Item {
   label: string;
   href?: string;
@@ -22,8 +24,8 @@ const { items } = Astro.props;
             <span aria-current="page">{item.label}</span>
           )}
           {index < items.length - 1 && (
-            <span aria-hidden="true" class="separator">
-              →
+            <span class="separator">
+              <Icon name="chevron-derecha" size={16} />
             </span>
           )}
         </li>
@@ -54,7 +56,16 @@ const { items } = Astro.props;
     gap: var(--space-2);
   }
 
+  /* Amplía el área táctil de los enlaces sin engrosar visualmente la fila. */
+  li a,
+  li span[aria-current] {
+    display: inline-flex;
+    align-items: center;
+    padding-block: var(--space-2);
+  }
+
   .separator {
+    display: inline-flex;
     color: var(--color-sage-400);
   }
 </style>

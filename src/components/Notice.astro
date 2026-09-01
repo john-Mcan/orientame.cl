@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 interface Props {
   title: string;
   tone?: 'info' | 'urgent';
@@ -8,7 +10,10 @@ const { title, tone = 'info' } = Astro.props;
 ---
 
 <aside class:list={['notice', tone]}>
-  <h2>{title}</h2>
+  <h2>
+    {tone === 'urgent' && <Icon name="alerta" size={20} />}
+    <span>{title}</span>
+  </h2>
   <div class="notice-body"><slot /></div>
 </aside>
 
@@ -16,19 +21,24 @@ const { title, tone = 'info' } = Astro.props;
   .notice {
     padding: var(--space-6);
     border: 1px solid var(--color-sage-400);
-    border-left: 0.35rem solid var(--color-green-900);
     border-radius: var(--radius-md);
     background: var(--color-mist-50);
   }
 
   .notice.urgent {
-    border-color: color-mix(in srgb, var(--color-urgent-700) 55%, var(--color-line));
-    border-left-color: var(--color-urgent-700);
+    border-color: color-mix(in srgb, var(--color-urgent-700) 45%, var(--color-line));
     background: var(--color-urgent-50);
   }
 
   h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
     font-size: var(--text-lg);
+  }
+
+  .notice.urgent h2 {
+    color: var(--color-urgent-700);
   }
 
   .notice-body {

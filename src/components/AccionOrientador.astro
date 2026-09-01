@@ -1,0 +1,129 @@
+---
+import { formatearFecha, resolverFuentes } from '@/data/fuentes';
+import type { Accion } from '@/lib/orientador';
+import GuionCopiable from './GuionCopiable.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  accion: Accion;
+}
+
+const { accion } = Astro.props;
+const fuentes = accion.tipo === 'guion' ? [] : resolverFuentes(accion.fuenteIds);
+---
+
+{
+  accion.tipo === 'guion' ? (
+    <GuionCopiable titulo={accion.titulo} texto={accion.texto} />
+  ) : (
+    <div class:list={['accion', accion.tipo]}>
+      {accion.tipo === 'llamada' ? (
+        <>
+          <p class="accion-titulo">
+            <Icon name="telefono" size={18} />
+            <span>{accion.titulo}</span>
+          </p>
+          <p class="accion-descripcion">{accion.descripcion}</p>
+          <a class="accion-llamar" href={`tel:${accion.marcar}`} data-siguiente-paso="llamada">
+            Llamar al {accion.numero}
+          </a>
+        </>
+      ) : (
+        <>
+          <p class="accion-titulo">{accion.titulo}</p>
+          <p class="accion-descripcion">{accion.descripcion}</p>
+        </>
+      )}
+
+      {fuentes.length > 0 && (
+        <p class="accion-fuentes">
+          {fuentes.map((fuente, indice) => (
+            <>
+              {indice > 0 && <span aria-hidden="true"> · </span>}
+              <a
+                href={fuente.url}
+                rel="external noopener noreferrer"
+                referrerpolicy="no-referrer"
+                title={fuente.titulo}
+              >
+                {fuente.organizacion}
+                <span class="sr-only">, {fuente.titulo} (abre un sitio externo)</span>
+              </a>
+              <span> · consultado el {formatearFecha(fuente.consultadoEl)}</span>
+            </>
+          ))}
+        </p>
+      )}
+    </div>
+  )
+}
+
+<style>
+  .accion {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+  }
+
+  .accion-titulo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-ink-900);
+    font-size: var(--text-base);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .llamada .accion-titulo {
+    color: var(--color-green-900);
+  }
+
+  .accion-descripcion {
+    margin-top: var(--space-3);
+    color: var(--color-ink-600);
+  }
+
+  .accion-llamar {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    margin-top: var(--space-4);
+    border: 2px solid var(--color-green-900);
+    border-radius: var(--radius-sm);
+    color: var(--color-white);
+    background: var(--color-green-900);
+    font-size: var(--text-base);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .accion-llamar:hover {
+    border-color: var(--color-green-700);
+    background: var(--color-green-700);
+    color: var(--color-white);
+  }
+
+  .accion-fuentes {
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-line);
+    color: var(--color-ink-600);
+    font-size: var(--text-xs);
+  }
+
+  .accion-fuentes a {
+    font-weight: 600;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .accion-llamar {
+      transition:
+        background-color 150ms ease,
+        border-color 150ms ease;
+    }
+  }
+</style>
