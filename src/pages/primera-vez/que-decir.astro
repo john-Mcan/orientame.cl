@@ -1,0 +1,169 @@
+---
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import GuionCopiable from '@components/GuionCopiable.astro';
+import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
+---
+
+<Base
+  title="Qué decir para pedir ayuda: guiones copiables | orientame.cl"
+  description="Mensajes listos para copiar y adaptar al contactar un CESFAM, pedir hora en una clínica psicológica o conversar con un ser querido."
+>
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Primera vez', href: '/primera-vez' },
+        { label: 'Qué decir' },
+      ]}
+    />
+  </div>
+
+  <article class="reading-shell articulo-guiones">
+    <header class="guiones-encabezado">
+      <p class="eyebrow">Herramienta práctica</p>
+      <h1>Guiones para pedir ayuda sin tener que improvisar</h1>
+      <p class="lede">
+        Poner en palabras lo que uno siente cuesta el doble cuando la energía está baja. Puedes
+        copiar estos textos directamente para enviar por WhatsApp, correo o leerlos si llamas por
+        teléfono. Adáptalos con confianza a tu propia voz.
+      </p>
+    </header>
+
+    <div class="seccion-bloque-guiones">
+      <h2>1. Contactar a un centro de salud o profesional</h2>
+
+      <div class="lista-guiones">
+        <GuionCopiable
+          titulo="Pedir primera hora en tu CESFAM (atención primaria pública)"
+          texto="Hola, buenos días. Estoy inscrito/a en este centro y quisiera solicitar una hora para evaluación de salud mental con médico o psicólogo. Es la primera vez que consulto por este motivo."
+          destino={{
+            texto: '¿No sabes cuál te corresponde?',
+            etiqueta: 'Ver cómo se accede en tu comuna',
+            href: '/donde',
+          }}
+        />
+
+        <GuionCopiable
+          titulo="Pedir primera hora en clínica universitaria o consulta privada"
+          texto="Hola. Quisiera consultar por disponibilidad de horas para atención psicológica de adultos. Es la primera vez que busco terapia y me gustaría conocer los valores de consulta y las opciones de agenda disponibles."
+          destino={{
+            texto: '¿Dónde ocuparlo?',
+            etiqueta: 'Ver clínicas universitarias',
+            href: '/donde/clinicas-universitarias',
+          }}
+        />
+
+        <GuionCopiable
+          titulo="Si en el mesón o recepción te preguntan por qué consultas"
+          texto="Vengo a consultar por temas de salud mental y bienestar emocional. Prefiero explicar los detalles directamente con el profesional durante la consulta."
+        />
+
+        <GuionCopiable
+          titulo="Preguntar por arancel diferenciado o facilidades de pago"
+          texto="Hola. Me interesa mucho consultar con ustedes pero cuento con un presupuesto ajustado. Quisiera saber si disponen de aranceles diferenciados según situación socioeconómica o convenio con Fonasa."
+          destino={{
+            texto: 'Antes de preguntar:',
+            etiqueta: 'Ver qué cuesta cada vía en Chile',
+            href: '/primera-vez/cuanto-cuesta',
+          }}
+        />
+
+        <GuionCopiable
+          titulo="Reagendar o cancelar una hora con anticipación"
+          texto="Hola. Te escribo para avisar con anticipación que no podré asistir a mi cita agendada para el [fecha y hora]. Quisiera saber si es posible reagendar para otro día o cancelar el turno para que otra persona pueda ocuparlo. Muchas gracias."
+        />
+      </div>
+    </div>
+
+    <div class="seccion-bloque-guiones">
+      <h2>2. Hablar con alguien de confianza</h2>
+
+      <div class="lista-guiones">
+        <GuionCopiable
+          titulo="Contarle a un amigo o familiar que estás pasando por un mal momento"
+          texto="Hola. Quería contarte algo que me ha costado un poco decir. Últimamente no me he sentido muy bien y creo que me haría bien conversar un ratito si tienes tiempo. No necesitas darme consejos ni resolver nada, sólo me serviría mucho que me escuches."
+        />
+
+        <GuionCopiable
+          titulo="Avisar a tu círculo cercano que estás iniciando terapia"
+          texto="Quería contarte que decidí empezar a consultar con un psicólogo para trabajar algunas cosas personales que me tenían con mucha carga. Te lo cuento para que sepas por qué a veces ando con menos energía y porque valoro tu apoyo."
+        />
+      </div>
+    </div>
+
+    <BloqueSiguientePaso
+      titulo="¿Quieres buscar un centro donde aplicar estos guiones?"
+      descripcion="Encuentra centros de atención primaria, clínicas universitarias y líneas oficiales en tu comuna o a nivel nacional."
+      accionPrincipal={{
+        texto: 'Ver centros disponibles en Chile',
+        href: '/donde',
+        tipo: 'recorrido',
+        aclaracion: 'Consulta centros por comuna, modalidad y tipo de costo.',
+      }}
+      pasoMenorCompromiso={{
+        texto: 'Revisar qué ocurre en una primera consulta',
+        href: '/primera-vez/que-pasa-en-sesion',
+        descripcion: 'Conoce los tiempos, preguntas habituales y secreto profesional.',
+      }}
+    />
+  </article>
+</Base>
+
+<style>
+  .articulo-guiones {
+    margin-block: var(--space-8) var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .guiones-encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-green-700);
+    margin: 0;
+  }
+
+  h1 {
+    line-height: 1.2;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .lede {
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .seccion-bloque-guiones {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .seccion-bloque-guiones h2 {
+    font-size: var(--text-xl);
+    line-height: 1.3;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .lista-guiones {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+</style>

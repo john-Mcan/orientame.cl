@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from 'astro:content';
+import Tema from '@layouts/Tema.astro';
+import { visibleEnEntorno } from '@/lib/editorial';
+
+export async function getStaticPaths() {
+  const temas = await getCollection('temas');
+  return temas
+    .filter((entry) => visibleEnEntorno(entry.data))
+    .map((tema) => ({
+      params: { slug: tema.id },
+      props: { tema },
+    }));
+}
+
+const { tema } = Astro.props;
+const { Content } = await render(tema);
+---
+
+<Tema tema={tema}>
+  <Content />
+</Tema>

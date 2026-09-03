@@ -1,6 +1,24 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fuentes, getFuente } from '../src/data/fuentes.ts';
+
+/**
+ * Archivos de interfaz que pueden citar una fuente del registro. Se excluye el propio
+ * registro: si no, encontrar el id dentro de su declaración haría pasar la prueba siempre.
+ */
+function archivosDeInterfaz(dir = path.join(process.cwd(), 'src')): string[] {
+  const registro = path.join(process.cwd(), 'src', 'data', 'fuentes.ts');
+  const encontrados: string[] = [];
+  for (const entrada of fs.readdirSync(dir, { withFileTypes: true })) {
+    const completo = path.join(dir, entrada.name);
+    if (entrada.isDirectory()) encontrados.push(...archivosDeInterfaz(completo));
+    else if (/\.(astro|ts|tsx)$/.test(entrada.name) && completo !== registro)
+      encontrados.push(completo);
+  }
+  return encontrados;
+}
 import {
   descripcionDe,
   destinosInternos,
@@ -34,6 +52,18 @@ const RUTAS_ESTATICAS = new Set([
   '/legal/privacidad',
   '/legal/alcance',
   '/legal/terminos',
+  '/siento',
+  '/temas',
+  '/primera-vez',
+  '/primera-vez/que-pasa-en-sesion',
+  '/primera-vez/que-decir',
+  '/primera-vez/cuanto-cuesta',
+  '/primera-vez/como-elegir',
+  '/donde',
+  '/donde/clinicas-universitarias',
+  '/donde/metropolitana/santiago',
+  '/donde/metropolitana/providencia',
+  '/donde/metropolitana/puente-alto',
 ]);
 
 const rutasDelOrientador = new Set(nodosConRutaPropia().map((nodo) => rutaDe(nodo.id)));
@@ -245,6 +275,7 @@ describe('Trazabilidad de afirmaciones', () => {
     for (const resultado of todosLosResultados()) {
       for (const accion of resultado.acciones) {
         if (accion.tipo === 'guion') continue;
+        if (accion.tipo === 'enlace' && accion.fuenteIds.length === 0) continue;
 
         assert.ok(
           accion.fuenteIds.length > 0,
@@ -277,6 +308,8 @@ describe('Trazabilidad de afirmaciones', () => {
   });
 
   it('no hay fuentes declaradas sin uso', () => {
+    // El registro también lo consumen páginas y layouts, no sólo el orientador: una fuente
+    // citada desde `/primera-vez/como-elegir` no está sin uso.
     const usadas = new Set<string>();
     for (const resultado of todosLosResultados()) {
       for (const accion of resultado.acciones) {
@@ -285,8 +318,13 @@ describe('Trazabilidad de afirmaciones', () => {
       }
     }
 
+    const codigoDelSitio = archivosDeInterfaz()
+      .map((archivo) => fs.readFileSync(archivo, 'utf8'))
+      .join('\n');
+
     for (const fuente of fuentes) {
-      assert.ok(usadas.has(fuente.id), `La fuente "${fuente.id}" está declarada pero no se usa`);
+      const citada = usadas.has(fuente.id) || codigoDelSitio.includes(`'${fuente.id}'`);
+      assert.ok(citada, `La fuente "${fuente.id}" está declarada pero no se usa`);
     }
   });
 });

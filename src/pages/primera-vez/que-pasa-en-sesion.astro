@@ -1,0 +1,221 @@
+---
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
+import SourceList from '@components/SourceList.astro';
+import Notice from '@components/Notice.astro';
+
+// La cita al Código de Ética del Colegio de Psicólogos se retiró en la auditoría de fase 3:
+// el dominio no responde y no fue posible comprobar que respaldara lo afirmado.
+const fuentes = [
+  {
+    name: 'Ley Chile · Biblioteca del Congreso Nacional',
+    url: 'https://www.bcn.cl/leychile/navegar?idNorma=1039348',
+    note: 'Texto oficial de la ley que regula los derechos y deberes de las personas en su atención de salud.',
+  },
+];
+---
+
+<Base
+  title="¿Qué pasa en una primera consulta psicológica? | orientame.cl"
+  description="Conoce cómo funciona una primera sesión de terapia en Chile: duración, confidencialidad, qué te preguntan y qué derechos tienes como paciente."
+>
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Primera vez', href: '/primera-vez' },
+        { label: 'Qué pasa en sesión' },
+      ]}
+    />
+  </div>
+
+  <article class="reading-shell articulo-guia">
+    <header class="guia-encabezado">
+      <p class="eyebrow">Guía práctica</p>
+      <h1>¿Qué ocurre realmente en una primera consulta psicológica?</h1>
+      <p class="lede">
+        La primera sesión no es un examen ni una confesión forzada. Es un espacio de encuentro para
+        conocerse, entender qué te trajo a consultar y decidir en conjunto cómo avanzar.
+      </p>
+    </header>
+
+    <div class="guia-cuerpo">
+      <section>
+        <h2>1. Antes de entrar: puntualidad y recepción</h2>
+        <p>
+          Tanto en un CESFAM público como en un centro universitario o consulta privada suele haber
+          un paso previo de recepción, donde se registra la asistencia y se completan datos
+          administrativos básicos (nombre, contacto y previsión de salud). Conviene llegar con algo
+          de anticipación.
+        </p>
+        <p>
+          Si la atención es por videollamada, el profesional suele enviar un enlace seguro por
+          correo o mensajería previa confirmación de la hora.
+        </p>
+      </section>
+
+      <section>
+        <h2>2. El encuadre inicial y la confidencialidad</h2>
+        <p>
+          Los primeros minutos suelen dedicarse al <em>encuadre</em>. El profesional explica cómo
+          funciona el espacio, la frecuencia recomendada de las citas y, de manera fundamental, el
+          secreto profesional.
+        </p>
+        <Notice title="Tu derecho a la confidencialidad">
+          <p>
+            En Chile la confidencialidad de la atención de salud está regulada por ley, y el secreto
+            profesional forma parte del encuadre de una terapia. Tiene excepciones acotadas que la
+            propia ley define. Si te importa saber exactamente hasta dónde llega, es una pregunta
+            legítima de hacer en la primera sesión: el profesional debe poder explicártelo.
+          </p>
+        </Notice>
+      </section>
+
+      <section>
+        <h2>3. La primera pregunta: ¿qué te trae por aquí?</h2>
+        <p>
+          El profesional abrirá la conversación con una pregunta abierta y sencilla: <em
+            >"¿Qué te motivó a pedir esta hora?"</em
+          > o <em>"¿En qué te gustaría que trabajemos?"</em>.
+        </p>
+        <p>No necesitas tener una respuesta técnica ni cronológica. Puedes decir simplemente:</p>
+        <blockquote>
+          "No sé muy bien cómo explicarlo, pero últimamente me he sentido muy cansado y abrumado, y
+          sentí que necesitaba ayuda para ordenar lo que me pasa."
+        </blockquote>
+      </section>
+
+      <section>
+        <h2>4. Cuánto dura</h2>
+        <p>
+          Una sesión de psicoterapia individual suele durar cerca de una hora. Si te sirve saberlo
+          con precisión para organizar tu día, pregúntalo al agendar: varía entre centros.
+        </p>
+      </section>
+
+      <section>
+        <h2>5. Dudas frecuentes sobre la primera sesión</h2>
+        <h3>¿Qué pasa si me emociono o me pongo a llorar?</h3>
+        <p>
+          Emocionarse o llorar en una consulta es frecuente y no tiene nada de raro. Es parte de lo
+          que el espacio está pensado para sostener.
+        </p>
+
+        <h3>¿Tengo que contar todo de inmediato?</h3>
+        <p>
+          No. Tú tienes el control de lo que compartes y de tus propios tiempos. Si hay temas
+          dolorosos que aún no quieres relatar, puedes decirle al terapeuta: <em
+            >"Prefiero no hablar de eso todavía"</em
+          >. Decidir qué cuentas y cuándo sigue siendo tuyo.
+        </p>
+
+        <h3>¿Qué pasa si no siento comodidad o "química" con el profesional?</h3>
+        <p>
+          La relación terapéutica (conocida como alianza terapéutica) es fundamental. Tienes pleno
+          derecho a no continuar si sientes que el estilo del profesional no se ajusta a lo que
+          necesitas. Cambiar de terapeuta no es un fracaso ni una falta de respeto: es parte
+          habitual del proceso de encontrar un profesional adecuado para ti.
+        </p>
+      </section>
+    </div>
+
+    <BloqueSiguientePaso
+      titulo="¿Listo para dar el siguiente paso?"
+      descripcion="Puedes preparar lo que dirás al solicitar tu hora o explorar centros disponibles en tu comuna."
+      accionPrincipal={{
+        texto: 'Ver guiones para pedir hora',
+        href: '/primera-vez/que-decir',
+        tipo: 'guion',
+        aclaracion: 'Mensajes copiables para llamar o escribir a un centro de salud.',
+      }}
+      pasoMenorCompromiso={{
+        texto: 'Revisar costos y coberturas en Chile',
+        href: '/primera-vez/cuanto-cuesta',
+        descripcion:
+          'Conoce cómo funciona la atención gratuita en Fonasa y las clínicas a bajo costo.',
+      }}
+    />
+
+    <footer class="guia-fuentes">
+      <SourceList sources={fuentes} />
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .articulo-guia {
+    margin-block: var(--space-8) var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .guia-encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-green-700);
+    margin: 0;
+  }
+
+  h1 {
+    line-height: 1.2;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .lede {
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .guia-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--color-ink-900);
+  }
+
+  .guia-cuerpo h2 {
+    font-size: var(--text-xl);
+    line-height: 1.3;
+    color: var(--color-ink-900);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-3);
+  }
+
+  .guia-cuerpo h3 {
+    font-size: var(--text-lg);
+    line-height: 1.4;
+    color: var(--color-ink-900);
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+
+  .guia-cuerpo p {
+    margin: 0 0 var(--space-4);
+  }
+
+  blockquote {
+    margin: var(--space-4) 0;
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-mist-50);
+    border-radius: var(--radius-sm);
+    font-style: italic;
+    color: var(--color-ink-900);
+  }
+</style>

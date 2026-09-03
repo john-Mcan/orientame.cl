@@ -1,0 +1,213 @@
+---
+import Icon from './Icon.astro';
+
+interface Accion {
+  texto: string;
+  href: string;
+  tipo?: 'enlace' | 'telefono' | 'guion' | 'recorrido';
+  aclaracion?: string;
+}
+
+interface PasoMenor {
+  texto: string;
+  href: string;
+  descripcion?: string;
+}
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+  accionPrincipal: Accion;
+  pasoMenorCompromiso?: PasoMenor;
+  permiteVolverDespues?: boolean;
+}
+
+const {
+  titulo = 'Un siguiente paso posible',
+  descripcion,
+  accionPrincipal,
+  pasoMenorCompromiso,
+  permiteVolverDespues = true,
+} = Astro.props;
+
+// El id se deriva del título para que dos bloques en una misma página no compartan uno:
+// un id duplicado invalida el HTML y hace que `aria-labelledby` apunte al bloque equivocado.
+const idTitulo = `siguiente-paso-${titulo
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[̀-ͯ]/g, '')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/(^-|-$)/g, '')}`;
+---
+
+<section class="bloque-siguiente-paso" aria-labelledby={idTitulo}>
+  <div class="contenido-paso">
+    <div class="encabezado-paso">
+      <p class="eyebrow">Siguiente paso</p>
+      <h2 id={idTitulo} class="titulo-paso">{titulo}</h2>
+      {descripcion && <p class="descripcion-paso">{descripcion}</p>}
+    </div>
+
+    <div class="accion-primaria-caja">
+      <a
+        href={accionPrincipal.href}
+        class="boton-accion-principal"
+        data-siguiente-paso={accionPrincipal.tipo ?? 'recorrido'}
+      >
+        <span>{accionPrincipal.texto}</span>
+        <Icon name="flecha-derecha" size={18} />
+      </a>
+      {accionPrincipal.aclaracion && <p class="aclaracion-accion">{accionPrincipal.aclaracion}</p>}
+    </div>
+
+    {
+      pasoMenorCompromiso && (
+        <div class="paso-menor-caja">
+          <p class="paso-menor-titulo">¿Prefieres un paso más pequeño?</p>
+          <a
+            href={pasoMenorCompromiso.href}
+            class="enlace-paso-menor"
+            data-siguiente-paso="recorrido"
+          >
+            <span>{pasoMenorCompromiso.texto}</span>
+            <Icon name="flecha-derecha" size={16} />
+          </a>
+          {pasoMenorCompromiso.descripcion && (
+            <p class="descripcion-paso-menor">{pasoMenorCompromiso.descripcion}</p>
+          )}
+        </div>
+      )
+    }
+
+    {
+      permiteVolverDespues && (
+        <div class="opcion-pausa">
+          <p>
+            Detenerte aquí y pensar las opciones también es un paso válido. Puedes guardar este
+            enlace o volver cuando te sientas preparado.
+          </p>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .bloque-siguiente-paso {
+    margin-block: var(--space-8);
+    padding: var(--space-8);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
+  }
+
+  .contenido-paso {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .encabezado-paso {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-green-700);
+    margin: 0;
+  }
+
+  .titulo-paso {
+    font-size: var(--text-xl);
+    line-height: 1.25;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .descripcion-paso {
+    font-size: var(--text-base);
+    color: var(--color-ink-600);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .accion-primaria-caja {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .boton-accion-principal {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 3rem;
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-green-900);
+    color: var(--color-white);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: var(--text-base);
+    text-decoration: none;
+  }
+
+  .boton-accion-principal:hover {
+    background: var(--color-green-700);
+    color: var(--color-white);
+  }
+
+  .aclaracion-accion {
+    font-size: var(--text-xs);
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .paso-menor-caja {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-line);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .paso-menor-titulo {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .enlace-paso-menor {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-green-900);
+    text-decoration: underline;
+  }
+
+  .descripcion-paso-menor {
+    font-size: var(--text-xs);
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .opcion-pausa {
+    padding-top: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--color-ink-600);
+    line-height: 1.5;
+  }
+
+  .opcion-pausa p {
+    margin: 0;
+  }
+</style>

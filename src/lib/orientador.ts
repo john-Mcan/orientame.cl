@@ -30,11 +30,25 @@ export type Accion =
       readonly tipo: 'guion';
       readonly titulo: string;
       readonly texto: string;
+      /** Dónde se ocupa el mensaje. Un guion sin destino deja a la persona con el texto y sin ruta. */
+      readonly destino?: {
+        readonly texto: string;
+        readonly etiqueta: string;
+        readonly href: string;
+      };
     }
   | {
       readonly tipo: 'dato';
       readonly titulo: string;
       readonly descripcion: string;
+      readonly fuenteIds: readonly string[];
+    }
+  | {
+      readonly tipo: 'enlace';
+      readonly titulo: string;
+      readonly descripcion: string;
+      readonly href: string;
+      readonly etiquetaEnlace: string;
       readonly fuenteIds: readonly string[];
     };
 
@@ -211,6 +225,15 @@ const resultados: readonly Resultado[] = [
     ],
     acciones: [
       {
+        tipo: 'enlace',
+        titulo: 'Explorar vivencias cotidianas y señales de alerta',
+        descripcion:
+          'Encuentra información sin diagnósticos sobre lo que estás sintiendo y cuándo conviene prestarle atención.',
+        href: '/siento',
+        etiquetaEnlace: 'Explorar vivencias cotidianas',
+        fuenteIds: [],
+      },
+      {
         tipo: 'guion',
         titulo: 'Contárselo a alguien de confianza',
         texto:
@@ -238,10 +261,24 @@ const resultados: readonly Resultado[] = [
       INSCRIPCION_APS,
       COBERTURA_PSICOLOGIA,
       {
+        tipo: 'enlace',
+        titulo: 'Qué ocurre en una primera consulta psicológica',
+        descripcion:
+          'Saber cómo funciona la sesión, cuánto dura y qué se conversa ayuda a dar el paso con tranquilidad.',
+        href: '/primera-vez/que-pasa-en-sesion',
+        etiquetaEnlace: 'Ver cómo es la primera sesión',
+        fuenteIds: [],
+      },
+      {
         tipo: 'guion',
         titulo: 'Pedir una hora en tu consultorio',
         texto:
           'Hola. Estoy inscrito aquí y quisiera saber cómo puedo solicitar una hora de salud mental. Es la primera vez que consulto.',
+        destino: {
+          texto: '¿Dónde ocuparlo?',
+          etiqueta: 'Ver centros y líneas en Chile',
+          href: '/donde',
+        },
       },
       SALUD_RESPONDE,
     ],
@@ -267,10 +304,24 @@ const resultados: readonly Resultado[] = [
     acciones: [
       INSCRIPCION_APS,
       {
+        tipo: 'enlace',
+        titulo: 'Poner en palabras lo que sientes',
+        descripcion:
+          'Revisa nuestras páginas de experiencias cotidianas (insomnio, cansancio, desgano, sobrecarga) escritas en lenguaje simple.',
+        href: '/siento',
+        etiquetaEnlace: 'Ver el catálogo de vivencias',
+        fuenteIds: [],
+      },
+      {
         tipo: 'guion',
         titulo: 'Pedir una hora sin saber todavía qué decir',
         texto:
           'Hola. Quisiera pedir una hora de salud mental. No sé bien cómo explicar lo que me pasa, pero me gustaría conversarlo con alguien.',
+        destino: {
+          texto: '¿Dónde ocuparlo?',
+          etiqueta: 'Ver centros y líneas en Chile',
+          href: '/donde',
+        },
       },
       SALUD_RESPONDE,
     ],
@@ -295,10 +346,24 @@ const resultados: readonly Resultado[] = [
     ],
     acciones: [
       {
+        tipo: 'enlace',
+        titulo: 'Biblioteca completa de guiones copiables',
+        descripcion:
+          'Mensajes listos para copiar y adaptar para consultar en el CESFAM, preguntar por aranceles o hablar con alguien cercano.',
+        href: '/primera-vez/que-decir',
+        etiquetaEnlace: 'Ver todos los guiones',
+        fuenteIds: [],
+      },
+      {
         tipo: 'guion',
         titulo: 'Pedir una primera hora',
         texto:
           'Hola. Quisiera saber cómo puedo solicitar una hora con psicología. Es la primera vez que busco atención.',
+        destino: {
+          texto: '¿Dónde ocuparlo?',
+          etiqueta: 'Ver centros y líneas en Chile',
+          href: '/donde',
+        },
       },
       {
         tipo: 'guion',
@@ -324,17 +389,31 @@ const resultados: readonly Resultado[] = [
     segmento: 'me-da-verguenza',
     padre: 'me-cuesta-dar-el-paso',
     etiqueta: 'Me da vergüenza',
-    titulo: 'Puedes pedir una hora sin explicar todavía por qué',
+    titulo: 'Se puede pedir una hora con la vergüenza puesta',
     cuerpo: [
-      'No tienes que justificar tu motivo para conseguir una hora ni contarlo todo en el primer contacto. Basta con decir que quieres una consulta de salud mental.',
-      'Lo demás puede quedar para la sesión, cuando y si quieres. Decidir cuánto contar y en qué momento sigue siendo tuyo.',
+      'Sentir vergüenza al consultar por salud mental es frecuente. No hace falta que se te pase primero, ni convencerte de que no corresponde sentirla, para dar el paso.',
+      'Lo concreto es que no tienes que justificar tu motivo para conseguir una hora ni contarlo todo en el primer contacto: basta con decir que quieres una consulta de salud mental. Lo demás puede quedar para la sesión, cuando y si quieres.',
     ],
     acciones: [
+      {
+        tipo: 'enlace',
+        titulo: 'Qué considerar al elegir con quién consultar',
+        descripcion:
+          'Las diferencias entre psicología y psiquiatría, y qué puedes preguntar antes de decidir.',
+        href: '/primera-vez/como-elegir',
+        etiquetaEnlace: 'Ver cómo elegir profesional',
+        fuenteIds: [],
+      },
       {
         tipo: 'guion',
         titulo: 'Pedir una hora sin dar detalles',
         texto:
           'Hola. Quisiera solicitar una hora de salud mental. Prefiero conversar el motivo directamente en la consulta.',
+        destino: {
+          texto: '¿Dónde ocuparlo?',
+          etiqueta: 'Ver centros y líneas en Chile',
+          href: '/donde',
+        },
       },
       {
         tipo: 'guion',
@@ -357,23 +436,43 @@ const resultados: readonly Resultado[] = [
     segmento: 'no-quiero-preocupar-a-nadie',
     padre: 'me-cuesta-dar-el-paso',
     etiqueta: 'No quiero preocupar a nadie',
-    titulo: 'Pedir una hora no obliga a contárselo a nadie',
+    titulo: 'No querer ser una carga es una de las razones más comunes para no consultar',
     cuerpo: [
-      'Puedes gestionar una consulta por tu cuenta y decidir después si quieres contarlo, a quién y cuándo. No es un paso que tengas que anunciar.',
-      'Cuidar cómo estás no le quita nada a las personas que te importan, aunque en el momento se sienta así.',
+      'A veces no es miedo ni vergüenza: es no querer instalar una preocupación en gente que ya tiene lo suyo, o pensar que lo que te pasa no da para molestar a nadie. Es algo que se siente seguido y no tiene nada de raro.',
+      'Vale la pena separar dos cosas que suelen ir juntas. Contarle a alguien cercano es una decisión tuya: puedes postergarla, hacerla a medias o no tomarla nunca. Pedir una hora es otra cosa distinta: es usar un servicio que existe para esto, y no tienes que demostrar que tu caso es lo bastante grave para ocuparlo.',
     ],
     acciones: [
-      INSCRIPCION_APS,
       {
         tipo: 'guion',
-        titulo: 'Pedir una hora por tu cuenta',
+        titulo: 'Pedir una hora sin involucrar a nadie',
         texto:
           'Hola. Quisiera solicitar una hora de salud mental para mí. Es la primera vez que consulto.',
+        destino: {
+          texto: '¿Dónde ocuparlo?',
+          etiqueta: 'Ver centros y líneas en Chile',
+          href: '/donde',
+        },
+      },
+      {
+        tipo: 'guion',
+        titulo: 'Contarle a alguien sin dejarle una preocupación encima',
+        texto:
+          'Quiero contarte algo y me gustaría pedirte que no te preocupes ni hagas nada. Prefiero que lo sepas: estoy viendo cómo pedir una hora para conversar con un psicólogo.',
+      },
+      INSCRIPCION_APS,
+      {
+        tipo: 'enlace',
+        titulo: 'Qué esperar de una primera consulta',
+        descripcion:
+          'Cómo funciona la sesión, qué se conversa y qué sigue decidiendo cada persona.',
+        href: '/primera-vez',
+        etiquetaEnlace: 'Ver la guía de primera vez',
+        fuenteIds: [],
       },
     ],
     menorCompromiso: {
       texto:
-        'Si prefieres partir preguntando cómo funciona antes de pedir una hora, Salud Responde orienta por teléfono sin que tengas que decidir nada en la llamada.',
+        'Si prefieres no involucrar todavía a nadie, ni siquiera para preguntar cómo funciona, Salud Responde orienta por teléfono sin que tengas que decidir nada en la llamada.',
     },
   },
   {
@@ -389,6 +488,15 @@ const resultados: readonly Resultado[] = [
     ],
     acciones: [
       INSCRIPCION_APS,
+      {
+        tipo: 'enlace',
+        titulo: 'Directorio piloto de centros en Chile',
+        descripcion:
+          'Consulta los CESFAM de tu comuna según el registro oficial DEIS, clínicas universitarias a bajo costo y líneas telefónicas.',
+        href: '/donde',
+        etiquetaEnlace: 'Explorar centros y líneas',
+        fuenteIds: ['deis-registro-establecimientos'],
+      },
       {
         tipo: 'guion',
         titulo: 'Preguntar si estás inscrito y cómo pedir hora',
@@ -416,7 +524,21 @@ const resultados: readonly Resultado[] = [
       'El costo es una barrera real y conviene resolverla con datos concretos antes de descartar la idea de consultar.',
       'La ruta pública no es una versión reducida de la privada: es la vía principal de acceso en Chile y no depende de tu capacidad de pago.',
     ],
-    acciones: [COBERTURA_PSICOLOGIA, INSCRIPCION_APS, GARANTIAS_GES, SALUD_RESPONDE],
+    acciones: [
+      COBERTURA_PSICOLOGIA,
+      INSCRIPCION_APS,
+      GARANTIAS_GES,
+      {
+        tipo: 'enlace',
+        titulo: 'Qué cuesta cada vía de atención en Chile',
+        descripcion:
+          'Un desglose de la vía pública, las clínicas universitarias con arancel diferenciado y la atención privada.',
+        href: '/primera-vez/cuanto-cuesta',
+        etiquetaEnlace: 'Leer la guía de costos',
+        fuenteIds: [],
+      },
+      SALUD_RESPONDE,
+    ],
     menorCompromiso: {
       texto: 'Si todavía no sabes a qué consultorio acudir, ese es el paso anterior.',
       enlace: {
@@ -450,6 +572,29 @@ const resultados: readonly Resultado[] = [
         titulo: 'Ofrecer compañía concreta',
         texto:
           '¿Te sirve que averigüemos juntos dónde pedir una hora? Puedo acompañarte a llamar o ir contigo si quieres.',
+        destino: {
+          texto: '¿Dónde buscar juntos?',
+          etiqueta: 'Ver centros y líneas en Chile',
+          href: '/donde',
+        },
+      },
+      {
+        tipo: 'llamada',
+        titulo: 'Fono Drogas y Alcohol 1412 · SENDA',
+        numero: '1412',
+        marcar: '1412',
+        descripcion:
+          'Servicio gratuito y confidencial de SENDA para orientar a familiares y personas cercanas preocupadas por consumo de sustancias.',
+        fuenteIds: ['senda-fono-1412'],
+      },
+      {
+        tipo: 'llamada',
+        titulo: 'Línea *4141',
+        numero: '*4141',
+        marcar: '*4141',
+        descripcion:
+          'Atención gratuita y confidencial con profesionales de psicología, disponible las 24 horas todos los días, desde celulares de cualquier compañía. También atiende a quien llama por otra persona.',
+        fuenteIds: ['minsal-linea-4141'],
       },
       INSCRIPCION_APS,
       SALUD_RESPONDE,
@@ -559,6 +704,10 @@ export function destinosInternos(): string[] {
     const enlace = resultado.menorCompromiso.enlace;
     if (enlace) destinos.add(hrefDeDestino(enlace.destino));
     if (resultado.avisoUrgencia) destinos.add(RUTA_URGENCIA);
+    for (const accion of resultado.acciones) {
+      if (accion.tipo === 'enlace') destinos.add(accion.href);
+      if (accion.tipo === 'guion' && accion.destino) destinos.add(accion.destino.href);
+    }
   }
 
   return [...destinos];

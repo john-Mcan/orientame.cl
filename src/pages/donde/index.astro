@@ -1,0 +1,340 @@
+---
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Notice from '@components/Notice.astro';
+import FichaRecurso from '@components/FichaRecurso.astro';
+import ResourceFinder from '@components/islands/ResourceFinder';
+import { getRecursos, COMUNAS_PILOTO } from '@/lib/resources';
+
+const recursos = getRecursos();
+
+const ETIQUETAS_TIPO: Record<string, string> = {
+  cesfam: 'CESFAM · Atención primaria',
+  cecosf: 'CECOSF · Centro comunitario',
+  cosam: 'COSAM · Nivel secundario',
+  hospital: 'Hospital',
+  'clinica-universitaria': 'Clínica universitaria',
+  ong: 'Organización comunitaria / ONG',
+  linea: 'Línea de orientación',
+  otro: 'Servicio de salud',
+};
+
+const ETIQUETAS_COSTO: Record<string, string> = {
+  gratuito: 'Gratuito',
+  'segun-tramo': 'Según tramo Fonasa',
+  bajo: 'Bajo costo / arancel diferenciado',
+  variable: 'Arancel variable',
+  desconocido: 'Costo por confirmar',
+};
+
+// Los filtros sólo ofrecen valores presentes en el dataset: un filtro que siempre devuelve
+// cero resultados es ruido. Con pocos recursos publicados, directamente no se muestran.
+const unicos = <T,>(valores: readonly T[]) => [...new Set(valores)];
+const tipos = unicos(recursos.map((r) => r.tipo)).map((valor) => ({
+  valor,
+  etiqueta: ETIQUETAS_TIPO[valor] ?? valor,
+}));
+const costos = unicos(recursos.map((r) => r.costo)).map((valor) => ({
+  valor,
+  etiqueta: ETIQUETAS_COSTO[valor] ?? valor,
+}));
+const valeLaPenaFiltrar = recursos.length > 6;
+---
+
+<Base
+  title="Dónde encontrar ayuda en salud mental en Chile | orientame.cl"
+  description="Cómo se entra a la atención de salud mental en Chile: líneas oficiales de orientación, atención primaria pública y clínicas universitarias, con la fuente de cada dato."
+>
+  <div class="reading-shell">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Dónde consultar' }]} />
+
+    <header class="seccion-encabezado">
+      <p class="eyebrow">Directorio y piloto de acceso</p>
+      <h1>Dónde encontrar atención de salud mental en Chile</h1>
+      <p class="lede">
+        Las alternativas públicas, gratuitas y de bajo costo van primero. Cada ficha indica de qué
+        fuente oficial salieron sus datos y cuándo la consultamos.
+      </p>
+    </header>
+
+    <div class="aviso-niveles">
+      <Notice title="Qué significa cada sello en este directorio">
+        <p>
+          Cada ficha dice en qué estado de comprobación está, para que sepas cuánto puedes apoyarte
+          en ella:
+        </p>
+        <ul>
+          <li>
+            <strong>Acceso verificado:</strong> alguien abrió la fuente oficial y confirmó los datos de
+            contacto y los pasos para pedir hora, con la fecha en que lo hizo.
+          </li>
+          <li>
+            <strong>Pasos por confirmar:</strong> sabemos que el servicio existe, pero no hemos comprobado
+            directamente sus horarios, su costo o su procedimiento de ingreso. Conviene confirmarlos en
+            la fuente oficial antes de ir o llamar.
+          </li>
+        </ul>
+        <p>
+          El directorio es todavía corto a propósito. Preferimos pocas fichas comprobadas antes que
+          una lista larga con datos que no hemos verificado.
+        </p>
+      </Notice>
+    </div>
+  </div>
+
+  <section class="seccion-comunas-piloto reading-shell" aria-labelledby="comunas-piloto-titulo">
+    <h2 id="comunas-piloto-titulo" class="seccion-subtitulo">Cómo se accede, comuna por comuna</h2>
+    <div class="enlaces-comunas">
+      {
+        COMUNAS_PILOTO.map((c) => (
+          <a href={`/donde/${c.regionSlug}/${c.slug}`} class="tarjeta-comuna">
+            <span class="comuna-nombre">{c.nombre}</span>
+            <span class="comuna-region">{c.region}</span>
+            <span class="comuna-detalle">{c.descripcion}</span>
+          </a>
+        ))
+      }
+      <a href="/donde/clinicas-universitarias" class="tarjeta-comuna especial">
+        <span class="comuna-nombre">Clínicas universitarias</span>
+        <span class="comuna-region">Atención docente-asistencial</span>
+        <span class="comuna-detalle"
+          >Centros docentes de facultades de psicología, con atención supervisada.</span
+        >
+      </a>
+    </div>
+  </section>
+
+  <section class="seccion-buscador reading-shell" aria-labelledby="buscador-titulo">
+    <div class="buscador-cabecera">
+      <h2 id="buscador-titulo">Recursos disponibles</h2>
+      <p>
+        Puedes acotar la lista por comuna, tipo de centro, modalidad y costo. Lo que eliges en estos
+        filtros se resuelve en tu dispositivo y orientame.cl no lo almacena.
+      </p>
+    </div>
+
+    {
+      valeLaPenaFiltrar && (
+        <ResourceFinder
+          client:visible
+          comunas={COMUNAS_PILOTO}
+          tipos={tipos}
+          costos={costos}
+          total={recursos.length}
+        />
+      )
+    }
+
+    <div class="lista-fichas">
+      {recursos.map((recurso) => <FichaRecurso recurso={recurso} />)}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .seccion-encabezado {
+    margin-block: var(--space-8) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-green-700);
+    margin: 0;
+  }
+
+  h1 {
+    line-height: 1.2;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .lede {
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .aviso-niveles {
+    margin-bottom: var(--space-8);
+  }
+
+  .aviso-niveles ul {
+    margin: var(--space-2) 0 0;
+    padding-left: 1.25rem;
+  }
+
+  .aviso-niveles li + li {
+    margin-top: var(--space-2);
+  }
+
+  .seccion-comunas-piloto {
+    margin-block: var(--space-6) var(--space-12);
+  }
+
+  .seccion-subtitulo {
+    font-size: var(--text-xl);
+    color: var(--color-ink-900);
+    margin: 0 0 var(--space-4);
+  }
+
+  .enlaces-comunas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .tarjeta-comuna {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    text-decoration: none;
+  }
+
+  .tarjeta-comuna:hover {
+    background: var(--color-mist-50);
+    border-color: var(--color-green-700);
+  }
+
+  .comuna-nombre {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-ink-900);
+  }
+
+  .comuna-region {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-green-700);
+    text-transform: uppercase;
+  }
+
+  .comuna-detalle {
+    font-size: var(--text-xs);
+    color: var(--color-ink-600);
+    line-height: 1.4;
+    margin-top: var(--space-1);
+  }
+
+  .tarjeta-comuna.especial {
+    background: var(--color-mist-50);
+  }
+
+  .seccion-buscador {
+    margin-block: var(--space-8) var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .buscador-cabecera {
+    margin-bottom: var(--space-6);
+  }
+
+  .buscador-cabecera h2 {
+    font-size: var(--text-xl);
+    color: var(--color-ink-900);
+    margin: 0 0 var(--space-2);
+  }
+
+  .buscador-cabecera p {
+    font-size: var(--text-base);
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .lista-fichas {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  /* Controles del island ResourceFinder. Sólo existen cuando hay JavaScript:
+     el listado de fichas se renderiza en el servidor y funciona sin ellos. */
+  .lista-fichas :global([data-recurso][hidden]) {
+    display: none;
+  }
+
+  .seccion-buscador :global(.finder) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .seccion-buscador :global(.finder-filtros) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-6) var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+  }
+
+  .seccion-buscador :global(.finder-leyenda) {
+    padding-inline: var(--space-2);
+    color: var(--color-ink-900);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .seccion-buscador :global(.campo-filtro) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .seccion-buscador :global(.campo-filtro label) {
+    color: var(--color-ink-900);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+
+  .seccion-buscador :global(.campo-filtro select) {
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    color: var(--color-ink-900);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+  }
+
+  .seccion-buscador :global(.finder-estado) {
+    margin: 0;
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  .seccion-buscador :global(.finder-limpiar) {
+    min-height: 2.75rem;
+    padding-inline: var(--space-2);
+    border: 0;
+    background: none;
+    color: var(--color-green-900);
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .seccion-buscador :global(.finder-vacio) {
+    margin: 0;
+    padding: var(--space-6);
+    border: 1px dashed var(--color-line);
+    border-radius: var(--radius-md);
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+</style>

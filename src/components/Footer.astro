@@ -11,6 +11,14 @@ import AccessUrgency from './AccessUrgency.astro';
       </p>
       <div class="footer-urgencia"><AccessUrgency /></div>
     </div>
+    <nav aria-label="Secciones del sitio">
+      <p>Secciones</p>
+      <a href="/empezar">Empezar</a>
+      <a href="/siento">Lo que sientes</a>
+      <a href="/temas">Temas</a>
+      <a href="/donde">Dónde consultar</a>
+      <a href="/primera-vez">Primera vez</a>
+    </nav>
     <nav aria-label="Información del proyecto">
       <p>Proyecto</p>
       <a href="/sobre">Sobre el proyecto</a>
@@ -38,7 +46,7 @@ import AccessUrgency from './AccessUrgency.astro';
 
   .footer-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.6fr) repeat(2, minmax(9rem, 0.7fr));
+    grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(9rem, 0.7fr));
     gap: var(--space-12);
   }
 

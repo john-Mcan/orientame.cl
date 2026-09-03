@@ -37,6 +37,24 @@ if (!inicio || inicio.tipo !== 'paso') {
     </div>
   </section>
 
+  <section class="atajos page-shell" aria-labelledby="atajos-titulo">
+    <h2 id="atajos-titulo">Si ya sabes qué necesitas</h2>
+    <ul class="atajos-lista">
+      <li>
+        <a href="/siento">Lo que estás sintiendo</a>
+        <span>Vivencias cotidianas explicadas en palabras simples, con su fuente.</span>
+      </li>
+      <li>
+        <a href="/donde">Dónde consultar en Chile</a>
+        <span>Líneas oficiales de orientación y cómo se entra a la atención pública.</span>
+      </li>
+      <li>
+        <a href="/primera-vez">Es tu primera vez</a>
+        <span>Qué pasa en una sesión, qué decir, cuánto cuesta y cómo elegir.</span>
+      </li>
+    </ul>
+  </section>
+
   <section class="proyecto page-shell" aria-labelledby="proyecto-titulo">
     <div class="proyecto-encabezado">
       <p class="eyebrow">Qué es orientame.cl</p>
@@ -109,6 +127,36 @@ if (!inicio || inicio.tipo !== 'paso') {
     margin-top: var(--space-8);
     padding-top: var(--space-6);
     border-top: 1px solid var(--color-line);
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  /* Atajos a las secciones que no pasan por el orientador. */
+
+  .atajos {
+    padding-block: var(--space-12) 0;
+  }
+
+  .atajos-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+    padding: 0;
+    list-style: none;
+  }
+
+  .atajos-lista li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .atajos-lista a {
+    font-weight: 700;
+  }
+
+  .atajos-lista span {
     color: var(--color-ink-600);
     font-size: var(--text-sm);
   }

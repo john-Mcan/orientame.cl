@@ -17,7 +17,7 @@ import Base from '@layouts/Base.astro';
     title="Reglas y límites en lenguaje claro"
     description="Estos documentos describen cómo funciona el sitio, qué datos implica navegarlo y qué no puede hacer por ti."
   />
-  <section class="legal-grid page-shell" aria-label="Documentos legales">
+  <section class="legal-grid reading-shell" aria-label="Documentos legales">
     <Card title="Privacidad" href="/legal/privacidad">
       <p>Datos técnicos, herramientas locales, terceros y decisiones de privacidad de la v1.</p>
     </Card>
@@ -33,7 +33,7 @@ import Base from '@layouts/Base.astro';
 <style>
   .legal-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: var(--space-4);
     padding-bottom: var(--space-24);
   }

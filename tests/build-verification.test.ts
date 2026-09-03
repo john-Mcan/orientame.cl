@@ -11,6 +11,17 @@ const leer = (ruta: string): string => fs.readFileSync(path.join(distDir, ruta),
 /** `/empezar/x/y` -> `empezar/x/y/index.html` */
 const archivoDe = (ruta: string): string => `${ruta.replace(/^\//, '')}/index.html`;
 
+/** Todos los `.html` generados, para las reglas que deben cumplirse en el sitio completo. */
+function paginasGeneradas(dir: string = distDir): string[] {
+  const encontradas: string[] = [];
+  for (const entrada of fs.readdirSync(dir, { withFileTypes: true })) {
+    const completo = path.join(dir, entrada.name);
+    if (entrada.isDirectory()) encontradas.push(...paginasGeneradas(completo));
+    else if (entrada.name.endsWith('.html')) encontradas.push(completo);
+  }
+  return encontradas;
+}
+
 describe('Build output verification', () => {
   it('dist directory exists', () => {
     assert.strictEqual(fs.existsSync(distDir), true);
@@ -26,6 +37,18 @@ describe('Build output verification', () => {
     'legal/privacidad/index.html',
     'legal/alcance/index.html',
     'legal/terminos/index.html',
+    'siento/index.html',
+    'temas/index.html',
+    'primera-vez/index.html',
+    'primera-vez/que-pasa-en-sesion/index.html',
+    'primera-vez/que-decir/index.html',
+    'primera-vez/cuanto-cuesta/index.html',
+    'primera-vez/como-elegir/index.html',
+    'donde/index.html',
+    'donde/clinicas-universitarias/index.html',
+    'donde/metropolitana/santiago/index.html',
+    'donde/metropolitana/providencia/index.html',
+    'donde/metropolitana/puente-alto/index.html',
     '404.html',
     'robots.txt',
     'sitemap-index.xml',
@@ -45,9 +68,11 @@ describe('Build output verification', () => {
     assert.ok(urgenciaHtml.includes('tel:+566003607777'), 'Missing Salud Responde link');
   });
 
-  it('no drafts from content collections are rendered into production dist', () => {
-    // Draft collections should not have static routes in dist
-    const forbiddenDraftPaths = ['sintomas', 'temas', 'instrumentos', 'guias', 'acompanamiento'];
+  it('no raw drafts from unreleased collections are rendered into production dist', () => {
+    // Draft collections should not have static routes in dist.
+    // Notice: /siento/ and /temas/ are now public verified routes in Phase 3.
+    // Raw collection folders and unreleased collections must not leak to dist.
+    const forbiddenDraftPaths = ['sintomas', 'instrumentos', 'guias', 'acompanamiento'];
 
     for (const draftPath of forbiddenDraftPaths) {
       const fullPath = path.join(distDir, draftPath);
@@ -143,6 +168,18 @@ describe('HTML válido en las páginas generadas', () => {
     'urgencia/index.html',
     'sobre/index.html',
     'metodologia/index.html',
+    'siento/index.html',
+    'temas/index.html',
+    'primera-vez/index.html',
+    'primera-vez/que-pasa-en-sesion/index.html',
+    'primera-vez/que-decir/index.html',
+    'primera-vez/cuanto-cuesta/index.html',
+    'primera-vez/como-elegir/index.html',
+    'donde/index.html',
+    'donde/clinicas-universitarias/index.html',
+    'donde/metropolitana/santiago/index.html',
+    'donde/metropolitana/providencia/index.html',
+    'donde/metropolitana/puente-alto/index.html',
     ...nodosConRutaPropia().map((nodo) => archivoDe(rutaDe(nodo.id))),
   ];
 
@@ -185,13 +222,40 @@ describe('La portada abre el recorrido sin controles engañosos', () => {
     );
   });
 
-  it('no afirma que ningún dato sale del dispositivo', () => {
-    // §2.5: la promesa correcta es que orientame.cl no almacena las respuestas,
-    // no que la navegación no genere solicitudes técnicas.
-    const html = leer('index.html');
-    assert.ok(
-      !/nada se (guarda|env[ií]a)|ning[uú]n dato sale/i.test(html),
-      'La portada usa una promesa de privacidad técnicamente incorrecta',
-    );
+  it('el contenido de lectura se mantiene en el ancho de lectura', () => {
+    // `estilos.md` §Contenedores: las páginas de lectura usan `reading-max` (45rem). El sitio
+    // se lee de una sola columna de ese ancho, incluidas las grillas de tarjetas: mezclar
+    // 45rem y 75rem entre páginas hace que el contenido salte de posición al navegar.
+    // La portada es la única excepción, porque su primera pantalla es a dos columnas.
+    const anchoCompletoPermitido = new Set(['index.html']);
+
+    for (const pagina of paginasGeneradas()) {
+      const relativa = path.relative(distDir, pagina).replace(/\\/g, '/');
+      if (anchoCompletoPermitido.has(relativa)) continue;
+
+      const contenido = /<main[^>]*>([\s\S]*?)<\/main>/.exec(fs.readFileSync(pagina, 'utf8'));
+      if (!contenido) continue;
+
+      assert.ok(
+        !contenido[1].includes('page-shell'),
+        `${relativa} usa page-shell para su contenido; las páginas de lectura van en reading-shell`,
+      );
+    }
+  });
+
+  it('ninguna página afirma que los datos no salen del dispositivo', () => {
+    // §2.5: la promesa correcta es que orientame.cl no almacena las respuestas, no que la
+    // navegación no genere solicitudes técnicas. Antes esto sólo revisaba la portada y por
+    // eso se coló "sin enviar tus datos a ningún servidor" en /donde.
+    const prohibido =
+      /nada se (guarda|env[ií]a)|ning[uú]n dato sale|sin enviar (tus|sus) datos|no se env[ií]an? (tus|sus)? ?datos|no sale de tu dispositivo/i;
+
+    for (const pagina of paginasGeneradas()) {
+      const html = fs.readFileSync(pagina, 'utf8');
+      assert.ok(
+        !prohibido.test(html),
+        `${path.relative(distDir, pagina)} usa una promesa de privacidad técnicamente incorrecta`,
+      );
+    }
   });
 });

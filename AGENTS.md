@@ -33,22 +33,31 @@ decisión, archivos por actualizar. No se cambia el propósito del producto en s
 
 ## Estado actual
 
-Fase 2 cerrada (portada, `/empezar`, orientador). **Sigue la etapa 3: contenido inicial y acceso a
-recursos.**
+**Fase 3 casi cerrada.** Se construyó completa, una auditoría la devolvió a verificación por citar
+fuentes inventadas, y luego se re-fuenteó contra referencias comprobadas. Lee
+[`docs/plan/fase-3-decisiones.md`](docs/plan/fase-3-decisiones.md) §Auditoría (D16–D23) antes de
+tocar `/siento`, `/temas`, `/donde` o `src/data/recursos.json`. **Queda pendiente el directorio
+comunal; no se avanza a la etapa 4 hasta resolverlo.**
 
-Rutas que existen hoy:
+Rutas que existen hoy (51 páginas estáticas):
 
 ```
 /  /urgencia  /404
 /empezar  +  11 rutas del orientador bajo /empezar/[...ruta]   (3 pasos y 9 resultados)
+/siento   +  12 vivencias cotidianas bajo /siento/[slug]
+/temas    +  6 cuadros clínicos bajo /temas/[slug]
+/primera-vez  +  4 guías (/que-pasa-en-sesion, /que-decir, /cuanto-cuesta, /como-elegir)
+/donde    +  3 comunas piloto (/donde/metropolitana/{santiago,providencia,puente-alto}) y /donde/clinicas-universitarias
 /sobre  /metodologia  /legal  /legal/{privacidad,alcance,terminos}
 ```
 
-**Rutas que NO existen: `/siento/`, `/temas/`, `/donde/`, `/primera-vez/`, `/acompanar/`,
-`/autoevaluacion/`, `/historias/`.** No enlaces a ninguna hasta crearla. Enviar a alguien a un 404
-al final de un recorrido es el peor resultado posible; ya ocurrió una vez.
+**Las 23 URLs citadas hoy en el sitio responden 200 y fueron leídas antes de citarse.** Si agregas
+una, ábrela y compruébala: hay un test que bloquea que una misma URL respalde documentos distintos,
+porque así se detectó que 16 citas colgaban de dos PDFs de MINSAL inventados.
 
-Las content collections existen y están en borrador, deliberadamente fuera de producción.
+**Rutas que NO existen: `/acompanar/`, `/autoevaluacion/`, `/historias/`.** No enlaces a ninguna hasta
+crearla en la etapa 4. Enviar a alguien a un 404 al final de un recorrido es el peor resultado
+posible.
 
 ## Reglas innegociables
 
@@ -67,6 +76,16 @@ de terceros ("no van a juzgarte").
 **Siempre existe un paso de menor compromiso.** Si la acción principal parece demasiado, se ofrece
 una más pequeña. Detenerse y volver después es una opción válida y se dice explícitamente. Urgencia
 nunca es "el paso de menor compromiso".
+
+**Primero se reconoce la barrera, después se ofrece la acción.** Si la persona eligió "no quiero
+preocupar a nadie" o "me da vergüenza", el resultado tiene que hablar de eso —nombrarlo, decir que
+es frecuente— antes de proponer que pida una hora. Saltar directo al trámite convierte lo que dijo
+en un obstáculo administrativo y el recorrido deja de acompañar. Ya pasó: `no-quiero-preocupar-a-nadie`
+respondía sobre confidencialidad ("no tienes que contárselo a nadie") cuando lo que la persona
+suele estar diciendo es que se siente una carga o que su caso no amerita molestar.
+
+Reconocer no es consolar: no se afirma cómo se van a sentir terceros ("no le quita nada a quienes te
+importan"), no se corrige el sentimiento y no se promete alivio.
 
 **La crisis no se delega a IA.** No hay chatbot de crisis ni decisiones generativas. **No se
 formulan preguntas que evalúen riesgo ni se bifurca según la respuesta.** El acceso a `/urgencia` es
@@ -194,6 +213,16 @@ silencio.
 
 Deriva todo de los tokens de `src/styles/global.css`; no repitas valores sueltos.
 
+**Un solo ancho en todo el sitio: `.reading-shell` (45rem).** Migas, encabezados, `lede`, avisos,
+artículos, fichas **y grillas de tarjetas** van ahí. `.page-shell` (75rem) queda para el encabezado
+y el pie del sitio, y para la portada, cuya primera pantalla es a dos columnas. Nada más.
+
+Mezclar los dos anchos entre páginas es lo que hace que el sitio se sienta inconsistente: el
+contenido salta de posición al navegar. Dos formas concretas en que ya pasó: el encabezado de las
+páginas nuevas quedó en `page-shell` mientras el resto del sitio leía a 45rem, y las migas quedaron
+en `page-shell` sobre un artículo en `reading-shell`, flotando a la izquierda. Una grilla de
+tarjetas a 45rem da dos columnas, que es suficiente. Hay un test que lo bloquea.
+
 - **Iconos SVG propios (`Icon.astro`), nunca emojis** en la interfaz.
 - **No** bordes de acento a la izquierda, gradientes extraños, ni otros patrones genéricos de
   interfaz generada por IA.
@@ -220,19 +249,16 @@ Deriva todo de los tokens de `src/styles/global.css`; no repitas valores sueltos
 
 ## Pendientes con dueño de etapa
 
-- **Etapa 3 — recursos en dos niveles.** Nivel A (qué existe en tu comuna, cobertura nacional desde
-  el registro DEIS, marcado `requiere-revision`) y Nivel B (`pasosAcceso` verificados a mano, sólo
-  comunas piloto). Una entrada de Nivel A nunca se presenta como verificada. Confirmar licencia y
-  atribución del dataset antes de redistribuirlo. Ver decisión D9.
-- **Etapa 3 — enriquecer los resultados de `/empezar`.** La tabla de puntos de enriquecimiento de D9
-  indica qué debería enlazar cada uno de los 9 resultados y de qué ruta depende. Al crear una ruta,
-  agrégala a `RUTAS_ESTATICAS` en `tests/orientador.test.ts`.
-- **Etapa 3 — `BloqueSiguientePaso.astro`**, pospuesto hasta que exista su segundo consumidor.
-- **Etapa 4 — buscador real** con Pagefind y campo de texto. Hasta entonces la portada no muestra
-  envoltorio de búsqueda.
+- **Etapa 3 — recursos comunales.** Único pendiente de la etapa. El directorio llegó a publicar
+  direcciones y teléfonos que su fuente no contenía; hoy sólo quedan las fichas comprobadas. Nivel B
+  exige verificación humana por establecimiento; Nivel A exige reproducir el registro DEIS sin
+  inventarle pasos de acceso, y confirmar antes su licencia y atribución.
 - **Etapa 4 — autoevaluaciones**, bloqueadas hasta verificar fuente, versión, licencia, población,
   scoring e interpretación de cada instrumento, y hasta que exista `protocolo-crisis.md` aprobado
   para cualquier respuesta asociada a riesgo.
+- **Etapa 4 — buscador real** con Pagefind y campo de texto. Hasta entonces la portada no muestra
+  envoltorio de búsqueda.
+- **Etapa 4 — `/acompanar/`**, guías de acompañamiento para personas cercanas y familiares.
 - **v2 — Nivel B nacional**, condicionado a financiamiento que sostenga revisión humana y
   reverificación periódica.
 - **Previo al lanzamiento** — revisión legal (Ley 21.719 de datos personales, Ley 21.331 de derechos

@@ -11,7 +11,7 @@
     "test": "node --test --experimental-strip-types tests/**/*.test.ts",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+    "check": "npm run lint && npm run typecheck && npm run build && npm run test"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -23,5 +23,9 @@
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.68.0"
+  },
+  "dependencies": {
+    "@astrojs/preact": "^6.0.5",
+    "preact": "^10.29.8"
   }
 }

@@ -1,0 +1,127 @@
+---
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Card from '@components/Card.astro';
+import Notice from '@components/Notice.astro';
+import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
+---
+
+<Base
+  title="Primera vez buscando apoyo psicológico | orientame.cl"
+  description="Qué ocurre en una primera consulta, cuánto cuesta en Chile, qué decir al pedir hora y cómo elegir profesional."
+>
+  <div class="reading-shell">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Primera vez' }]} />
+
+    <header class="seccion-encabezado">
+      <p class="eyebrow">Guía de inicio</p>
+      <h1>Antes de tu primera consulta</h1>
+      <p class="lede">
+        Pedir ayuda por primera vez genera dudas legítimas: no saber cuánto va a costar, qué te van
+        a preguntar o cómo explicar lo que te pasa. Esta sección reúne información práctica para que
+        des el paso con tranquilidad y a tu propio ritmo.
+      </p>
+    </header>
+
+    <div class="aviso-tranquilidad">
+      <Notice title="No tienes que tener todo resuelto para consultar">
+        <p>
+          Muchas personas postergan consultar creyendo que deben llegar con un discurso ordenado o
+          saber exactamente qué les ocurre. El trabajo del profesional es justamente ayudarte a
+          desenredar lo que sientes en un espacio confidencial y seguro.
+        </p>
+      </Notice>
+    </div>
+
+    <section class="seccion-guias" aria-labelledby="guias-titulo">
+      <h2 id="guias-titulo" class="sr-only">Guías de primera vez</h2>
+      <div class="grilla-guias">
+        <Card title="¿Qué pasa en una primera sesión?" href="/primera-vez/que-pasa-en-sesion">
+          <p>
+            Cuánto dura, qué suelen preguntar, cómo funciona el secreto profesional y qué pasa si te
+            emocionas o te quedas en silencio.
+          </p>
+        </Card>
+
+        <Card title="Guiones: qué decir para pedir hora" href="/primera-vez/que-decir">
+          <p>
+            Mensajes listos para copiar y adaptar al contactar un CESFAM, una clínica privada o al
+            hablar con alguien cercano.
+          </p>
+        </Card>
+
+        <Card title="¿Cuánto cuesta la atención en Chile?" href="/primera-vez/cuanto-cuesta">
+          <p>
+            La vía pública, las garantías AUGE-GES, las clínicas universitarias y la atención
+            privada, con qué preguntar en cada una.
+          </p>
+        </Card>
+
+        <Card title="Cómo elegir profesional" href="/primera-vez/como-elegir">
+          <p>
+            Diferencias entre psicología y psiquiatría, cómo verificar el registro oficial de
+            prestadores y corrientes terapéuticas explicadas en simple.
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <BloqueSiguientePaso
+      titulo="¿Quieres saber dónde consultar en tu comuna?"
+      descripcion="Revisa las líneas oficiales, las clínicas universitarias y cómo se accede a la atención pública en tu comuna."
+      accionPrincipal={{
+        texto: 'Ver centros y recursos disponibles',
+        href: '/donde',
+        tipo: 'recorrido',
+        aclaracion: 'Líneas oficiales y cómo se entra a la atención pública por comuna.',
+      }}
+      pasoMenorCompromiso={{
+        texto: 'Explorar guiones copiables para pedir hora',
+        href: '/primera-vez/que-decir',
+        descripcion: 'Mensajes sencillos para escribir o llamar sin tener que improvisar.',
+      }}
+    />
+  </div>
+</Base>
+
+<style>
+  .seccion-encabezado {
+    margin-block: var(--space-8) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-green-700);
+    margin: 0;
+  }
+
+  h1 {
+    line-height: 1.2;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .lede {
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .aviso-tranquilidad {
+    margin-bottom: var(--space-8);
+  }
+
+  .grilla-guias {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+  }
+</style>

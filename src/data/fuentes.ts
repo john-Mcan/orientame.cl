@@ -38,7 +38,46 @@ export const fuentes: readonly Fuente[] = [
     url: 'https://www.chileatiende.gob.cl/fichas/2464',
     consultadoEl: '2026-09-01',
   },
+  {
+    id: 'minsal-linea-4141',
+    titulo: 'Línea de Prevención del Suicidio *4141: No Estás Solo, No Estás Sola',
+    organizacion: 'Ministerio de Salud · Gobierno de Chile',
+    url: 'https://www.minsal.cl/linea-de-atencion-4141-no-estas-solo-no-estas-sola/',
+    consultadoEl: '2026-09-03',
+  },
+  {
+    id: 'senda-fono-1412',
+    titulo: 'Fono Drogas y Alcohol 1412',
+    organizacion:
+      'Servicio Nacional para la Prevención y Rehabilitación del Consumo de Drogas y Alcohol (SENDA)',
+    url: 'https://www.senda.gob.cl/informacion-sobre-drogas/fono-drogas-y-alcohol-1412/',
+    consultadoEl: '2026-09-01',
+  },
+  {
+    id: 'deis-registro-establecimientos',
+    titulo: 'Registro Oficial de Establecimientos de Salud (DEIS)',
+    organizacion:
+      'Departamento de Estadísticas e Información de Salud (DEIS) · Ministerio de Salud',
+    url: 'https://deis.minsal.cl/',
+    consultadoEl: '2026-09-01',
+  },
+  {
+    id: 'sis-registro-prestadores',
+    titulo: 'Registro Nacional de Prestadores Individuales de Salud',
+    organizacion: 'Superintendencia de Salud · Gobierno de Chile',
+    url: 'https://rnpi.superdesalud.gob.cl/',
+    consultadoEl: '2026-09-03',
+  },
 ];
+
+// Retiradas en la auditoría de fase 3 (2026-09-03) porque su URL no resuelve y por tanto
+// ninguna afirmación puede comprobarse contra ellas:
+//   fonasa-copago-cero      → fonasa.cl/sites/fonasa/beneficiarios/copago-cero (404)
+//   minsal-salud-mental-aps → minsal.cl/portal/url/item/722232c2560882e3e04001011f0169dc.pdf (404)
+// `sis-registro-prestadores` se conservó con la URL correcta del registro (rnpi.superdesalud.gob.cl);
+// la que se había publicado antes respondía 404.
+// No se reemplazan por una URL adivinada: se vuelven a agregar cuando alguien abra la página
+// oficial correcta y confirme que respalda la afirmación asociada.
 
 const fuentePorId = new Map(fuentes.map((f) => [f.id, f]));
 

@@ -1,17 +1,35 @@
 ---
 import Icon from './Icon.astro';
 
+/** Dónde se ocupa el mensaje. Un guion que dice qué decir pero no a quién deja el paso a medias. */
+export interface DestinoGuion {
+  texto: string;
+  etiqueta: string;
+  href: string;
+}
+
 interface Props {
   titulo: string;
   texto: string;
+  destino?: DestinoGuion;
 }
 
-const { titulo, texto } = Astro.props;
+const { titulo, texto, destino } = Astro.props;
 ---
 
 <div class="guion">
   <p class="guion-titulo">{titulo}</p>
   <blockquote class="guion-texto"><p>{texto}</p></blockquote>
+  {
+    destino && (
+      <p class="guion-destino">
+        <span>{destino.texto}</span>{' '}
+        <a href={destino.href} data-siguiente-paso="recorrido">
+          {destino.etiqueta}
+        </a>
+      </p>
+    )
+  }
   <div class="guion-acciones">
     {
       /* Sin JavaScript el botón no puede copiar, así que sólo aparece cuando el script se
@@ -53,6 +71,12 @@ const { titulo, texto } = Astro.props;
     background: var(--color-mist-50);
     color: var(--color-ink-900);
     line-height: 1.6;
+  }
+
+  .guion-destino {
+    margin-top: var(--space-3);
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
   }
 
   .guion-acciones {

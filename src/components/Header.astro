@@ -2,9 +2,13 @@
 import AccessUrgency from './AccessUrgency.astro';
 
 const path = Astro.url.pathname;
+// El menú lista las entradas al contenido, no las páginas institucionales: `/temas` se
+// alcanza desde cada vivencia de `/siento` y desde el pie.
 const links = [
   { href: '/empezar', label: 'Empezar' },
-  { href: '/metodologia', label: 'Metodología' },
+  { href: '/siento', label: 'Lo que sientes' },
+  { href: '/donde', label: 'Dónde consultar' },
+  { href: '/primera-vez', label: 'Primera vez' },
   { href: '/sobre', label: 'Sobre el proyecto' },
 ];
 

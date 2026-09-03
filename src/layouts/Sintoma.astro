@@ -1,0 +1,234 @@
+---
+import Base from './Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import EditorialStatus from '@components/EditorialStatus.astro';
+import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
+import SourceList from '@components/SourceList.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { visibleEnEntorno } from '@/lib/editorial';
+
+interface Props {
+  sintoma: CollectionEntry<'sintomas'>;
+}
+
+const { sintoma } = Astro.props;
+const data = sintoma.data;
+
+// Se resuelve el título real de cada tema en vez de mostrar el slug, y se descartan los que
+// no se generan en este entorno: un enlace a una pieza no publicada termina en 404.
+const temas = await getCollection('temas');
+const temasRelacionados = data.temasRelacionados.flatMap((slug) => {
+  const tema = temas.find((entrada) => entrada.id === slug);
+  return tema && visibleEnEntorno(tema.data) ? [tema] : [];
+});
+
+const fechaVerificacion = data.verificadoEl
+  ? data.verificadoEl.toISOString().split('T')[0]
+  : undefined;
+
+const fuentesFormateadas = data.fuentes.map((f) => ({
+  name: `${f.titulo} (${f.organizacion})`,
+  url: f.url,
+  note: f.notas,
+}));
+---
+
+<Base title={`${data.titulo} | orientame.cl`} description={data.descripcion}>
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Lo que sientes', href: '/siento' },
+        { label: data.titulo },
+      ]}
+    />
+  </div>
+
+  <article class="reading-shell articulo-sintoma">
+    <header class="articulo-encabezado">
+      <div class="meta-editorial">
+        <EditorialStatus
+          status={data.estadoEditorial === 'verificado-con-fuentes' ? 'sources' : 'draft'}
+          date={fechaVerificacion}
+        />
+      </div>
+      <h1 class="articulo-titulo">{data.titulo}</h1>
+      <p class="articulo-bajada">{data.descripcion}</p>
+    </header>
+
+    <div class="articulo-contenido">
+      <slot />
+    </div>
+
+    {
+      temasRelacionados.length > 0 && (
+        <section class="seccion-temas-relacionados" aria-labelledby="temas-rel-titulo">
+          <h2 id="temas-rel-titulo" class="seccion-titulo">
+            Conceptos y temas que pueden estar relacionados
+          </h2>
+          <p class="seccion-explicacion">
+            Un síntoma o experiencia cotidiana no equivale a un diagnóstico. Si quieres entender
+            mejor los cuadros de salud mental que suelen asociarse a estas dificultades:
+          </p>
+          <ul class="lista-temas">
+            {temasRelacionados.map((tema) => (
+              <li>
+                <a href={`/temas/${tema.id}`} class="enlace-tema">
+                  {tema.data.titulo}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <BloqueSiguientePaso
+      titulo="¿Quieres dar un siguiente paso?"
+      descripcion="No necesitas tener certeza de qué te ocurre para consultar. Encontrar orientación o saber qué opciones tienes en tu comuna puede quitar incertidumbre."
+      accionPrincipal={{
+        texto: 'Ver dónde encontrar atención en Chile',
+        href: '/donde',
+        tipo: 'recorrido',
+        aclaracion:
+          'Conoce los centros públicos de tu comuna, clínicas universitarias y líneas oficiales.',
+      }}
+      pasoMenorCompromiso={{
+        texto: 'Leer qué ocurre en una primera consulta psicológica',
+        href: '/primera-vez/que-pasa-en-sesion',
+        descripcion:
+          'Conoce cómo funciona una sesión, cuánto dura y qué derechos tienes como paciente.',
+      }}
+    />
+
+    {
+      fuentesFormateadas.length > 0 && (
+        <footer class="articulo-fuentes">
+          <SourceList sources={fuentesFormateadas} />
+        </footer>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .articulo-sintoma {
+    margin-block: var(--space-8) var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .articulo-encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .meta-editorial {
+    display: flex;
+    align-items: center;
+  }
+
+  .articulo-titulo {
+    line-height: 1.2;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .articulo-bajada {
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .articulo-contenido {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--color-ink-900);
+  }
+
+  .articulo-contenido :global(h2) {
+    font-size: var(--text-xl);
+    line-height: 1.3;
+    color: var(--color-ink-900);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+  }
+
+  .articulo-contenido :global(h3) {
+    font-size: var(--text-lg);
+    line-height: 1.4;
+    color: var(--color-ink-900);
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+
+  .articulo-contenido :global(p) {
+    margin: 0 0 var(--space-4);
+  }
+
+  .articulo-contenido :global(ul),
+  .articulo-contenido :global(ol) {
+    margin: 0 0 var(--space-4);
+    padding-left: 1.5rem;
+  }
+
+  .articulo-contenido :global(li + li) {
+    margin-top: var(--space-2);
+  }
+
+  .articulo-contenido :global(blockquote) {
+    margin: var(--space-4) 0;
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-mist-50);
+    border-radius: var(--radius-sm);
+    font-style: italic;
+  }
+
+  .seccion-temas-relacionados {
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+    border: 1px solid var(--color-line);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .seccion-titulo {
+    font-size: var(--text-xl);
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .seccion-explicacion {
+    font-size: var(--text-sm);
+    color: var(--color-ink-600);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .lista-temas {
+    margin: var(--space-2) 0 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .enlace-tema {
+    font-weight: 600;
+    color: var(--color-green-900);
+  }
+
+  .articulo-fuentes {
+    margin-top: var(--space-4);
+  }
+</style>

@@ -1,0 +1,145 @@
+---
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Card from '@components/Card.astro';
+import Notice from '@components/Notice.astro';
+import { getCollection } from 'astro:content';
+import { visibleEnEntorno } from '@/lib/editorial';
+
+const todasLasEntradas = await getCollection('sintomas');
+const sintomasPublicables = todasLasEntradas
+  .filter((entry) => visibleEnEntorno(entry.data))
+  .sort((a, b) => a.data.titulo.localeCompare(b.data.titulo, 'es'));
+---
+
+<Base
+  title="Lo que sientes: experiencias cotidianas y orientación | orientame.cl"
+  description="Encuentra información clara, basada en evidencia y sin diagnósticos sobre vivencias cotidianas como insomnio, desgano, angustia o sobrecarga emocional."
+>
+  <div class="reading-shell">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Lo que sientes' }]} />
+
+    <header class="seccion-encabezado">
+      <p class="eyebrow">Entrada por vivencias</p>
+      <h1>Lo que estás sintiendo, en palabras simples</h1>
+      <p class="lede">
+        No necesitas conocer un término clínico para buscar orientación. Estas páginas explican en
+        lenguaje cotidiano qué puede significar lo que estás viviendo, cuándo prestarle atención y
+        qué opciones de apoyo tienen respaldo.
+      </p>
+    </header>
+
+    <div class="aviso-alcance">
+      <Notice title="Sin etiquetas diagnósticas">
+        <p>
+          Un síntoma o una vivencia difícil no equivale a un trastorno. Estas páginas buscan
+          orientarte y reducir la incertidumbre, no ponerte una etiqueta ni sustituir una consulta
+          profesional.
+        </p>
+      </Notice>
+    </div>
+  </div>
+
+  {
+    sintomasPublicables.length > 0 ? (
+      <section
+        class="grilla-sintomas reading-shell"
+        aria-label="Listado de experiencias cotidianas"
+      >
+        {sintomasPublicables.map((sintoma) => (
+          <Card title={sintoma.data.titulo} href={`/siento/${sintoma.id}`}>
+            <p>{sintoma.data.descripcion}</p>
+          </Card>
+        ))}
+      </section>
+    ) : (
+      <div class="seccion-vacia reading-shell">
+        <Notice title="Todavía no hay páginas publicadas aquí">
+          <p>
+            Estas páginas están escritas pero aún no superan nuestra verificación de fuentes, así
+            que preferimos no publicarlas antes de poder mostrarte de dónde sale cada afirmación.
+            Puedes revisar cómo verificamos en <a href="/metodologia">metodología</a>.
+          </p>
+          <p>
+            Mientras tanto, el <a href="/empezar">orientador de primer paso</a> y{' '}
+            <a href="/donde">dónde consultar</a> están disponibles.
+          </p>
+        </Notice>
+      </div>
+    )
+  }
+
+  <section class="seccion-ayuda-adicional reading-shell">
+    <h2>¿No encuentras lo que estás sintiendo?</h2>
+    <p>
+      Si tu experiencia es distinta o no sabes cómo nombrarla, puedes iniciar el recorrido guiado de
+      preguntas en <a href="/empezar">orientador de primer paso</a> o revisar las opciones de atención
+      en <a href="/donde">dónde encontrar ayuda en Chile</a>.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .seccion-encabezado {
+    margin-block: var(--space-8) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-green-700);
+    margin: 0;
+  }
+
+  h1 {
+    line-height: 1.2;
+    color: var(--color-ink-900);
+    margin: 0;
+  }
+
+  .lede {
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    color: var(--color-ink-600);
+    margin: 0;
+  }
+
+  .aviso-alcance {
+    margin-bottom: var(--space-8);
+  }
+
+  .seccion-vacia {
+    margin-bottom: var(--space-12);
+  }
+
+  .grilla-sintomas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+  }
+
+  .seccion-ayuda-adicional {
+    margin-block: var(--space-8) var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .seccion-ayuda-adicional h2 {
+    font-size: var(--text-xl);
+    color: var(--color-ink-900);
+    margin: 0 0 var(--space-3);
+  }
+
+  .seccion-ayuda-adicional p {
+    font-size: var(--text-base);
+    color: var(--color-ink-600);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

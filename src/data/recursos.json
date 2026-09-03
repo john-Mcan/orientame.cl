@@ -1,0 +1,135 @@
+[
+  {
+    "id": "salud-responde",
+    "nombre": "Salud Responde — Ministerio de Salud",
+    "tipo": "linea",
+    "region": "Nacional",
+    "regionSlug": "nacional",
+    "telefono": "600 360 7777",
+    "telefonoMarcar": "+566003607777",
+    "web": "https://www.chileatiende.gob.cl/fichas/2467-salud-responde",
+    "costo": "bajo",
+    "rangoPrecio": "Tiene el costo de una llamada local",
+    "requisitos": ["No exige inscripción, afiliación previa ni documentación"],
+    "canales": ["telefono"],
+    "modalidad": "remoto",
+    "pasosAcceso": [
+      "Llama al 600 360 7777 desde un teléfono fijo o celular.",
+      "Puedes pedir orientación sobre qué centro de salud te corresponde, su dirección y sus horarios: la ficha oficial describe esa orientación administrativa como parte del servicio.",
+      "También responde consultas de salud y orienta sobre cuidados o derivación."
+    ],
+    "horarios": "Las 24 horas, durante todo el año",
+    "audiencias": ["general", "adultos", "familias"],
+    "notas": "Entrega orientación sobre acceso, centros y programas de salud de la red pública. No es una consulta médica ni psicológica.",
+    "estado": "verificado",
+    "nivel": "B",
+    "fuente": {
+      "nombre": "ChileAtiende · Ficha oficial Salud Responde",
+      "url": "https://www.chileatiende.gob.cl/fichas/2467-salud-responde",
+      "tipo": "oficial",
+      "consultadoEl": "2026-09-03"
+    },
+    "verificadoPor": "Auditoría orientame.cl",
+    "verificadoEl": "2026-09-03",
+    "proximaRevision": "2027-03-03"
+  },
+  {
+    "id": "linea-4141",
+    "nombre": "Línea *4141: No Estás Solo, No Estás Sola",
+    "tipo": "linea",
+    "region": "Nacional",
+    "regionSlug": "nacional",
+    "telefono": "*4141",
+    "telefonoMarcar": "*4141",
+    "web": "https://www.minsal.cl/linea-de-atencion-4141-no-estas-solo-no-estas-sola/",
+    "costo": "gratuito",
+    "rangoPrecio": "Gratuito desde celulares de cualquier compañía",
+    "requisitos": ["No exige inscripción ni derivación"],
+    "canales": ["telefono"],
+    "modalidad": "remoto",
+    "pasosAcceso": [
+      "Marca *4141 desde un teléfono celular.",
+      "Te atiende un profesional de psicología.",
+      "La atención es gratuita y confidencial."
+    ],
+    "horarios": "Las 24 horas, todos los días",
+    "audiencias": ["general", "adultos", "jovenes"],
+    "notas": "Línea del Ministerio de Salud para crisis de salud mental asociadas al suicidio. También aparece en la página de ayuda inmediata del sitio.",
+    "estado": "verificado",
+    "nivel": "B",
+    "fuente": {
+      "nombre": "Ministerio de Salud · Línea de atención *4141",
+      "url": "https://www.minsal.cl/linea-de-atencion-4141-no-estas-solo-no-estas-sola/",
+      "tipo": "oficial",
+      "consultadoEl": "2026-08-31"
+    },
+    "verificadoPor": "Equipo editorial orientame.cl (fase 1, /urgencia)",
+    "verificadoEl": "2026-08-31",
+    "proximaRevision": "2027-02-28"
+  },
+  {
+    "id": "senda-1412",
+    "nombre": "Fono Drogas y Alcohol 1412 — SENDA",
+    "tipo": "linea",
+    "region": "Nacional",
+    "regionSlug": "nacional",
+    "telefono": "1412",
+    "telefonoMarcar": "1412",
+    "web": "https://www.senda.gob.cl/informacion-sobre-drogas/fono-drogas-y-alcohol-1412/",
+    "costo": "desconocido",
+    "requisitos": ["No exige inscripción ni derivación"],
+    "canales": ["telefono"],
+    "modalidad": "remoto",
+    "pasosAcceso": [
+      "Marca 1412.",
+      "Consulta las condiciones vigentes de horario y costo en la página oficial de SENDA enlazada más abajo: no las hemos podido comprobar de forma directa."
+    ],
+    "audiencias": ["adultos", "familias", "jovenes"],
+    "notas": "Línea de SENDA sobre consumo de drogas y alcohol, para quien consume y para personas cercanas. Ficha pendiente de verificación directa: la página oficial bloquea la consulta automatizada y no hemos confirmado horario ni costo en un navegador.",
+    "estado": "requiere-revision",
+    "nivel": "A",
+    "fuente": {
+      "nombre": "SENDA · Fono Drogas y Alcohol 1412",
+      "url": "https://www.senda.gob.cl/informacion-sobre-drogas/fono-drogas-y-alcohol-1412/",
+      "tipo": "oficial",
+      "consultadoEl": "2026-09-03"
+    }
+  },
+  {
+    "id": "clinica-psicologica-udp",
+    "nombre": "Clínica Psicológica — Universidad Diego Portales",
+    "tipo": "clinica-universitaria",
+    "region": "Metropolitana",
+    "regionSlug": "metropolitana",
+    "comuna": "Santiago",
+    "comunaSlug": "santiago",
+    "direccion": "Grajales 1775, Santiago",
+    "telefono": "+56 2 2676 2870",
+    "telefonoMarcar": "+56226762870",
+    "web": "https://psicologia.udp.cl/clinica-psicologica/",
+    "costo": "bajo",
+    "rangoPrecio": "La facultad describe el servicio como de bajo costo. No publica un arancel en su página, así que conviene preguntarlo al contactar.",
+    "requisitos": [
+      "Consultar disponibilidad de cupos directamente con la clínica antes de asumir que hay horas"
+    ],
+    "canales": ["presencial", "telefono"],
+    "modalidad": "presencial",
+    "pasosAcceso": [
+      "Llama al +56 2 2676 2870 o revisa la página oficial de la clínica para conocer el procedimiento de ingreso vigente.",
+      "Pregunta por disponibilidad de cupos y por el valor de la sesión: el sitio no publica un arancel."
+    ],
+    "audiencias": ["adultos", "jovenes", "familias"],
+    "notas": "Centro docente asistencial de la Facultad de Psicología UDP, en funcionamiento desde 1997. Las atenciones las realizan estudiantes de psicología en práctica clínica supervisada.",
+    "estado": "verificado",
+    "nivel": "B",
+    "fuente": {
+      "nombre": "Universidad Diego Portales · Clínica Psicológica",
+      "url": "https://psicologia.udp.cl/clinica-psicologica/",
+      "tipo": "institucional",
+      "consultadoEl": "2026-09-03"
+    },
+    "verificadoPor": "Auditoría orientame.cl",
+    "verificadoEl": "2026-09-03",
+    "proximaRevision": "2027-03-03"
+  }
+]

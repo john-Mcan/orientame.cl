@@ -9,12 +9,23 @@ interface Props {
 }
 
 const { accion } = Astro.props;
-const fuentes = accion.tipo === 'guion' ? [] : resolverFuentes(accion.fuenteIds);
+const fuentes = accion.tipo === 'guion' ? [] : resolverFuentes(accion.fuenteIds ?? []);
 ---
 
 {
   accion.tipo === 'guion' ? (
-    <GuionCopiable titulo={accion.titulo} texto={accion.texto} />
+    <GuionCopiable titulo={accion.titulo} texto={accion.texto} destino={accion.destino} />
+  ) : accion.tipo === 'enlace' ? (
+    <div class="accion enlace">
+      <p class="accion-titulo">
+        <span>{accion.titulo}</span>
+      </p>
+      <p class="accion-descripcion">{accion.descripcion}</p>
+      <a class="accion-enlace-btn" href={accion.href} data-siguiente-paso="recorrido">
+        <span>{accion.etiquetaEnlace}</span>
+        <Icon name="flecha-derecha" size={16} />
+      </a>
+    </div>
   ) : (
     <div class:list={['accion', accion.tipo]}>
       {accion.tipo === 'llamada' ? (
@@ -105,6 +116,26 @@ const fuentes = accion.tipo === 'guion' ? [] : resolverFuentes(accion.fuenteIds)
     border-color: var(--color-green-700);
     background: var(--color-green-700);
     color: var(--color-white);
+  }
+
+  .accion-enlace-btn {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    margin-top: var(--space-4);
+    border: 1px solid var(--color-green-900);
+    border-radius: var(--radius-sm);
+    color: var(--color-green-900);
+    background: transparent;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .accion-enlace-btn:hover {
+    background: var(--color-mist-100);
   }
 
   .accion-fuentes {

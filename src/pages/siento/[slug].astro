@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from 'astro:content';
+import Sintoma from '@layouts/Sintoma.astro';
+import { visibleEnEntorno } from '@/lib/editorial';
+
+export async function getStaticPaths() {
+  const sintomas = await getCollection('sintomas');
+  return sintomas
+    .filter((entry) => visibleEnEntorno(entry.data))
+    .map((sintoma) => ({
+      params: { slug: sintoma.id },
+      props: { sintoma },
+    }));
+}
+
+const { sintoma } = Astro.props;
+const { Content } = await render(sintoma);
+---
+
+<Sintoma sintoma={sintoma}>
+  <Content />
+</Sintoma>

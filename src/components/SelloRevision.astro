@@ -1,0 +1,106 @@
+---
+interface Props {
+  nivel: 'A' | 'B';
+  estado: 'verificado' | 'requiere-revision' | 'no-disponible';
+  fecha?: string;
+}
+
+const { nivel, estado, fecha } = Astro.props;
+
+let etiqueta = '';
+let descripcionCorta = '';
+let clase = '';
+
+if (nivel === 'B' && estado === 'verificado') {
+  etiqueta = `Acceso verificado${fecha ? ` · ${fecha}` : ''}`;
+  descripcionCorta = 'Pasos de acceso y requisitos confirmados por el equipo.';
+  clase = 'verificado';
+} else if (estado === 'requiere-revision' || nivel === 'A') {
+  etiqueta = 'Registro oficial DEIS · Pasos por confirmar';
+  descripcionCorta =
+    'Datos del registro nacional de establecimientos; confirma el procedimiento local en el centro.';
+  clase = 'requiere-revision';
+} else {
+  etiqueta = 'No disponible temporalmente';
+  descripcionCorta = 'Este recurso se encuentra en pausa o con atenciones suspendidas.';
+  clase = 'no-disponible';
+}
+---
+
+<div class:list={['sello-revision', clase]}>
+  <span class="sello-marcador" aria-hidden="true"></span>
+  <div class="sello-texto">
+    <span class="sello-etiqueta">{etiqueta}</span>
+    <span class="sello-descripcion">{descripcionCorta}</span>
+  </div>
+</div>
+
+<style>
+  .sello-revision {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+  }
+
+  .sello-marcador {
+    width: 0.625rem;
+    height: 0.625rem;
+    margin-top: 0.2rem;
+    flex: none;
+    border-radius: 50%;
+  }
+
+  .sello-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .sello-etiqueta {
+    font-weight: 700;
+  }
+
+  .sello-descripcion {
+    color: var(--color-ink-600);
+  }
+
+  /* Nivel B: verificado */
+  .verificado {
+    background: var(--color-mist-100);
+    border: 1px solid var(--color-green-700);
+    color: var(--color-green-900);
+  }
+
+  .verificado .sello-marcador {
+    background: var(--color-green-700);
+  }
+
+  /* Nivel A: registro DEIS / requiere revisión.
+     Se distingue del sello verificado por ausencia de relleno y de color de marca:
+     un dato que no está confirmado no puede leerse como una credencial. */
+  .requiere-revision {
+    background: var(--color-paper);
+    border: 1px dashed var(--color-line);
+    color: var(--color-ink-900);
+  }
+
+  .requiere-revision .sello-marcador {
+    background: transparent;
+    border: 2px solid var(--color-ink-600);
+  }
+
+  /* No disponible */
+  .no-disponible {
+    background: var(--color-mist-50);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink-600);
+  }
+
+  .no-disponible .sello-marcador {
+    background: var(--color-line);
+  }
+</style>
