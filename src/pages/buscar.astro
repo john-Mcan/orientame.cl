@@ -1,0 +1,71 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Buscador from '@components/islands/Buscador';
+import Base from '@layouts/Base.astro';
+---
+
+<Base
+  title="Buscar | orientame.cl"
+  description="Busca información publicada en orientame.cl por una palabra o una frase."
+>
+  <div class="reading-shell pagina-buscar">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Buscar' }]} />
+
+    <header class="seccion-encabezado">
+      <p class="eyebrow">Búsqueda del sitio</p>
+      <h1>¿Qué necesitas encontrar?</h1>
+      <p class="lede">
+        Busca una palabra o una frase. Los resultados provienen sólo del contenido publicado en este
+        sitio y no interpretan lo que escribes ni evalúan tu situación.
+      </p>
+    </header>
+
+    <div class="bloque-buscador">
+      <Buscador client:load />
+    </div>
+
+    <aside class="privacidad-busqueda" aria-labelledby="privacidad-busqueda-titulo">
+      <h2 id="privacidad-busqueda-titulo">Cómo funciona</h2>
+      <p>
+        El índice se descarga desde orientame.cl y la búsqueda ocurre en tu navegador. No guardamos
+        lo que escribes en nuestros servidores. Como en cualquier navegación web, el servidor recibe
+        las solicitudes técnicas necesarias para entregar los archivos de la página.
+      </p>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  /* El aire final va como `padding` del contenedor y no como `margin` del último bloque:
+     un margen inferior colapsa fuera de `main` y deja el pie pegado al contenido. */
+  .pagina-buscar {
+    padding-bottom: var(--space-16);
+  }
+
+  /* Mismo encabezado de sección que `/siento`, `/temas`, `/donde` y `/primera-vez`. */
+  .seccion-encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-block: var(--space-8) var(--space-8);
+  }
+
+  .bloque-buscador {
+    margin-bottom: var(--space-12);
+  }
+
+  .privacidad-busqueda {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+
+  .privacidad-busqueda h2 {
+    font-size: var(--text-lg);
+  }
+
+  .privacidad-busqueda p {
+    margin-top: var(--space-3);
+  }
+</style>

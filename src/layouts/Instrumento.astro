@@ -1,0 +1,330 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
+import EditorialStatus from '@components/EditorialStatus.astro';
+import Notice from '@components/Notice.astro';
+import SourceList from '@components/SourceList.astro';
+import Test from '@components/islands/Test';
+
+interface Props {
+  instrumento: CollectionEntry<'instrumentos'>;
+}
+
+const { instrumento } = Astro.props;
+const data = instrumento.data;
+
+if (!data.instrumentoId || !data.instrucciones) {
+  throw new Error(
+    `El instrumento publicable "${instrumento.id}" no tiene implementación completa.`,
+  );
+}
+
+const fechaVerificacion = data.verificadoEl?.toISOString().split('T')[0];
+const fuentes = data.fuentes.map((fuente) => ({
+  name: `${fuente.titulo} (${fuente.organizacion})`,
+  url: fuente.url,
+  note: fuente.notas,
+}));
+
+// El sello se deriva del estado real de la pieza: fijarlo en "verificado" mostraría un
+// respaldo falso a un borrador visible en desarrollo.
+const selloEditorial =
+  data.estadoEditorial === 'revisado-clinicamente'
+    ? 'clinical'
+    : data.estadoEditorial === 'verificado-con-fuentes'
+      ? 'sources'
+      : 'draft';
+
+// El puntaje máximo del instrumento se calcula desde sus propios rangos, para que el
+// resultado no dependa de un número escrito a mano en el island.
+const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango.hasta), 0);
+---
+
+<Base title={`${data.titulo} | orientame.cl`} description={data.descripcion}>
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Autoevaluaciones', href: '/autoevaluacion' },
+        { label: data.titulo },
+      ]}
+    />
+  </div>
+
+  <article
+    class="instrumento reading-shell"
+    data-pagefind-body
+    data-pagefind-filter="seccion:Autoevaluaciones"
+  >
+    <header class="instrumento-encabezado">
+      <EditorialStatus status={selloEditorial} date={fechaVerificacion} />
+      <h1 data-pagefind-meta="title">{data.titulo}</h1>
+      <p class="lede">{data.descripcion}</p>
+    </header>
+
+    <Notice title="Una herramienta opcional, no una evaluación clínica">
+      <p>
+        Tú decides si responderla. El puntaje describe un rango dentro de este instrumento: no
+        entrega un diagnóstico ni indica por sí solo qué atención necesitas.
+      </p>
+    </Notice>
+
+    <div class="instrumento-contenido">
+      <slot />
+    </div>
+
+    <section class="instrumento-ficha" aria-labelledby="ficha-titulo">
+      <h2 id="ficha-titulo">Antes de responder</h2>
+      <dl>
+        <div><dt>Versión</dt><dd>{data.version}</dd></div>
+        <div><dt>Población y alcance</dt><dd>{data.poblacion}</dd></div>
+        <div><dt>Condición de uso</dt><dd>{data.licencia}</dd></div>
+      </dl>
+    </section>
+
+    <section class="instrumento-test" aria-labelledby="responder-titulo">
+      <h2 id="responder-titulo">Responder la autoevaluación</h2>
+      <Test
+        client:load
+        instrumentoId={data.instrumentoId}
+        instrucciones={data.instrucciones}
+        preguntas={data.preguntas}
+        opciones={data.opciones}
+        rangos={data.rangos}
+        puntajeMaximo={puntajeMaximo}
+      />
+    </section>
+
+    {/* Responder es opcional: quien decide no hacerlo también necesita una salida. */}
+    <BloqueSiguientePaso
+      titulo="No hace falta responder para seguir"
+      descripcion="Un cuestionario es sólo una forma de mirar las últimas semanas. Puedes ir directamente a las opciones de atención o leer sobre lo que estás sintiendo."
+      accionPrincipal={{
+        texto: 'Ver dónde consultar en Chile',
+        href: '/donde',
+        tipo: 'recorrido',
+        aclaracion: 'Líneas oficiales, atención pública por comuna y clínicas universitarias.',
+      }}
+      pasoMenorCompromiso={{
+        texto: 'Leer lo que estás sintiendo, en palabras simples',
+        href: '/siento',
+        descripcion: 'Vivencias cotidianas explicadas sin etiquetas diagnósticas.',
+      }}
+    />
+
+    <footer>
+      <SourceList sources={fuentes} />
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .instrumento {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    margin-block: var(--space-8) var(--space-16);
+  }
+
+  .instrumento-encabezado,
+  .instrumento-contenido,
+  .instrumento-test {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .instrumento-encabezado {
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .instrumento-contenido :global(h2) {
+    margin-top: var(--space-6);
+  }
+
+  .instrumento-contenido :global(p) {
+    color: var(--color-ink-600);
+  }
+
+  .instrumento-ficha {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+  }
+
+  .instrumento-ficha dl {
+    display: grid;
+    gap: var(--space-4);
+    margin: var(--space-4) 0 0;
+  }
+
+  .instrumento-ficha dl div {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  .instrumento-ficha dt {
+    font-weight: 700;
+  }
+
+  .instrumento-ficha dd {
+    margin: 0;
+    color: var(--color-ink-600);
+  }
+
+  .instrumento-test {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .instrumento-test :global(.test-sin-js) {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    color: var(--color-ink-600);
+    background: var(--color-mist-50);
+  }
+
+  .instrumento-test :global(.test-instrucciones) {
+    color: var(--color-ink-600);
+  }
+
+  .instrumento-test :global(.test-error) {
+    margin-top: var(--space-6);
+    padding: var(--space-4);
+    border: 2px solid var(--color-ink-900);
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-900);
+    background: var(--color-mist-100);
+  }
+
+  .instrumento-test :global(.test-error p) {
+    margin-top: var(--space-2);
+  }
+
+  .instrumento-test :global(.test-preguntas) {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+
+  .instrumento-test :global(.test-pregunta) {
+    min-width: 0;
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+
+  .instrumento-test :global(.test-pregunta legend) {
+    padding-inline: var(--space-2);
+    font-weight: 700;
+  }
+
+  .instrumento-test :global(.test-pregunta legend span) {
+    color: var(--color-green-700);
+  }
+
+  .instrumento-test :global(.test-opciones) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .instrumento-test :global(.test-opciones label) {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .instrumento-test :global(.test-opciones label:has(input:checked)) {
+    border-color: var(--color-green-900);
+    background: var(--color-mist-100);
+  }
+
+  .instrumento-test :global(.test-opciones input) {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    accent-color: var(--color-green-900);
+  }
+
+  .instrumento-test :global(.test-acciones) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  .instrumento-test :global(.test-acciones button) {
+    min-height: 2.75rem;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .instrumento-test :global(.test-calcular) {
+    border: 1px solid var(--color-green-900);
+    color: var(--color-white);
+    background: var(--color-green-900);
+  }
+
+  .instrumento-test :global(.test-borrar) {
+    border: 1px solid var(--color-green-900);
+    color: var(--color-green-900);
+    background: transparent;
+  }
+
+  .instrumento-test :global(.test-resultado) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+    padding: var(--space-8);
+    border: 2px solid var(--color-green-900);
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
+  }
+
+  .instrumento-test :global(.test-puntaje) {
+    font-size: var(--text-lg);
+  }
+
+  .instrumento-test :global(.test-siguientes) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    padding-top: var(--space-2);
+  }
+
+  .instrumento-test :global(.test-siguientes a) {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    font-weight: 700;
+  }
+
+  .instrumento-test :global(.test-pausa) {
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 40rem) {
+    .instrumento-ficha dl div,
+    .instrumento-test :global(.test-opciones) {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

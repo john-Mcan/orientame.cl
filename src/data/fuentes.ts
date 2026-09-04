@@ -55,11 +55,11 @@ export const fuentes: readonly Fuente[] = [
   },
   {
     id: 'deis-registro-establecimientos',
-    titulo: 'Registro Oficial de Establecimientos de Salud (DEIS)',
+    titulo: 'Establecimientos de Salud Vigentes',
     organizacion:
       'Departamento de Estadísticas e Información de Salud (DEIS) · Ministerio de Salud',
-    url: 'https://deis.minsal.cl/',
-    consultadoEl: '2026-09-01',
+    url: 'https://datos.gob.cl/en/dataset/establecimientos-de-salud-vigentes/resource/2c44d782-3365-44e3-aefb-2c8b8363a1bc',
+    consultadoEl: '2026-09-03',
   },
   {
     id: 'sis-registro-prestadores',

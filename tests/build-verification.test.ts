@@ -31,6 +31,7 @@ describe('Build output verification', () => {
     'index.html',
     'sobre/index.html',
     'metodologia/index.html',
+    'metodologia/protocolo-crisis/index.html',
     'urgencia/index.html',
     'empezar/index.html',
     'legal/index.html',
@@ -49,6 +50,14 @@ describe('Build output verification', () => {
     'donde/metropolitana/santiago/index.html',
     'donde/metropolitana/providencia/index.html',
     'donde/metropolitana/puente-alto/index.html',
+    'buscar/index.html',
+    'autoevaluacion/index.html',
+    'autoevaluacion/oms-5/index.html',
+    'autoevaluacion/gad-7/index.html',
+    'acompanar/index.html',
+    'acompanar/preguntar-y-escuchar/index.html',
+    'acompanar/ofrecer-ayuda-sin-presionar/index.html',
+    'acompanar/acompanar-primer-contacto/index.html',
     '404.html',
     'robots.txt',
     'sitemap-index.xml',
@@ -168,6 +177,7 @@ describe('HTML válido en las páginas generadas', () => {
     'urgencia/index.html',
     'sobre/index.html',
     'metodologia/index.html',
+    'metodologia/protocolo-crisis/index.html',
     'siento/index.html',
     'temas/index.html',
     'primera-vez/index.html',
@@ -180,6 +190,14 @@ describe('HTML válido en las páginas generadas', () => {
     'donde/metropolitana/santiago/index.html',
     'donde/metropolitana/providencia/index.html',
     'donde/metropolitana/puente-alto/index.html',
+    'buscar/index.html',
+    'autoevaluacion/index.html',
+    'autoevaluacion/oms-5/index.html',
+    'autoevaluacion/gad-7/index.html',
+    'acompanar/index.html',
+    'acompanar/preguntar-y-escuchar/index.html',
+    'acompanar/ofrecer-ayuda-sin-presionar/index.html',
+    'acompanar/acompanar-primer-contacto/index.html',
     ...nodosConRutaPropia().map((nodo) => archivoDe(rutaDe(nodo.id))),
   ];
 
@@ -211,14 +229,18 @@ describe('La portada abre el recorrido sin controles engañosos', () => {
     assert.ok(leer('index.html').includes('/urgencia'), 'La portada debe enlazar a /urgencia');
   });
 
-  it('no presenta un campo de búsqueda que no exista todavía', () => {
-    // Un control con forma de buscador que en realidad es un enlace confunde a quien
-    // intenta escribir y se anuncia mal en lectores de pantalla.
+  it('la búsqueda es una función real y conserva una alternativa sin JavaScript', () => {
     const html = leer('index.html');
+    const buscar = leer('buscar/index.html');
     assert.ok(!html.includes('type="search"'), 'No debe haber un campo de búsqueda sin buscador');
     assert.ok(
-      !/placeholder="[^"]*[Bb]uscar/.test(html),
-      'No debe haber un placeholder de búsqueda sin buscador',
+      html.includes('Puedes explorar') && buscar.includes('Puedes explorar'),
+      'La búsqueda necesita enlaces útiles antes de hidratarse',
+    );
+    assert.ok(fs.existsSync(path.join(distDir, 'pagefind', 'pagefind.js')), 'Falta Pagefind');
+    assert.ok(
+      fs.existsSync(path.join(distDir, 'pagefind', 'pagefind-entry.json')),
+      'Falta el índice de Pagefind',
     );
   });
 

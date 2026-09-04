@@ -11,6 +11,7 @@ estadoEditorial: verificado-con-fuentes
 fraseCotidiana: 'Siento angustia en el pecho'
 temasRelacionados:
   - ansiedad
+  - crisis-de-panico
   - estres-cronico
 nivelUrgencia: contextual
 fuentes:

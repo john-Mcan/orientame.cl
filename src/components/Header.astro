@@ -9,6 +9,8 @@ const links = [
   { href: '/siento', label: 'Lo que sientes' },
   { href: '/donde', label: 'Dónde consultar' },
   { href: '/primera-vez', label: 'Primera vez' },
+  { href: '/acompanar', label: 'Acompañar' },
+  { href: '/buscar', label: 'Buscar' },
   { href: '/sobre', label: 'Sobre el proyecto' },
 ];
 
@@ -86,11 +88,14 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     height: 2.625rem;
   }
 
+  /* Con siete entradas, la fila completa (marca + menú + acceso a urgencia) sólo cabe en
+     el ancho máximo de `page-shell`. La separación cede antes que el texto para que ningún
+     enlace se corte ni aparezca scroll horizontal. */
   .desktop-nav {
     display: flex;
     margin-left: auto;
     align-items: center;
-    gap: var(--space-6);
+    gap: clamp(var(--space-3), 1.4vw, var(--space-4));
   }
 
   .desktop-nav a {
@@ -153,7 +158,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     text-decoration: none;
   }
 
-  @media (max-width: 52rem) {
+  @media (max-width: 78rem) {
     .header-inner {
       gap: var(--space-3);
     }

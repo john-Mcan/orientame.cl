@@ -48,6 +48,7 @@ const RUTAS_ESTATICAS = new Set([
   '/urgencia',
   '/sobre',
   '/metodologia',
+  '/metodologia/protocolo-crisis',
   '/legal',
   '/legal/privacidad',
   '/legal/alcance',
@@ -64,6 +65,14 @@ const RUTAS_ESTATICAS = new Set([
   '/donde/metropolitana/santiago',
   '/donde/metropolitana/providencia',
   '/donde/metropolitana/puente-alto',
+  '/buscar',
+  '/autoevaluacion',
+  '/autoevaluacion/oms-5',
+  '/autoevaluacion/gad-7',
+  '/acompanar',
+  '/acompanar/preguntar-y-escuchar',
+  '/acompanar/ofrecer-ayuda-sin-presionar',
+  '/acompanar/acompanar-primer-contacto',
 ]);
 
 const rutasDelOrientador = new Set(nodosConRutaPropia().map((nodo) => rutaDe(nodo.id)));

@@ -1,0 +1,170 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import EditorialStatus from '@components/EditorialStatus.astro';
+import Notice from '@components/Notice.astro';
+import SourceList from '@components/SourceList.astro';
+import Base from './Base.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  pieza: CollectionEntry<'acompanamiento'>;
+}
+
+const { pieza } = Astro.props;
+const data = pieza.data;
+const fechaVerificacion = data.verificadoEl?.toISOString().split('T')[0];
+const fuentes = data.fuentes.map((fuente) => ({
+  name: `${fuente.titulo} (${fuente.organizacion})`,
+  url: fuente.url,
+  note: fuente.notas,
+}));
+
+// El sello se deriva del estado real de la pieza: fijarlo en "verificado" mostraría un
+// respaldo falso a un borrador visible en desarrollo.
+const selloEditorial =
+  data.estadoEditorial === 'revisado-clinicamente'
+    ? 'clinical'
+    : data.estadoEditorial === 'verificado-con-fuentes'
+      ? 'sources'
+      : 'draft';
+---
+
+<Base title={`${data.titulo} | orientame.cl`} description={data.descripcion}>
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Acompañar a alguien', href: '/acompanar' },
+        { label: data.titulo },
+      ]}
+    />
+  </div>
+
+  <article
+    class="reading-shell articulo-acompanamiento"
+    data-pagefind-body
+    data-pagefind-filter="seccion:Acompañar a alguien"
+  >
+    <header class="articulo-encabezado">
+      <div class="meta-editorial">
+        <EditorialStatus status={selloEditorial} date={fechaVerificacion} />
+      </div>
+      <h1 class="articulo-titulo" data-pagefind-meta="title">{data.titulo}</h1>
+      <p class="articulo-bajada">{data.descripcion}</p>
+    </header>
+
+    <Notice title="Acompañar no es reemplazar atención profesional">
+      <p>
+        Estas ideas están dirigidas a acompañar a una persona adulta. No sirven para evaluar su
+        situación, diagnosticarla ni asumir decisiones en su nombre.
+      </p>
+    </Notice>
+
+    <div class="articulo-contenido"><slot /></div>
+
+    <section class="siguiente" aria-labelledby="siguiente-titulo">
+      <p class="eyebrow">Siguiente paso</p>
+      <h2 id="siguiente-titulo">Un siguiente paso posible</h2>
+      <p>
+        Si la persona quiere conocer opciones, pueden revisar juntos
+        <a href="/donde">dónde consultar en Chile</a>. También pueden detenerse y volver después.
+      </p>
+      <p>
+        Si tú o alguien cercano corre peligro ahora, la página de
+        <a href="/urgencia">ayuda inmediata</a> reúne canales oficiales disponibles en Chile.
+      </p>
+    </section>
+
+    <footer><SourceList sources={fuentes} /></footer>
+  </article>
+</Base>
+
+<style>
+  /* Mismo esqueleto que `Sintoma.astro` y `Tema.astro`: el artículo se lee igual en las
+     tres colecciones y no cambia de posición al navegar entre secciones. */
+  .articulo-acompanamiento {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    margin-block: var(--space-8) var(--space-16);
+  }
+
+  .articulo-encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .meta-editorial {
+    display: flex;
+    align-items: center;
+  }
+
+  .articulo-titulo {
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .articulo-bajada {
+    margin: 0;
+    color: var(--color-ink-600);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+  }
+
+  .articulo-contenido {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    line-height: 1.7;
+  }
+
+  .articulo-contenido :global(h2) {
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-xl);
+    line-height: 1.3;
+  }
+
+  .articulo-contenido :global(p) {
+    margin: 0 0 var(--space-4);
+  }
+
+  .articulo-contenido :global(ul),
+  .articulo-contenido :global(ol) {
+    margin: 0 0 var(--space-4);
+    padding-left: 1.5rem;
+  }
+
+  .articulo-contenido :global(li + li) {
+    margin-top: var(--space-2);
+  }
+
+  .articulo-contenido :global(blockquote) {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+
+  /* Mismo tratamiento visual que `BloqueSiguientePaso.astro`. */
+  .siguiente {
+    padding: var(--space-8);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
+  }
+
+  .siguiente h2 {
+    margin-top: var(--space-2);
+    font-size: var(--text-xl);
+  }
+
+  .siguiente p + p,
+  .siguiente h2 + p {
+    margin-top: var(--space-4);
+  }
+</style>

@@ -9,7 +9,8 @@
     "format": "prettier --write .",
     "typecheck": "astro check",
     "test": "node --test --experimental-strip-types tests/**/*.test.ts",
-    "build": "astro build",
+    "build:site": "astro build",
+    "build": "npm run build:site && pagefind --site dist",
     "preview": "astro preview",
     "check": "npm run lint && npm run typecheck && npm run build && npm run test"
   },
@@ -19,6 +20,7 @@
     "astro": "^7.2.9",
     "eslint": "^10.9.1",
     "eslint-plugin-astro": "^1.7.0",
+    "pagefind": "^1.5.2",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",

@@ -11,6 +11,7 @@ estadoEditorial: verificado-con-fuentes
 fraseCotidiana: 'Tengo miedo a perder el control'
 temasRelacionados:
   - ansiedad
+  - crisis-de-panico
   - estres-cronico
 nivelUrgencia: contextual
 fuentes:

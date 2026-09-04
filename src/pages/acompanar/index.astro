@@ -1,0 +1,98 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Card from '@components/Card.astro';
+import Notice from '@components/Notice.astro';
+import Base from '@layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { visibleEnEntorno } from '@/lib/editorial';
+
+const piezas = (await getCollection('acompanamiento'))
+  .filter((pieza) => visibleEnEntorno(pieza.data))
+  .sort((a, b) => a.data.titulo.localeCompare(b.data.titulo, 'es'));
+---
+
+<Base
+  title="Acompañar a alguien | orientame.cl"
+  description="Guías para escuchar y ofrecer ayuda a una persona adulta sin presionarla ni decidir en su nombre."
+>
+  <div class="reading-shell">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Acompañar a alguien' }]} />
+  </div>
+
+  <div
+    class="reading-shell pagina-acompanar"
+    data-pagefind-body
+    data-pagefind-filter="seccion:Acompañar a alguien"
+  >
+    <header class="seccion-encabezado">
+      <p class="eyebrow">Para personas cercanas</p>
+      <h1 data-pagefind-meta="title">Acompañar a alguien</h1>
+      <p class="lede">
+        No necesitas tener todas las respuestas. Estas guías ofrecen formas concretas de escuchar y
+        ayudar respetando las decisiones de la otra persona y tus propios límites.
+      </p>
+    </header>
+
+    <div class="aviso-alcance">
+      <Notice title="Estas guías tienen un alcance acotado">
+        <p>
+          Están dirigidas a situaciones entre personas adultas y no enseñan a evaluar riesgo ni a
+          diagnosticar. No reemplazan atención profesional.
+        </p>
+      </Notice>
+    </div>
+
+    <section aria-labelledby="guias-titulo">
+      <h2 id="guias-titulo" class="seccion-titulo">Elige la ayuda que te serviría ahora</h2>
+      <div class="grilla-guias">
+        {
+          piezas.map((pieza) => (
+            <Card title={pieza.data.titulo} href={`/acompanar/${pieza.id}`}>
+              <p>{pieza.data.descripcion}</p>
+            </Card>
+          ))
+        }
+      </div>
+    </section>
+
+    <p class="pausa">
+      Si ninguna opción te sirve hoy, puedes detenerte. Volver a conversar en otro momento también
+      puede ser un siguiente paso.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .pagina-acompanar {
+    padding-bottom: var(--space-16);
+  }
+
+  /* Mismo encabezado de sección que `/siento`, `/temas`, `/donde` y `/primera-vez`. */
+  .seccion-encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-block: var(--space-8) var(--space-6);
+  }
+
+  .aviso-alcance {
+    margin-bottom: var(--space-8);
+  }
+
+  .seccion-titulo {
+    font-size: var(--text-xl);
+  }
+
+  /* Mismo ritmo de grilla que el resto del sitio: a 45rem da dos columnas. */
+  .grilla-guias {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+
+  .pausa {
+    margin-top: var(--space-12);
+    color: var(--color-ink-600);
+  }
+</style>

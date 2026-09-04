@@ -562,6 +562,15 @@ const resultados: readonly Resultado[] = [
       'Si crees que esa persona puede estar en peligro en este momento, no esperes a terminar de leer.',
     acciones: [
       {
+        tipo: 'enlace',
+        titulo: 'Guías para acompañar sin presionar',
+        descripcion:
+          'Formas concretas de preguntar, escuchar y ayudar con un primer contacto respetando lo que la otra persona decida.',
+        href: '/acompanar',
+        etiquetaEnlace: 'Ver las guías para acompañar',
+        fuenteIds: [],
+      },
+      {
         tipo: 'guion',
         titulo: 'Abrir la conversación sin presionar',
         texto:

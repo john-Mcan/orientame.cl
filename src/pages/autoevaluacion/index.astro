@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Card from '@components/Card.astro';
+import Notice from '@components/Notice.astro';
+import { visibleEnEntorno } from '@/lib/editorial';
+
+const instrumentos = (await getCollection('instrumentos'))
+  .filter((instrumento) => visibleEnEntorno(instrumento.data))
+  .sort((a, b) => a.data.titulo.localeCompare(b.data.titulo, 'es'));
+---
+
+<Base
+  title="Autoevaluaciones orientativas"
+  description="Instrumentos breves con fuente, versión, población, licencia y scoring verificados. Los resultados se calculan en tu dispositivo y no son diagnósticos."
+>
+  <div class="reading-shell">
+    <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Autoevaluaciones' }]} />
+
+    <header class="seccion-encabezado">
+      <p class="eyebrow">Herramientas opcionales</p>
+      <h1>Una medición puede orientar, no definirte</h1>
+      <p class="lede">
+        Estas autoevaluaciones sirven para observar un aspecto concreto de las últimas semanas. No
+        son la puerta principal del sitio ni sustituyen una evaluación profesional.
+      </p>
+    </header>
+
+    <div class="aviso-alcance">
+      <Notice title="Tus respuestas no se guardan">
+        <p>
+          El cálculo ocurre en tu navegador y orientame.cl no almacena las respuestas ni el
+          resultado en sus servidores. Al recargar o cerrar la página, las respuestas desaparecen.
+        </p>
+      </Notice>
+    </div>
+
+    <section class="autoevaluaciones-lista" aria-labelledby="lista-titulo">
+      <h2 id="lista-titulo" class="seccion-titulo">Instrumentos disponibles</h2>
+      <div class="grilla-instrumentos">
+        {
+          instrumentos.map((instrumento) => (
+            <Card title={instrumento.data.titulo} href={`/autoevaluacion/${instrumento.id}`}>
+              <p>{instrumento.data.descripcion}</p>
+              <p class="detalle">{instrumento.data.preguntas.length} preguntas · sin guardar</p>
+            </Card>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="seccion-ayuda-adicional">
+      <h2>¿Prefieres no responder un cuestionario?</h2>
+      <p>
+        Ninguna de estas herramientas es necesaria para seguir. Puedes revisar
+        <a href="/siento">lo que estás sintiendo</a> en palabras cotidianas o ver directamente
+        <a href="/donde">dónde consultar en Chile</a>.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* Mismo encabezado de sección que `/siento`, `/temas`, `/donde` y `/primera-vez`. */
+  .seccion-encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-block: var(--space-8) var(--space-6);
+  }
+
+  .aviso-alcance {
+    margin-bottom: var(--space-8);
+  }
+
+  .seccion-titulo {
+    font-size: var(--text-xl);
+  }
+
+  .grilla-instrumentos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+
+  .detalle {
+    margin-top: var(--space-4);
+    color: var(--color-green-700);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .seccion-ayuda-adicional {
+    margin-block: var(--space-12) var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .seccion-ayuda-adicional h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .seccion-ayuda-adicional p {
+    color: var(--color-ink-600);
+  }
+</style>

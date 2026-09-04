@@ -2,6 +2,7 @@
 import Card from '@components/Card.astro';
 import Notice from '@components/Notice.astro';
 import PasoOrientador from '@components/PasoOrientador.astro';
+import Buscador from '@components/islands/Buscador';
 import Base from '@layouts/Base.astro';
 import { getNodo } from '@/lib/orientador';
 
@@ -37,6 +38,14 @@ if (!inicio || inicio.tipo !== 'paso') {
     </div>
   </section>
 
+  <section class="busqueda-portada reading-shell" aria-labelledby="busqueda-portada-titulo">
+    <div>
+      <p class="eyebrow">Buscar en el sitio</p>
+      <h2 id="busqueda-portada-titulo">¿Tienes una palabra en mente?</h2>
+    </div>
+    <Buscador compacto client:load />
+  </section>
+
   <section class="atajos page-shell" aria-labelledby="atajos-titulo">
     <h2 id="atajos-titulo">Si ya sabes qué necesitas</h2>
     <ul class="atajos-lista">
@@ -51,6 +60,14 @@ if (!inicio || inicio.tipo !== 'paso') {
       <li>
         <a href="/primera-vez">Es tu primera vez</a>
         <span>Qué pasa en una sesión, qué decir, cuánto cuesta y cómo elegir.</span>
+      </li>
+      <li>
+        <a href="/autoevaluacion">Autoevaluaciones</a>
+        <span>Instrumentos breves con puntuación local y sus límites explicados.</span>
+      </li>
+      <li>
+        <a href="/acompanar">Acompañar a alguien</a>
+        <span>Ideas concretas para escuchar y ofrecer apoyo sin presionar.</span>
       </li>
     </ul>
   </section>
@@ -131,6 +148,25 @@ if (!inicio || inicio.tipo !== 'paso') {
     font-size: var(--text-sm);
   }
 
+  .busqueda-portada {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    align-items: end;
+    gap: var(--space-8);
+    padding-block: var(--space-12) 0;
+  }
+
+  .busqueda-portada h2 {
+    margin-top: var(--space-2);
+    font-size: var(--text-lg);
+  }
+
+  /* El buscador se estiliza una sola vez en `global.css`; aquí sólo cambia su tipografía
+     de etiqueta, que en la portada acompaña a un `h2` y no a un encabezado de página. */
+  .busqueda-portada :global(.buscador-formulario label) {
+    font-size: var(--text-sm);
+  }
+
   /* Atajos a las secciones que no pasan por el orientador. */
 
   .atajos {
@@ -198,6 +234,11 @@ if (!inicio || inicio.tipo !== 'paso') {
   }
 
   @media (max-width: 48rem) {
+    .busqueda-portada {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
     .proyecto {
       padding-block: var(--space-16);
     }

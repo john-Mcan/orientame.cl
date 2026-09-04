@@ -1,0 +1,19 @@
+---
+import { getCollection, render } from 'astro:content';
+import Instrumento from '@layouts/Instrumento.astro';
+import { visibleEnEntorno } from '@/lib/editorial';
+
+export async function getStaticPaths() {
+  const instrumentos = await getCollection('instrumentos');
+  return instrumentos
+    .filter((instrumento) => visibleEnEntorno(instrumento.data))
+    .map((instrumento) => ({ params: { slug: instrumento.id }, props: { instrumento } }));
+}
+
+const { instrumento } = Astro.props;
+const { Content } = await render(instrumento);
+---
+
+<Instrumento instrumento={instrumento}>
+  <Content />
+</Instrumento>

@@ -108,15 +108,66 @@ const topics = defineCollection({
 
 const instruments = defineCollection({
   loader: glob({ base: './src/content/instrumentos', pattern: '**/*.{md,mdx}' }),
-  schema: editorialSchema.and(
-    z.object({
-      nombreInstrumento: z.string().min(3),
-      version: z.string().min(1),
-      poblacion: z.string().min(3),
-      licencia: z.string().min(3),
-      scoringVerificado: z.boolean().default(false),
+  schema: editorialSchema
+    .and(
+      z.object({
+        nombreInstrumento: z.string().min(3),
+        version: z.string().min(1),
+        poblacion: z.string().min(3),
+        licencia: z.string().min(3),
+        scoringVerificado: z.boolean().default(false),
+        instrumentoId: z.enum(['oms-5', 'gad-7']).optional(),
+        instrucciones: z.string().min(20).optional(),
+        preguntas: z
+          .array(
+            z.object({
+              id: z.string().regex(/^[a-z0-9-]+$/),
+              texto: z.string().min(4),
+            }),
+          )
+          .default([]),
+        opciones: z
+          .array(
+            z.object({
+              valor: z.number().int().nonnegative(),
+              texto: z.string().min(2),
+            }),
+          )
+          .default([]),
+        rangos: z
+          .array(
+            z.object({
+              desde: z.number().int().nonnegative(),
+              hasta: z.number().int().nonnegative(),
+              etiqueta: z.string().min(3),
+              explicacion: z.string().min(20),
+            }),
+          )
+          .default([]),
+      }),
+    )
+    .superRefine((data, context) => {
+      const puedePublicarse =
+        data.estadoEditorial === 'verificado-con-fuentes' ||
+        data.estadoEditorial === 'revisado-clinicamente';
+
+      if (
+        puedePublicarse &&
+        (!data.scoringVerificado ||
+          !data.instrumentoId ||
+          !data.instrucciones ||
+          data.preguntas.length === 0 ||
+          data.opciones.length === 0 ||
+          data.rangos.length === 0)
+      ) {
+        context.addIssue({
+          code: 'custom',
+          path: ['scoringVerificado'],
+          message:
+            'Un instrumento publicable requiere versión, preguntas, opciones, rangos y scoring verificado.',
+        });
+      }
     }),
-  ),
 });
 
 const guides = defineCollection({

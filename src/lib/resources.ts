@@ -61,24 +61,21 @@ export const COMUNAS_PILOTO: readonly ComunaPiloto[] = [
     slug: 'santiago',
     region: 'Metropolitana',
     regionSlug: 'metropolitana',
-    descripcion:
-      'Comuna central de Santiago con red municipal de salud primaria, COSAM y clínicas docentes.',
+    descripcion: 'Establecimientos vigentes reproducidos del registro oficial DEIS/MINSAL.',
   },
   {
     nombre: 'Providencia',
     slug: 'providencia',
     region: 'Metropolitana',
     regionSlug: 'metropolitana',
-    descripcion:
-      'Red de salud comunal Providencia, centros de atención primaria y servicios especializados.',
+    descripcion: 'Establecimientos vigentes reproducidos del registro oficial DEIS/MINSAL.',
   },
   {
     nombre: 'Puente Alto',
     slug: 'puente-alto',
     region: 'Metropolitana',
     regionSlug: 'metropolitana',
-    descripcion:
-      'Red municipal de salud de la comuna más poblada de Chile, con amplia red de CESFAM y COSAM.',
+    descripcion: 'Establecimientos vigentes reproducidos del registro oficial DEIS/MINSAL.',
   },
 ];
 

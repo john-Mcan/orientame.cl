@@ -1,0 +1,120 @@
+---
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Notice from '@components/Notice.astro';
+import Base from '@layouts/Base.astro';
+import { Content as Protocolo } from '../../../docs/plan/protocolo-crisis.md';
+---
+
+<Base
+  title="Protocolo de crisis en revisión"
+  description="Borrador público del protocolo de crisis de orientame.cl, disponible para revisión profesional a distancia."
+>
+  <div class="reading-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: '/' },
+        { label: 'Metodología', href: '/metodologia' },
+        { label: 'Protocolo de crisis' },
+      ]}
+    />
+
+    {
+      /* La página necesita su propio `h1`: el documento incrustado trae el suyo y, sin este
+        encabezado, el primer título de la página era el `h2` del aviso. */
+    }
+    <header class="seccion-encabezado">
+      <p class="eyebrow">Documento en revisión</p>
+      <h1>Protocolo de crisis en revisión</h1>
+      <p class="lede">
+        Esta es la versión íntegra del borrador, publicada tal como está en el repositorio del
+        proyecto para que pueda revisarse a distancia.
+      </p>
+    </header>
+
+    <div class="aviso-alcance">
+      <Notice title="Borrador público para revisión profesional">
+        <p>
+          Esta versión se publica para que profesionales puedan revisarla a distancia y comentar una
+          prueba de concepto concreta. No declara aprobación clínica y todavía no activa respuestas
+          automáticas en las autoevaluaciones.
+        </p>
+      </Notice>
+    </div>
+
+    <article class="documento-protocolo">
+      <Protocolo />
+    </article>
+  </div>
+</Base>
+
+<style>
+  /* Mismo encabezado de sección que el resto del sitio. */
+  .seccion-encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-block: var(--space-8) var(--space-6);
+  }
+
+  .aviso-alcance {
+    margin-bottom: var(--space-8);
+  }
+
+  .documento-protocolo {
+    padding-bottom: var(--space-16);
+  }
+
+  /* El título del documento incrustado es el de un artículo dentro de la página, no el de
+     la página: se muestra un escalón por debajo del `h1` del encabezado. */
+  .documento-protocolo :global(h1) {
+    font-size: var(--text-xl);
+  }
+
+  .documento-protocolo :global(h2) {
+    margin-top: var(--space-12);
+    font-size: var(--text-lg);
+  }
+
+  .documento-protocolo :global(p),
+  .documento-protocolo :global(ul),
+  .documento-protocolo :global(ol),
+  .documento-protocolo :global(table),
+  .documento-protocolo :global(blockquote) {
+    margin-top: var(--space-4);
+  }
+
+  .documento-protocolo :global(li + li) {
+    margin-top: var(--space-2);
+  }
+
+  .documento-protocolo :global(table) {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+
+  .documento-protocolo :global(th),
+  .documento-protocolo :global(td) {
+    padding: var(--space-3);
+    border: 1px solid var(--color-line);
+    overflow-wrap: anywhere;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .documento-protocolo :global(th:first-child) {
+    width: 34%;
+  }
+
+  .documento-protocolo :global(blockquote) {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-mist-100);
+  }
+
+  .documento-protocolo :global(code) {
+    overflow-wrap: anywhere;
+  }
+</style>

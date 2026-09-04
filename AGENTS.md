@@ -33,31 +33,34 @@ decisión, archivos por actualizar. No se cambia el propósito del producto en s
 
 ## Estado actual
 
-**Fase 3 casi cerrada.** Se construyó completa, una auditoría la devolvió a verificación por citar
-fuentes inventadas, y luego se re-fuenteó contra referencias comprobadas. Lee
-[`docs/plan/fase-3-decisiones.md`](docs/plan/fase-3-decisiones.md) §Auditoría (D16–D23) antes de
-tocar `/siento`, `/temas`, `/donde` o `src/data/recursos.json`. **Queda pendiente el directorio
-comunal; no se avanza a la etapa 4 hasta resolverlo.**
+**Fase 4 implementada, excepto testimonios autorizados.** La fase 3 se cerró reproduciendo 27
+establecimientos vigentes del registro DEIS como fichas nivel A, sin inventar formas de acceso.
+Lee [`docs/plan/fase-3-decisiones.md`](docs/plan/fase-3-decisiones.md) §Auditoría (D16–D23) y
+[`docs/plan/fase-4-decisiones.md`](docs/plan/fase-4-decisiones.md) antes de tocar `/siento`, `/temas`,
+`/donde`, `/autoevaluacion`, `/acompanar` o `src/data/recursos.json`.
 
-Rutas que existen hoy (51 páginas estáticas):
+Rutas que existen hoy (61 páginas estáticas):
 
 ```
 /  /urgencia  /404
 /empezar  +  11 rutas del orientador bajo /empezar/[...ruta]   (3 pasos y 9 resultados)
 /siento   +  12 vivencias cotidianas bajo /siento/[slug]
-/temas    +  6 cuadros clínicos bajo /temas/[slug]
+/temas    +  7 cuadros clínicos bajo /temas/[slug]
 /primera-vez  +  4 guías (/que-pasa-en-sesion, /que-decir, /cuanto-cuesta, /como-elegir)
 /donde    +  3 comunas piloto (/donde/metropolitana/{santiago,providencia,puente-alto}) y /donde/clinicas-universitarias
-/sobre  /metodologia  /legal  /legal/{privacidad,alcance,terminos}
+/autoevaluacion  +  2 instrumentos (/oms-5, /gad-7)
+/acompanar  +  3 guías iniciales
+/buscar
+/sobre  /metodologia  /metodologia/protocolo-crisis  /legal  /legal/{privacidad,alcance,terminos}
 ```
 
-**Las 23 URLs citadas hoy en el sitio responden 200 y fueron leídas antes de citarse.** Si agregas
+**Las URLs citadas hoy en el sitio fueron abiertas y leídas antes de citarse.** Si agregas
 una, ábrela y compruébala: hay un test que bloquea que una misma URL respalde documentos distintos,
 porque así se detectó que 16 citas colgaban de dos PDFs de MINSAL inventados.
 
-**Rutas que NO existen: `/acompanar/`, `/autoevaluacion/`, `/historias/`.** No enlaces a ninguna hasta
-crearla en la etapa 4. Enviar a alguien a un 404 al final de un recorrido es el peor resultado
-posible.
+**La ruta que NO existe es `/historias/`.** No la enlaces hasta contar con testimonios cuyo
+consentimiento y procedencia estén documentados. Enviar a alguien a un 404 al final de un recorrido
+es el peor resultado posible.
 
 ## Reglas innegociables
 
@@ -213,6 +216,17 @@ silencio.
 
 Deriva todo de los tokens de `src/styles/global.css`; no repitas valores sueltos.
 
+**La escala de espaciado tiene huecos: 1, 2, 3, 4, 6, 8, 12, 16, 24.** No existen `--space-5`,
+`--space-10` ni `--space-20`, y tampoco `--text-md`. Un token inexistente no cae en un valor por
+defecto razonable: invalida la declaración completa, así que `gap: var(--space-10)` queda en `0` y
+`margin-block: var(--space-8) var(--space-20)` pierde también el margen superior. Ya pasó en cuatro
+archivos de la fase 4 y el resultado eran bloques pegados sin separación. Si necesitas un paso
+intermedio, usa el de la escala; no inventes el token.
+
+Los estilos del buscador viven en `global.css` porque el island lo consumen la portada y `/buscar`:
+un estilo con scope de página no alcanza su DOM sin `:global`, y duplicarlo hacía que los dos
+buscadores pudieran divergir.
+
 **Un solo ancho en todo el sitio: `.reading-shell` (45rem).** Migas, encabezados, `lede`, avisos,
 artículos, fichas **y grillas de tarjetas** van ahí. `.page-shell` (75rem) queda para el encabezado
 y el pie del sitio, y para la portada, cuya primera pantalla es a dos columnas. Nada más.
@@ -249,16 +263,13 @@ tarjetas a 45rem da dos columnas, que es suficiente. Hay un test que lo bloquea.
 
 ## Pendientes con dueño de etapa
 
-- **Etapa 3 — recursos comunales.** Único pendiente de la etapa. El directorio llegó a publicar
-  direcciones y teléfonos que su fuente no contenía; hoy sólo quedan las fichas comprobadas. Nivel B
-  exige verificación humana por establecimiento; Nivel A exige reproducir el registro DEIS sin
-  inventarle pasos de acceso, y confirmar antes su licencia y atribución.
-- **Etapa 4 — autoevaluaciones**, bloqueadas hasta verificar fuente, versión, licencia, población,
-  scoring e interpretación de cada instrumento, y hasta que exista `protocolo-crisis.md` aprobado
-  para cualquier respuesta asociada a riesgo.
-- **Etapa 4 — buscador real** con Pagefind y campo de texto. Hasta entonces la portada no muestra
-  envoltorio de búsqueda.
-- **Etapa 4 — `/acompanar/`**, guías de acompañamiento para personas cercanas y familiares.
+- **Etapa 4 — testimonios.** `/historias/` queda pendiente hasta contar con consentimiento,
+  procedencia y reglas editoriales verificables.
+- **Etapa 4 — protocolo de crisis.** Existe `protocolo-crisis.md` en versión `0.1-borrador`, no
+  aprobado y técnicamente inactivo. El borrador se publica en `/metodologia/protocolo-crisis` para
+  revisión profesional a distancia. OMS-5 y GAD-7 no contienen una pregunta explícita de riesgo y
+  no activan respuestas de crisis. Cualquier instrumento futuro que sí la contenga permanece
+  bloqueado hasta una revisión clínica documentada.
 - **v2 — Nivel B nacional**, condicionado a financiamiento que sostenga revisión humana y
   reverificación periódica.
 - **Previo al lanzamiento** — revisión legal (Ley 21.719 de datos personales, Ley 21.331 de derechos

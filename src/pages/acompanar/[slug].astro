@@ -1,0 +1,19 @@
+---
+import Acompanamiento from '@layouts/Acompanamiento.astro';
+import { getCollection, render } from 'astro:content';
+import { visibleEnEntorno } from '@/lib/editorial';
+
+export async function getStaticPaths() {
+  const piezas = await getCollection('acompanamiento');
+  return piezas
+    .filter((pieza) => visibleEnEntorno(pieza.data))
+    .map((pieza) => ({ params: { slug: pieza.id }, props: { pieza } }));
+}
+
+const { pieza } = Astro.props;
+const { Content } = await render(pieza);
+---
+
+<Acompanamiento pieza={pieza}>
+  <Content />
+</Acompanamiento>
