@@ -1,5 +1,5 @@
 ---
-import type { Recurso } from '@/lib/resources';
+import { textoBusqueda, type Recurso } from '@/lib/resources';
 import SelloRevision from './SelloRevision.astro';
 
 interface Props {
@@ -43,6 +43,7 @@ const modalidadEtiquetas: Record<string, string> = {
   data-tipo={recurso.tipo}
   data-costo={recurso.costo}
   data-modalidad={recurso.modalidad}
+  data-busqueda={textoBusqueda(recurso)}
 >
   <header class="ficha-encabezado">
     <div class="ficha-meta">

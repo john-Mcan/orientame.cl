@@ -1,7 +1,7 @@
 ---
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import Notice from '@components/Notice.astro';
-import PageIntro from '@components/PageIntro.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Base from '@layouts/Base.astro';
 ---
 
@@ -17,12 +17,14 @@ import Base from '@layouts/Base.astro';
         { label: 'Privacidad' },
       ]}
     />
+
+    <EncabezadoSeccion
+      eyebrow="Privacidad · Actualizado el 31 de agosto de 2026"
+      titulo="Recopilar menos es proteger mejor"
+      descripcion="La primera versión se diseña sin cuentas, perfiles ni una base de datos de usuarios. Esta política describe el preview actual y se revisará antes del lanzamiento público."
+      descripcionMovil="La v1 se diseña sin cuentas, perfiles ni base de datos de usuarios. Esta política describe el preview actual."
+    />
   </div>
-  <PageIntro
-    eyebrow="Privacidad · Actualizado el 31 de agosto de 2026"
-    title="Recopilar menos es proteger mejor"
-    description="La primera versión se diseña sin cuentas, perfiles ni una base de datos de usuarios. Esta política describe el preview actual y se revisará antes del lanzamiento público."
-  />
 
   <div class="reading-shell">
     <section class="content-section">

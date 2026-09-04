@@ -1,6 +1,7 @@
 ---
 titulo: 'Ansiedad'
 descripcion: 'Qué diferencia la respuesta normal de alerta de los trastornos de ansiedad, cuándo consultar y qué abordajes cuentan con evidencia clínica.'
+descripcionMovil: 'Qué diferencia la alerta normal de los trastornos de ansiedad y cuándo consultar.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

@@ -22,6 +22,7 @@ const MODALIDADES = [
 
 export default function ResourceFinder({ comunas, tipos, costos, total }: Props) {
   const [montado, setMontado] = useState(false);
+  const [texto, setTexto] = useState('');
   const [comuna, setComuna] = useState('todas');
   const [tipo, setTipo] = useState('todos');
   const [costo, setCosto] = useState('todos');
@@ -37,19 +38,24 @@ export default function ResourceFinder({ comunas, tipos, costos, total }: Props)
     let cuenta = 0;
 
     for (const ficha of fichas) {
-      const coincide = coincideConFiltros(ficha.dataset, { comuna, tipo, costo, modalidad });
+      const coincide = coincideConFiltros(ficha.dataset, { comuna, tipo, costo, modalidad, texto });
 
       ficha.hidden = !coincide;
       if (coincide) cuenta += 1;
     }
 
     setVisibles(cuenta);
-  }, [montado, comuna, tipo, costo, modalidad]);
+  }, [montado, comuna, tipo, costo, modalidad, texto]);
 
   const hayFiltrosActivos =
-    comuna !== 'todas' || tipo !== 'todos' || costo !== 'todos' || modalidad !== 'todas';
+    texto.trim() !== '' ||
+    comuna !== 'todas' ||
+    tipo !== 'todos' ||
+    costo !== 'todos' ||
+    modalidad !== 'todas';
 
   const limpiar = () => {
+    setTexto('');
     setComuna('todas');
     setTipo('todos');
     setCosto('todos');
@@ -60,6 +66,20 @@ export default function ResourceFinder({ comunas, tipos, costos, total }: Props)
 
   return (
     <div class="finder">
+      {/* La búsqueda por texto está pensada para escribir una comuna: el desplegable sólo
+          ofrece las comunas del piloto y la lista crecerá antes que ese control. */}
+      <div class="campo-filtro finder-texto">
+        <label for="filtro-texto">Buscar por comuna o nombre del centro</label>
+        <input
+          id="filtro-texto"
+          type="search"
+          value={texto}
+          placeholder="Ej.: Puente Alto"
+          autocomplete="off"
+          onInput={(e) => setTexto((e.target as HTMLInputElement).value)}
+        />
+      </div>
+
       <fieldset class="finder-filtros">
         <legend class="finder-leyenda">Acotar la lista</legend>
 
@@ -145,8 +165,8 @@ export default function ResourceFinder({ comunas, tipos, costos, total }: Props)
 
       {visibles === 0 && (
         <p class="finder-vacio">
-          Ninguno de los recursos publicados coincide con esa combinación. Quita algún filtro para
-          volver a verlos.
+          Ninguno de los recursos publicados coincide con esa búsqueda. Quita algún filtro o prueba
+          con el nombre de la comuna para volver a verlos.
         </p>
       )}
     </div>

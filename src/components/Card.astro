@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 interface Props {
   title: string;
   href?: string;
@@ -8,8 +10,17 @@ interface Props {
 const { title, href, tone = 'default' } = Astro.props;
 ---
 
-<article class:list={['card', tone]}>
-  <h3>{href ? <a href={href}>{title}</a> : title}</h3>
+<article class:list={['card', tone, { enlazada: href }]}>
+  <h3>
+    {href ? <a href={href}>{title}</a> : title}
+    {
+      href && (
+        <span class="indicador" aria-hidden="true">
+          <Icon name="flecha-derecha" size={18} />
+        </span>
+      )
+    }
+  </h3>
   <div class="card-body"><slot /></div>
 </article>
 
@@ -24,6 +35,15 @@ const { title, href, tone = 'default' } = Astro.props;
 
   .card.soft {
     background: var(--color-mist-50);
+  }
+
+  /* Una tarjeta enlazada tiene que verse enlazada: sin este indicador se leía como un
+     recuadro de texto y nada anunciaba que llevaba a otra página. */
+  h3 {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--space-4);
   }
 
   h3 a {
@@ -43,9 +63,40 @@ const { title, href, tone = 'default' } = Astro.props;
     text-underline-offset: 0.2em;
   }
 
-  .card:has(h3 a):hover {
+  .indicador {
+    display: inline-flex;
+    width: 1.875rem;
+    height: 1.875rem;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--color-green-700);
+    background: var(--color-mist-100);
+  }
+
+  .card.enlazada:hover {
     border-color: var(--color-sage-400);
     transform: translateY(-1px);
+  }
+
+  .card.enlazada:hover .indicador {
+    color: var(--color-white);
+    background: var(--color-green-700);
+    transform: translateX(0.125rem);
+  }
+
+  /* El enlace cubre toda la tarjeta, así que el foco se dibuja sobre la tarjeta entera.
+     Bajo `@supports` para no quedarnos sin indicador de foco si `:has()` no está. */
+  @supports selector(:has(a)) {
+    .card:has(h3 a:focus-visible) {
+      border-radius: var(--radius-md);
+      box-shadow: var(--focus-ring);
+    }
+
+    .card h3 a:focus-visible {
+      box-shadow: none;
+    }
   }
 
   .card-body {
@@ -54,9 +105,12 @@ const { title, href, tone = 'default' } = Astro.props;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .card {
+    .card,
+    .indicador {
       transition:
         border-color 150ms ease,
+        background-color 150ms ease,
+        color 150ms ease,
         transform 150ms ease;
     }
   }

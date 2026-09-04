@@ -2,7 +2,7 @@
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import Card from '@components/Card.astro';
 import Notice from '@components/Notice.astro';
-import PageIntro from '@components/PageIntro.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Base from '@layouts/Base.astro';
 ---
 
@@ -12,12 +12,13 @@ import Base from '@layouts/Base.astro';
 >
   <div class="reading-shell">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Sobre el proyecto' }]} />
+
+    <EncabezadoSeccion
+      eyebrow="Sobre orientame.cl"
+      titulo="Menos barreras antes de pedir ayuda"
+      descripcion="orientame.cl es una iniciativa independiente y sin fines de lucro, creada para aportar a la comunidad en Chile."
+    />
   </div>
-  <PageIntro
-    eyebrow="Sobre orientame.cl"
-    title="Menos barreras antes de pedir ayuda"
-    description="orientame.cl es una iniciativa independiente y sin fines de lucro, creada para aportar a la comunidad en Chile."
-  />
 
   <div class="reading-shell">
     <section class="content-section">

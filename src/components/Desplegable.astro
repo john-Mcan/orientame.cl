@@ -1,0 +1,93 @@
+---
+// Bloque que se abre y se cierra. Usa `<details>` nativo: funciona sin JavaScript, conserva
+// el estado expandido para lectores de pantalla y no necesita ningún control propio.
+//
+// Se usa para explicaciones largas que no todo el mundo necesita leer y que, abiertas por
+// defecto, empujan el contenido principal fuera de la primera pantalla en móvil.
+
+import Icon from './Icon.astro';
+import type { IconName } from '@/lib/iconos';
+
+interface Props {
+  titulo: string;
+  icono?: IconName;
+  /** Cerrado por defecto: si el contenido hay que leerlo sí o sí, esto no es lo correcto. */
+  abierto?: boolean;
+}
+
+const { titulo, icono = 'pregunta', abierto = false } = Astro.props;
+---
+
+<details class="desplegable" open={abierto}>
+  <summary>
+    <span class="desplegable-icono"><Icon name={icono} size={20} /></span>
+    <span class="desplegable-titulo">{titulo}</span>
+    <span class="desplegable-chevron"><Icon name="chevron-abajo" size={18} /></span>
+  </summary>
+  <div class="desplegable-cuerpo"><slot /></div>
+</details>
+
+<style>
+  .desplegable {
+    border: 1px solid var(--color-sage-400);
+    border-radius: var(--radius-md);
+    background: var(--color-mist-50);
+  }
+
+  summary {
+    display: flex;
+    min-height: 3.25rem;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    color: var(--color-green-900);
+    font-size: var(--text-base);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .desplegable-icono,
+  .desplegable-chevron {
+    display: inline-flex;
+  }
+
+  .desplegable-icono {
+    color: var(--color-green-700);
+  }
+
+  .desplegable-titulo {
+    flex: 1;
+  }
+
+  .desplegable-chevron {
+    color: var(--color-sage-400);
+  }
+
+  .desplegable[open] .desplegable-chevron {
+    transform: rotate(180deg);
+  }
+
+  .desplegable-cuerpo {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+
+  .desplegable-cuerpo :global(ul) {
+    padding-left: 1.25rem;
+    margin-top: var(--space-3);
+  }
+
+  .desplegable-cuerpo :global(li + li) {
+    margin-top: var(--space-2);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .desplegable-chevron {
+      transition: transform 160ms ease;
+    }
+  }
+</style>

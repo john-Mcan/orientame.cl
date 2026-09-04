@@ -1,5 +1,6 @@
 ---
 import Breadcrumbs from '@components/Breadcrumbs.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Buscador from '@components/islands/Buscador';
 import Base from '@layouts/Base.astro';
 ---
@@ -11,14 +12,12 @@ import Base from '@layouts/Base.astro';
   <div class="reading-shell pagina-buscar">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Buscar' }]} />
 
-    <header class="seccion-encabezado">
-      <p class="eyebrow">Búsqueda del sitio</p>
-      <h1>¿Qué necesitas encontrar?</h1>
-      <p class="lede">
-        Busca una palabra o una frase. Los resultados provienen sólo del contenido publicado en este
-        sitio y no interpretan lo que escribes ni evalúan tu situación.
-      </p>
-    </header>
+    <EncabezadoSeccion
+      eyebrow="Búsqueda del sitio"
+      titulo="¿Qué necesitas encontrar?"
+      descripcion="Busca una palabra o una frase. Los resultados provienen sólo del contenido publicado en este sitio y no interpretan lo que escribes ni evalúan tu situación."
+      descripcionMovil="Busca una palabra o una frase. Los resultados salen sólo del contenido publicado aquí."
+    />
 
     <div class="bloque-buscador">
       <Buscador client:load />
@@ -40,14 +39,6 @@ import Base from '@layouts/Base.astro';
      un margen inferior colapsa fuera de `main` y deja el pie pegado al contenido. */
   .pagina-buscar {
     padding-bottom: var(--space-16);
-  }
-
-  /* Mismo encabezado de sección que `/siento`, `/temas`, `/donde` y `/primera-vez`. */
-  .seccion-encabezado {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    margin-block: var(--space-8) var(--space-8);
   }
 
   .bloque-buscador {

@@ -1,6 +1,7 @@
 ---
 titulo: 'Duelo'
 descripcion: 'El proceso natural de adaptación tras una pérdida significativa, diferencias con un cuadro depresivo y cuándo buscar apoyo especializado.'
+descripcionMovil: 'El proceso de adaptación tras una pérdida y sus diferencias con un cuadro depresivo.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

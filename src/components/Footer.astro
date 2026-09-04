@@ -2,10 +2,13 @@
 import AccessUrgency from './AccessUrgency.astro';
 ---
 
-<footer class="site-footer">
+<footer class="site-footer" data-pagefind-ignore>
   <div class="footer-inner page-shell">
     <div class="footer-intro">
-      <a class="footer-brand" href="/">orientame.cl</a>
+      <a class="footer-brand" href="/">
+        <img src="/orientame-logo.svg" width="40" height="40" alt="" />
+        <span>orientame.cl</span>
+      </a>
       <p>
         Orientación independiente y sin fines de lucro para encontrar un siguiente paso en Chile.
       </p>
@@ -70,10 +73,18 @@ import AccessUrgency from './AccessUrgency.astro';
   }
 
   .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
     color: var(--color-green-900);
     font-size: var(--text-lg);
     font-weight: 700;
     text-decoration: none;
+  }
+
+  .footer-brand img {
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
   nav {

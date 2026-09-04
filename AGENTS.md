@@ -170,6 +170,12 @@ remoto.
 **Progressive enhancement.** Si un control requiere JavaScript, que no aparezca cuando no lo hay
 (ver el botón de `GuionCopiable.astro`, que parte `hidden`), y que el contenido siga accesible.
 
+**Un island que no pinta nada en el servidor no puede usar `client:visible`.** La directiva observa
+los hijos que el servidor dejó dentro de `<astro-island>` —la etiqueta es `display: contents` y no
+tiene caja propia—, así que un componente que devuelve `null` antes de montar no deja nada que
+observar y nunca se hidrata. Le pasó a `ResourceFinder`: los filtros de `/donde` estaban en el HTML
+y no aparecieron jamás. Para esos casos, `client:idle` o `client:load`. Hay un test que lo bloquea.
+
 **Accesibilidad: WCAG 2.2 AA como mínimo, desde el diseño.** Navegación completa por teclado, foco
 visible con separación, targets de 44 px, reflow a 320 px sin scroll horizontal, landmarks y
 jerarquía de headings, errores explicados en texto, `prefers-reduced-motion`.
@@ -223,9 +229,52 @@ defecto razonable: invalida la declaración completa, así que `gap: var(--space
 archivos de la fase 4 y el resultado eran bloques pegados sin separación. Si necesitas un paso
 intermedio, usa el de la escala; no inventes el token.
 
-Los estilos del buscador viven en `global.css` porque el island lo consumen la portada y `/buscar`:
-un estilo con scope de página no alcanza su DOM sin `:global`, y duplicarlo hacía que los dos
+Los estilos del buscador viven en `global.css` porque el island lo consumen la portada, `/siento` y
+`/buscar`: un estilo con scope de página no alcanza su DOM sin `:global`, y duplicarlo hacía que los
 buscadores pudieran divergir.
+
+**Piezas compartidas que no se duplican:**
+
+| Pieza                | Dónde vive                | Qué resuelve                                                                            |
+| -------------------- | ------------------------- | --------------------------------------------------------------------------------------- |
+| Secciones del sitio  | `src/data/navegacion.ts`  | Única lista. La consumen el encabezado, el mapa de la portada y las comunas del piloto. |
+| Encabezado de página | `EncabezadoSeccion.astro` | Ojal, `h1` y bajada, con el mismo ritmo vertical en las diez páginas índice.            |
+| Trazos de iconos     | `src/lib/iconos.ts`       | `Icon.astro` sólo los dibuja; el modelo de navegación necesita el tipo `IconName`.      |
+| Bloque plegable      | `Desplegable.astro`       | `<details>` nativo para explicaciones que no todo el mundo necesita leer.               |
+
+Diez páginas repetían su propio `.seccion-encabezado` con valores distintos y el aire entre las
+migas y el título cambiaba de una sección a otra. Ahora la regla está una vez en `global.css`. No la
+vuelvas a declarar con scope de página.
+
+**Bajada breve en móvil.** Una bajada de cinco líneas empuja el contenido fuera de la primera
+pantalla. Las páginas índice pasan `descripcionMovil` a `EncabezadoSeccion`; el contenido editorial
+lo declara en su frontmatter (`descripcionMovil`, opcional, máx. 110 caracteres) y los layouts pintan
+las dos con `.texto-amplio` / `.texto-movil`. Es la misma información con otra extensión, resuelta
+en CSS: no se acorta cuando perder la precisión importa —`/donde` y `/primera-vez` muestran la misma
+bajada en todos los anchos a pedido del proyecto.
+
+**Una tarjeta enlazada tiene que verse enlazada.** `Card.astro` y las tarjetas propias de `/donde` y
+de la portada llevan una flecha visible; sin ella se leían como recuadros de texto y nadie las
+tocaba.
+
+**El encabezado es una tarjeta fija del ancho del contenido, no una banda de lado a lado.** Sigue
+el moodboard: fondo de página blanco y las secciones —barra y portada— en color, cada una como
+tarjeta de `page-shell` con esquina redondeada. Al bajar, la barra se vuelve vidrio; el estado lo
+aplica un `IntersectionObserver` sobre un centinela de 1 px y sin JavaScript la barra sigue fija,
+sólo que opaca. Dos detalles que no son adorno: el desenfoque queda **siempre** declarado y lo que
+cambia es la opacidad del fondo, porque pasar de `none` a un filtro no interpola; y una franja del
+color de la página tapa el aire sobre la tarjeta, porque si no las letras que suben se ven cortadas
+por el borde de la ventana.
+
+El mega-menú se abre por `:hover`/`:focus-within` y su nivel superior es siempre un enlace real a la
+sección, así que el panel enriquece la navegación pero nunca es la única forma de llegar.
+
+**Y ese destino se escribe dentro del panel.** Que la etiqueta de un grupo (“Empezar”) sea al mismo
+tiempo título y enlace no es evidente para nadie que no lo sepa de antemano. Por eso cada sección
+declara `etiquetaDestino` (“Ir al orientador de primer paso”) y el panel —y el grupo del cajón
+móvil— la muestran arriba, en un bloque con borde y flecha, antes del resto de los enlaces. `href`
+no se repite dentro de `enlaces`: ese destino ya lo nombra `etiquetaDestino`. Si agregas una sección
+al menú, nombra su destino; no dejes que la única vía sea adivinar que el título es clicable.
 
 **Un solo ancho en todo el sitio: `.reading-shell` (45rem).** Migas, encabezados, `lede`, avisos,
 artículos, fichas **y grillas de tarjetas** van ahí. `.page-shell` (75rem) queda para el encabezado
@@ -270,6 +319,9 @@ tarjetas a 45rem da dos columnas, que es suficiente. Hay un test que lo bloquea.
   revisión profesional a distancia. OMS-5 y GAD-7 no contienen una pregunta explícita de riesgo y
   no activan respuestas de crisis. Cualquier instrumento futuro que sí la contenga permanece
   bloqueado hasta una revisión clínica documentada.
+- **Etapa 5 — modo oscuro y repaso de accesibilidad.** Pendiente abrir un modo oscuro, pensado como
+  comodidad de lectura y no como decoración, y completar lo que falte de WCAG 2.2 AA. Hoy el sitio
+  declara `color-scheme: light` y una sola paleta.
 - **v2 — Nivel B nacional**, condicionado a financiamiento que sostenga revisión humana y
   reverificación periódica.
 - **Previo al lanzamiento** — revisión legal (Ley 21.719 de datos personales, Ley 21.331 de derechos

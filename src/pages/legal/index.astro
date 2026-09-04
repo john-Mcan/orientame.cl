@@ -1,7 +1,7 @@
 ---
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import Card from '@components/Card.astro';
-import PageIntro from '@components/PageIntro.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Base from '@layouts/Base.astro';
 ---
 
@@ -11,12 +11,13 @@ import Base from '@layouts/Base.astro';
 >
   <div class="reading-shell">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Información legal' }]} />
+
+    <EncabezadoSeccion
+      eyebrow="Información legal"
+      titulo="Reglas y límites en lenguaje claro"
+      descripcion="Estos documentos describen cómo funciona el sitio, qué datos implica navegarlo y qué no puede hacer por ti."
+    />
   </div>
-  <PageIntro
-    eyebrow="Información legal"
-    title="Reglas y límites en lenguaje claro"
-    description="Estos documentos describen cómo funciona el sitio, qué datos implica navegarlo y qué no puede hacer por ti."
-  />
   <section class="legal-grid reading-shell" aria-label="Documentos legales">
     <Card title="Privacidad" href="/legal/privacidad">
       <p>Datos técnicos, herramientas locales, terceros y decisiones de privacidad de la v1.</p>

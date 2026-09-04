@@ -58,7 +58,16 @@ const fuentesFormateadas = data.fuentes.map((f) => ({
         />
       </div>
       <h1 class="articulo-titulo" data-pagefind-meta="title">{data.titulo}</h1>
-      <p class="articulo-bajada">{data.descripcion}</p>
+      <p class:list={['articulo-bajada', { 'texto-amplio': data.descripcionMovil }]}>
+        {data.descripcion}
+      </p>
+      {
+        data.descripcionMovil && (
+          <p class="articulo-bajada texto-movil" data-pagefind-ignore>
+            {data.descripcionMovil}
+          </p>
+        )
+      }
     </header>
 
     <Notice title="Información orientativa basada en guías oficiales">
@@ -234,5 +243,13 @@ const fuentesFormateadas = data.fuentes.map((f) => ({
 
   .articulo-fuentes {
     margin-top: var(--space-4);
+  }
+
+  /* En móvil el artículo arrancaba a 3,5 rem de las migas; el título tiene que entrar en la
+     primera pantalla junto con el comienzo del texto. */
+  @media (max-width: 48rem) {
+    .articulo-tema {
+      margin-top: var(--space-4);
+    }
   }
 </style>

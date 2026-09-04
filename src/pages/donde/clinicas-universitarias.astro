@@ -1,6 +1,7 @@
 ---
 import Base from '@layouts/Base.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Notice from '@components/Notice.astro';
 import FichaRecurso from '@components/FichaRecurso.astro';
 import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
@@ -22,15 +23,12 @@ const clinicas = getRecursosClinicasUniversitarias();
       ]}
     />
 
-    <header class="seccion-encabezado">
-      <p class="eyebrow">Alternativa accesible</p>
-      <h1>Clínicas psicológicas universitarias a bajo costo</h1>
-      <p class="lede">
-        Varias facultades de psicología atienden público general en sus centros docentes. Suelen ser
-        una vía más barata que la consulta privada, pero cada una fija sus propias condiciones, así
-        que conviene preguntarlas antes de contar con ellas.
-      </p>
-    </header>
+    <EncabezadoSeccion
+      eyebrow="Alternativa accesible"
+      titulo="Clínicas psicológicas universitarias a bajo costo"
+      descripcion="Varias facultades de psicología atienden público general en sus centros docentes. Suelen ser una vía más barata que la consulta privada, pero cada una fija sus propias condiciones, así que conviene preguntarlas antes de contar con ellas."
+      descripcionMovil="Varias facultades de psicología atienden público general. Cada una fija sus condiciones, así que conviene preguntarlas antes."
+    />
 
     <div class="aviso-formato">
       <Notice title="¿Cómo funciona la atención universitaria?">
@@ -84,35 +82,6 @@ const clinicas = getRecursosClinicasUniversitarias();
 </Base>
 
 <style>
-  .seccion-encabezado {
-    margin-block: var(--space-8) var(--space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .eyebrow {
-    font-size: var(--text-xs);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-green-700);
-    margin: 0;
-  }
-
-  h1 {
-    line-height: 1.2;
-    color: var(--color-ink-900);
-    margin: 0;
-  }
-
-  .lede {
-    font-size: var(--text-lg);
-    line-height: 1.6;
-    color: var(--color-ink-600);
-    margin: 0;
-  }
-
   .aviso-formato {
     margin-bottom: var(--space-8);
   }

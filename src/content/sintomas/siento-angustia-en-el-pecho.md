@@ -1,6 +1,7 @@
 ---
 titulo: 'Siento angustia en el pecho'
 descripcion: 'Qué significa la opresión o nudo en el pecho por ansiedad, cuándo descartar causas médicas de urgencia y qué técnicas ayudan a regular la respiración.'
+descripcionMovil: 'Qué significa el nudo en el pecho por ansiedad y qué técnicas ayudan a regular la respiración.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

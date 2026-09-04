@@ -20,6 +20,13 @@ const claimSchema = z.object({
 const editorialFields = {
   titulo: z.string().min(4),
   descripcion: z.string().min(20).max(170),
+  /**
+   * Bajada para pantallas angostas. La `descripcion` completa también es la meta description
+   * y en móvil ocupa cinco líneas antes del primer contenido. Es opcional: sin ella se
+   * muestra la misma bajada en todos los anchos, que es lo correcto cuando acortarla
+   * perdería una precisión que importa.
+   */
+  descripcionMovil: z.string().min(20).max(110).optional(),
   autor: z.string().min(2),
   creadoConIA: z.boolean(),
   creadoEl: z.coerce.date(),

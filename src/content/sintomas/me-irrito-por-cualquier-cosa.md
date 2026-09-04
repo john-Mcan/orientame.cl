@@ -1,6 +1,7 @@
 ---
 titulo: 'Me irrito por cualquier cosa'
 descripcion: 'Por qué la irritabilidad constante suele ser una señal de sobrecarga o depresión oculta, y cómo abordarla antes de que dañe tus relaciones.'
+descripcionMovil: 'Por qué la irritabilidad constante suele ser una señal de sobrecarga, y cómo abordarla.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

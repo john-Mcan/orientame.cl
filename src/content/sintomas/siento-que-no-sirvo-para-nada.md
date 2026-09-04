@@ -1,6 +1,7 @@
 ---
 titulo: 'Siento que no sirvo para nada'
 descripcion: 'Qué hay detrás de los sentimientos intensos de inutilidad o culpa, cómo opera la autocrítica destructiva y qué abordajes terapéuticos ayudan.'
+descripcionMovil: 'Qué hay detrás de la sensación de inutilidad o culpa y qué abordajes terapéuticos ayudan.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

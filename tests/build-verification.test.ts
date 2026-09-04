@@ -265,6 +265,22 @@ describe('La portada abre el recorrido sin controles engañosos', () => {
     }
   });
 
+  it('ningún island de `client:visible` queda sin nada que observar', () => {
+    // `client:visible` observa los hijos que el servidor dejó dentro de `<astro-island>`,
+    // no la etiqueta (que es `display: contents`). Un componente que devuelve `null` antes
+    // de montar —lo que hacemos para no mostrar controles que todavía no controlan nada—
+    // no deja hijos, así que nunca se hidrata. Le pasó a los filtros de `/donde`: el island
+    // estaba en el HTML y los `<select>` no aparecían jamás.
+    const islaVacia = /<astro-island\b[^>]*client="visible"[^>]*>\s*<\/astro-island>/;
+
+    for (const pagina of paginasGeneradas()) {
+      assert.ok(
+        !islaVacia.test(fs.readFileSync(pagina, 'utf8')),
+        `${path.relative(distDir, pagina)} tiene un island client:visible sin contenido servido; usa client:idle`,
+      );
+    }
+  });
+
   it('ninguna página afirma que los datos no salen del dispositivo', () => {
     // §2.5: la promesa correcta es que orientame.cl no almacena las respuestas, no que la
     // navegación no genere solicitudes técnicas. Antes esto sólo revisaba la portada y por

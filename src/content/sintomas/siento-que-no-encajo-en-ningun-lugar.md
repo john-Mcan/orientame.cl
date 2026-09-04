@@ -1,6 +1,7 @@
 ---
 titulo: 'Siento que no encajo en ningún lugar'
 descripcion: 'Qué significa experimentar aislamiento o desconexión con el entorno, cómo impacta en el bienestar y qué caminos permiten reconstruir vínculos significativos.'
+descripcionMovil: 'Qué significa el aislamiento o la desconexión y qué caminos permiten reconstruir vínculos.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

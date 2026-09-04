@@ -1,6 +1,7 @@
 ---
 titulo: 'Índice de Bienestar OMS-5'
 descripcion: 'Cinco preguntas sobre bienestar durante las últimas dos semanas, con puntuación local y una interpretación orientativa.'
+descripcionMovil: 'Cinco preguntas sobre bienestar en las últimas dos semanas, con puntuación local.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-03

@@ -9,6 +9,8 @@ import {
   getRecursosPorComuna,
   getRecursosClinicasUniversitarias,
   getRecursosNacionales,
+  normalizarTexto,
+  textoBusqueda,
 } from '../src/lib/resources.ts';
 
 // Estas pruebas no exigen un número mínimo de recursos a propósito. Un piso ("al menos 5
@@ -213,6 +215,52 @@ describe('Filtrado de recursos (la función que ejecuta el island)', () => {
   it('filtrarRecursos usa el mismo criterio que el island', () => {
     for (const r of filtrarRecursos(recursos, { tipo: 'linea' })) {
       assert.equal(r.tipo, 'linea');
+    }
+  });
+});
+
+describe('Búsqueda libre del directorio', () => {
+  // El campo está pensado para escribir una comuna: el desplegable sólo ofrece las del piloto
+  // y la lista de comunas va a crecer antes que ese control.
+  const ficha = {
+    comuna: 'puente-alto',
+    tipo: 'cesfam',
+    costo: 'segun-tramo',
+    modalidad: 'presencial',
+    busqueda: textoBusqueda({
+      nombre: 'CESFAM de ejemplo',
+      comuna: 'Puente Alto',
+      region: 'Metropolitana',
+      direccion: 'Avenida Concha y Toro 3459',
+    } as Parameters<typeof textoBusqueda>[0]),
+  };
+
+  it('encuentra por nombre de comuna', () => {
+    assert.equal(coincideConFiltros(ficha, { texto: 'Puente Alto' }), true);
+    assert.equal(coincideConFiltros(ficha, { texto: 'providencia' }), false);
+  });
+
+  it('ignora tildes, mayúsculas y espacios sobrantes', () => {
+    assert.equal(normalizarTexto('  Ñuñoa '), 'nunoa');
+    assert.equal(coincideConFiltros(ficha, { texto: '  METROPOLITANA ' }), true);
+  });
+
+  it('una consulta vacía no descarta nada', () => {
+    assert.equal(coincideConFiltros(ficha, { texto: '   ' }), true);
+    assert.equal(coincideConFiltros({ comuna: 'nacional' }, { texto: '' }), true);
+  });
+
+  it('se combina con los desplegables', () => {
+    assert.equal(coincideConFiltros(ficha, { texto: 'puente', tipo: 'cesfam' }), true);
+    assert.equal(coincideConFiltros(ficha, { texto: 'puente', tipo: 'cosam' }), false);
+  });
+
+  it('toda ficha publicada tiene texto indexado, o la búsqueda la deja fuera', () => {
+    for (const r of recursos) {
+      assert.ok(
+        atributosDe(r).busqueda,
+        `El recurso "${r.id}" no aporta texto de búsqueda y sería invisible al escribir`,
+      );
     }
   });
 });

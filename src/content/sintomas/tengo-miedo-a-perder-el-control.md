@@ -1,6 +1,7 @@
 ---
 titulo: 'Tengo miedo a perder el control'
 descripcion: 'Qué ocurre durante una crisis de pánico o desborde de ansiedad, por qué se siente que se va a perder la razón y qué herramientas permiten atravesarlo.'
+descripcionMovil: 'Qué ocurre durante una crisis de pánico y qué herramientas permiten atravesarla.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

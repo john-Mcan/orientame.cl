@@ -1,6 +1,7 @@
 ---
 titulo: 'Estrés crónico'
 descripcion: 'Qué le ocurre al cuerpo y la mente cuando la sobrecarga se mantiene en el tiempo, cómo identificar el agotamiento y qué abordajes ayudan.'
+descripcionMovil: 'Qué le ocurre al cuerpo y la mente cuando la sobrecarga se mantiene en el tiempo.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

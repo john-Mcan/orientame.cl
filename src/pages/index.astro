@@ -1,9 +1,11 @@
 ---
 import Card from '@components/Card.astro';
+import Icon from '@components/Icon.astro';
 import Notice from '@components/Notice.astro';
 import PasoOrientador from '@components/PasoOrientador.astro';
 import Buscador from '@components/islands/Buscador';
 import Base from '@layouts/Base.astro';
+import { SECCIONES } from '@/data/navegacion';
 import { getNodo } from '@/lib/orientador';
 
 // La portada y `/empezar` muestran exactamente las mismas puertas de entrada porque leen
@@ -13,20 +15,59 @@ const inicio = getNodo('inicio');
 if (!inicio || inicio.tipo !== 'paso') {
   throw new Error('La portada necesita el paso "inicio" del orientador.');
 }
+
+// El mapa de secciones sale del mismo modelo que el menú: si mañana se publica una sección
+// nueva aparece en los dos sitios a la vez.
+const tarjetaBuscar = {
+  href: '/buscar',
+  icono: 'lupa' as const,
+  titulo: 'Buscar',
+  descripcion:
+    'Busca una palabra o una frase en todo lo publicado. La búsqueda no interpreta lo que escribes ni evalúa tu situación.',
+  descripcionMovil: 'Busca una palabra en todo lo publicado.',
+  contiene: 'Vivencias · Temas · Guías · Recursos',
+};
+
+const tarjetasPortada = SECCIONES.flatMap((seccion) => {
+  const tarjeta = {
+    href: seccion.href,
+    icono: seccion.icono,
+    titulo: seccion.etiqueta,
+    descripcion: seccion.descripcion,
+    descripcionMovil: seccion.descripcionMovil,
+    contiene: seccion.enlaces
+      .slice(0, 3)
+      .map((enlace) => enlace.etiqueta)
+      .join(' · '),
+  };
+
+  // La búsqueda es una entrada del sitio aunque no sea una sección de contenido, y entra
+  // antes de la institucional, que es la que menos urge.
+  return seccion.id === 'proyecto' ? [tarjetaBuscar, tarjeta] : [tarjeta];
+});
 ---
 
 <Base
   title="orientame.cl"
   description="Orientación independiente y sin fines de lucro para entender tus opciones de salud mental en Chile y encontrar un siguiente paso posible."
 >
-  <section class="portada">
-    <div class="page-shell portada-inner">
+  <section class="portada page-shell">
+    <div class="portada-inner">
       <div class="portada-copia">
         <h1>No tienes que saber qué te pasa para empezar.</h1>
-        <p class="lede">
+
+        <p class="lede texto-amplio">
           Te ayudamos a entender qué opciones existen en Chile y a encontrar un siguiente paso
           posible, si decides darlo. No damos diagnósticos ni reemplazamos a un profesional.
         </p>
+        <p class="lede texto-movil">
+          Qué opciones de salud mental existen en Chile y cómo se accede a ellas. Sin diagnósticos.
+        </p>
+
+        <div class="portada-buscador">
+          <Buscador compacto client:load />
+        </div>
+
         <p class="portada-nota">
           Proyecto sin fines de lucro. Sin cuentas, sin publicidad y sin recomendaciones pagadas.
         </p>
@@ -38,37 +79,32 @@ if (!inicio || inicio.tipo !== 'paso') {
     </div>
   </section>
 
-  <section class="busqueda-portada reading-shell" aria-labelledby="busqueda-portada-titulo">
-    <div>
-      <p class="eyebrow">Buscar en el sitio</p>
-      <h2 id="busqueda-portada-titulo">¿Tienes una palabra en mente?</h2>
+  <section class="secciones page-shell" aria-labelledby="secciones-titulo">
+    <div class="secciones-encabezado">
+      <p class="eyebrow">Secciones del sitio</p>
+      <h2 id="secciones-titulo">Todo lo que puedes encontrar aquí</h2>
     </div>
-    <Buscador compacto client:load />
-  </section>
 
-  <section class="atajos page-shell" aria-labelledby="atajos-titulo">
-    <h2 id="atajos-titulo">Si ya sabes qué necesitas</h2>
-    <ul class="atajos-lista">
-      <li>
-        <a href="/siento">Lo que estás sintiendo</a>
-        <span>Vivencias cotidianas explicadas en palabras simples, con su fuente.</span>
-      </li>
-      <li>
-        <a href="/donde">Dónde consultar en Chile</a>
-        <span>Líneas oficiales de orientación y cómo se entra a la atención pública.</span>
-      </li>
-      <li>
-        <a href="/primera-vez">Es tu primera vez</a>
-        <span>Qué pasa en una sesión, qué decir, cuánto cuesta y cómo elegir.</span>
-      </li>
-      <li>
-        <a href="/autoevaluacion">Autoevaluaciones</a>
-        <span>Instrumentos breves con puntuación local y sus límites explicados.</span>
-      </li>
-      <li>
-        <a href="/acompanar">Acompañar a alguien</a>
-        <span>Ideas concretas para escuchar y ofrecer apoyo sin presionar.</span>
-      </li>
+    <ul class="secciones-lista">
+      {
+        tarjetasPortada.map((tarjeta) => (
+          <li>
+            <a class="tarjeta-seccion" href={tarjeta.href}>
+              <span class="tarjeta-icono">
+                <Icon name={tarjeta.icono} size={22} />
+              </span>
+              <span class="tarjeta-titulo">{tarjeta.titulo}</span>
+              <span class="tarjeta-texto texto-amplio">{tarjeta.descripcion}</span>
+              <span class="tarjeta-texto texto-movil">{tarjeta.descripcionMovil}</span>
+              <span class="tarjeta-contiene">{tarjeta.contiene}</span>
+              <span class="tarjeta-ir">
+                <span>Ver sección</span>
+                <Icon name="flecha-derecha" size={16} />
+              </span>
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </section>
 
@@ -111,10 +147,13 @@ if (!inicio || inicio.tipo !== 'paso') {
 </Base>
 
 <style>
-  /* Portada: el mensaje y las puertas de entrada comparten la primera pantalla. */
+  /* Portada: el mensaje, la búsqueda y las puertas de entrada comparten la primera pantalla.
+     El bloque es una tarjeta del ancho del contenido sobre fondo blanco, igual que la barra
+     de navegación: lo de color son las secciones, no la página entera. */
 
   .portada {
-    padding-block: clamp(var(--space-12), 7vw, var(--space-24));
+    padding: clamp(var(--space-8), 5vw, var(--space-24)) clamp(var(--space-4), 3vw, var(--space-16));
+    border-radius: var(--radius-lg);
     background: var(--color-mist-100);
   }
 
@@ -125,18 +164,18 @@ if (!inicio || inicio.tipo !== 'paso') {
     gap: clamp(var(--space-8), 6vw, var(--space-24));
   }
 
-  /* En la portada el título es el foco principal, así que la pregunta del orientador
-     entra un escalón por debajo del `h1`. */
-  .portada-entrada :global(.paso-pregunta) {
-    font-size: var(--text-lg);
-  }
-
   .portada-copia {
     max-width: 34rem;
   }
 
   .portada-copia .lede {
     margin-top: var(--space-6);
+  }
+
+  /* La búsqueda entra en la primera pantalla porque es la vía directa para quien ya sabe
+     qué palabra tiene en la cabeza. El island se estiliza en `global.css`. */
+  .portada-buscador {
+    margin-top: var(--space-8);
   }
 
   .portada-nota {
@@ -148,59 +187,138 @@ if (!inicio || inicio.tipo !== 'paso') {
     font-size: var(--text-sm);
   }
 
-  .busqueda-portada {
-    display: grid;
-    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
-    align-items: end;
-    gap: var(--space-8);
-    padding-block: var(--space-12) 0;
+  /* En la portada el título es el foco principal, así que la pregunta del orientador
+     entra un escalón por debajo del `h1`. */
+  .portada-entrada {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-paper);
   }
 
-  .busqueda-portada h2 {
-    margin-top: var(--space-2);
+  .portada-entrada :global(.paso-pregunta) {
     font-size: var(--text-lg);
   }
 
-  /* El buscador se estiliza una sola vez en `global.css`; aquí sólo cambia su tipografía
-     de etiqueta, que en la portada acompaña a un `h2` y no a un encabezado de página. */
-  .busqueda-portada :global(.buscador-formulario label) {
-    font-size: var(--text-sm);
-  }
-
-  /* Atajos a las secciones que no pasan por el orientador. */
-
-  .atajos {
-    padding-block: var(--space-12) 0;
-  }
-
-  .atajos-lista {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: var(--space-6);
+  .portada-entrada :global(.paso-opciones) {
     margin-top: var(--space-6);
+  }
+
+  /* Mapa de secciones: qué existe en el sitio, en una sola vista. */
+
+  .secciones {
+    padding-block: var(--space-16) 0;
+  }
+
+  .secciones-encabezado .eyebrow + h2 {
+    margin-top: var(--space-2);
+  }
+
+  /* Columnas explícitas: con `auto-fit` las seis tarjetas caían en filas de cuatro y dos,
+     y la última fila quedaba estirada. */
+  .secciones-lista {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
     padding: 0;
+    margin-top: var(--space-8);
     list-style: none;
   }
 
-  .atajos-lista li {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
+  @media (min-width: 38rem) {
+    .secciones-lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
-  .atajos-lista a {
+  @media (min-width: 64rem) {
+    .secciones-lista {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Columna flexible para que el "Ver sección" quede al pie de todas las tarjetas de una
+     fila, aunque la bajada de cada una tenga distinto largo. */
+  .tarjeta-seccion {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    text-decoration: none;
+  }
+
+  .tarjeta-icono {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2);
+    border-radius: var(--radius-md);
+    color: var(--color-green-700);
+    background: var(--color-mist-100);
+  }
+
+  .tarjeta-titulo {
+    color: var(--color-green-900);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .tarjeta-texto {
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+  }
+
+  .tarjeta-contiene {
+    color: var(--color-ink-600);
+    font-size: var(--text-xs);
+    line-height: 1.45;
+  }
+
+  /* Indicador explícito de destino: la tarjeta completa es un enlace y tiene que decirlo. */
+  .tarjeta-ir {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-4);
+    color: var(--color-green-700);
+    font-size: var(--text-sm);
     font-weight: 700;
   }
 
-  .atajos-lista span {
-    color: var(--color-ink-600);
-    font-size: var(--text-sm);
+  .tarjeta-seccion:hover {
+    border-color: var(--color-sage-400);
+    background: var(--color-mist-50);
+    transform: translateY(-1px);
+  }
+
+  .tarjeta-seccion:hover .tarjeta-titulo {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .tarjeta-seccion:hover .tarjeta-ir :global(svg) {
+    transform: translateX(0.2rem);
   }
 
   /* Qué es orientame.cl */
 
+  /* Segunda banda de color, más clara que la portada: marca el cierre sin competir con ella. */
   .proyecto {
-    padding-block: var(--space-24);
+    margin-block: var(--space-16);
+    padding: clamp(var(--space-12), 4vw, var(--space-16))
+      clamp(var(--space-4), 3vw, var(--space-12));
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
   }
 
   .proyecto-encabezado {
@@ -222,6 +340,16 @@ if (!inicio || inicio.tipo !== 'paso') {
     padding-bottom: var(--space-24);
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .tarjeta-seccion,
+    .tarjeta-ir :global(svg) {
+      transition:
+        border-color 150ms ease,
+        background-color 150ms ease,
+        transform 150ms ease;
+    }
+  }
+
   @media (max-width: 64rem) {
     .portada-inner {
       grid-template-columns: 1fr;
@@ -234,17 +362,40 @@ if (!inicio || inicio.tipo !== 'paso') {
   }
 
   @media (max-width: 48rem) {
-    .busqueda-portada {
-      grid-template-columns: 1fr;
-      gap: var(--space-4);
+    .portada-copia .lede {
+      margin-top: var(--space-4);
+    }
+
+    .portada-buscador,
+    .portada-nota {
+      margin-top: var(--space-6);
+    }
+
+    .portada-entrada {
+      padding: var(--space-4);
+    }
+
+    .secciones {
+      padding-block: var(--space-12) 0;
+    }
+
+    /* Radio menor en pantallas angostas: una esquina de 1,25 rem sobre una tarjeta que ocupa
+       casi todo el ancho se lee como deformación, no como tarjeta. */
+    .portada,
+    .proyecto {
+      border-radius: var(--radius-md);
     }
 
     .proyecto {
-      padding-block: var(--space-16);
+      margin-block: var(--space-12);
     }
 
     .proyecto-tarjetas {
       grid-template-columns: 1fr;
+    }
+
+    .alcance {
+      padding-bottom: var(--space-16);
     }
   }
 </style>

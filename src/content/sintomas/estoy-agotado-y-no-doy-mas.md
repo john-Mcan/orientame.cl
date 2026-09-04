@@ -1,6 +1,7 @@
 ---
 titulo: 'Estoy agotado y siento que no doy más'
 descripcion: 'Qué diferencia el cansancio común del agotamiento vital por estrés crónico o burnout, y qué medidas permiten frenar el colapso.'
+descripcionMovil: 'Qué diferencia el cansancio común del agotamiento por estrés crónico, y qué ayuda a frenar el colapso.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

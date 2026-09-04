@@ -39,6 +39,18 @@ const { items } = Astro.props;
     padding-top: var(--space-6);
   }
 
+  /* En móvil las migas y el `h1` sumaban casi media pantalla de aire antes del contenido. */
+  @media (max-width: 48rem) {
+    .breadcrumbs {
+      padding-top: var(--space-3);
+    }
+
+    li a,
+    li span[aria-current] {
+      padding-block: var(--space-1);
+    }
+  }
+
   ol {
     display: flex;
     flex-wrap: wrap;

@@ -1,6 +1,7 @@
 ---
 titulo: 'Me preocupo por todo'
 descripcion: 'Qué significa anticipar constantemente problemas y dificultades, cuándo puede tratarse de ansiedad generalizada y qué estrategias ayudan.'
+descripcionMovil: 'Qué significa anticipar problemas todo el tiempo y qué estrategias ayudan.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

@@ -1,6 +1,7 @@
 ---
 titulo: 'Crisis de pánico y trastorno de pánico'
 descripcion: 'Qué ocurre durante una crisis de pánico, en qué se diferencia del trastorno de pánico y por qué conviene descartar otras causas médicas.'
+descripcionMovil: 'Qué ocurre en una crisis de pánico y en qué se diferencia del trastorno de pánico.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-03

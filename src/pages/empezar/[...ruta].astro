@@ -82,6 +82,13 @@ const preguntaAnterior = padre?.tipo === 'paso' ? padre.pregunta : undefined;
     font-weight: 600;
   }
 
+  /* Mismo recorte de aire que el resto del sitio en móvil. */
+  @media (max-width: 48rem) {
+    .nodo {
+      padding-top: var(--space-6);
+    }
+  }
+
   .nodo-cierre {
     padding-bottom: var(--space-24);
   }

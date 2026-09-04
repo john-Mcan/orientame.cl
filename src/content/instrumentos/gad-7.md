@@ -1,6 +1,7 @@
 ---
 titulo: 'Cuestionario de ansiedad GAD-7'
 descripcion: 'Siete preguntas sobre la frecuencia reciente de síntomas de ansiedad, con puntuación local y límites de uso visibles.'
+descripcionMovil: 'Siete preguntas sobre síntomas de ansiedad, con puntuación local y sus límites visibles.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-03

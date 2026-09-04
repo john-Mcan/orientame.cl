@@ -1,5 +1,6 @@
 ---
 import Breadcrumbs from '@components/Breadcrumbs.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Notice from '@components/Notice.astro';
 import Base from '@layouts/Base.astro';
 import { Content as Protocolo } from '../../../docs/plan/protocolo-crisis.md';
@@ -22,14 +23,12 @@ import { Content as Protocolo } from '../../../docs/plan/protocolo-crisis.md';
       /* La página necesita su propio `h1`: el documento incrustado trae el suyo y, sin este
         encabezado, el primer título de la página era el `h2` del aviso. */
     }
-    <header class="seccion-encabezado">
-      <p class="eyebrow">Documento en revisión</p>
-      <h1>Protocolo de crisis en revisión</h1>
-      <p class="lede">
-        Esta es la versión íntegra del borrador, publicada tal como está en el repositorio del
-        proyecto para que pueda revisarse a distancia.
-      </p>
-    </header>
+    <EncabezadoSeccion
+      eyebrow="Documento en revisión"
+      titulo="Protocolo de crisis en revisión"
+      descripcion="Esta es la versión íntegra del borrador, publicada tal como está en el repositorio del proyecto para que pueda revisarse a distancia."
+      descripcionMovil="Versión íntegra del borrador, publicada tal como está en el repositorio."
+    />
 
     <div class="aviso-alcance">
       <Notice title="Borrador público para revisión profesional">
@@ -49,13 +48,6 @@ import { Content as Protocolo } from '../../../docs/plan/protocolo-crisis.md';
 
 <style>
   /* Mismo encabezado de sección que el resto del sitio. */
-  .seccion-encabezado {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    margin-block: var(--space-8) var(--space-6);
-  }
-
   .aviso-alcance {
     margin-bottom: var(--space-8);
   }

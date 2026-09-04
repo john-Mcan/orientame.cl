@@ -1,6 +1,7 @@
 ---
 titulo: 'Insomnio'
 descripcion: 'Qué es el insomnio, cuándo se considera crónico según guías clínicas y cuáles son las alternativas de tratamiento con evidencia.'
+descripcionMovil: 'Qué es el insomnio, cuándo se considera crónico y qué tratamientos tienen evidencia.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

@@ -1,6 +1,7 @@
 ---
 titulo: 'Me cuesta salir de la cama'
 descripcion: 'Qué hay detrás de la dificultad profunda para levantarse por las mañanas, cuándo prestarle atención y qué pasos realistas permiten retomar el día.'
+descripcionMovil: 'Qué hay detrás de la dificultad para levantarse y qué pasos realistas permiten retomar el día.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

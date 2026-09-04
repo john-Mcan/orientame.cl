@@ -1,7 +1,7 @@
 ---
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import Notice from '@components/Notice.astro';
-import PageIntro from '@components/PageIntro.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Base from '@layouts/Base.astro';
 ---
 
@@ -17,12 +17,14 @@ import Base from '@layouts/Base.astro';
         { label: 'Alcance y límites' },
       ]}
     />
+
+    <EncabezadoSeccion
+      eyebrow="Alcance"
+      titulo="Orientación, no atención clínica"
+      descripcion="Este sitio ayuda a comprender opciones y rutas de acceso. No puede evaluar tu situación individual ni reemplazar a una persona profesional."
+      descripcionMovil="Ayuda a comprender opciones y rutas de acceso. No evalúa tu situación ni reemplaza a un profesional."
+    />
   </div>
-  <PageIntro
-    eyebrow="Alcance"
-    title="Orientación, no atención clínica"
-    description="Este sitio ayuda a comprender opciones y rutas de acceso. No puede evaluar tu situación individual ni reemplazar a una persona profesional."
-  />
 
   <div class="reading-shell">
     <Notice title="Si existe peligro ahora" tone="urgent">

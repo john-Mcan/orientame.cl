@@ -1,6 +1,7 @@
 ---
 titulo: 'Acompañar un primer contacto'
 descripcion: 'Cómo ayudar con una llamada o una primera consulta sin hablar por la otra persona ni prometer cómo será la atención.'
+descripcionMovil: 'Cómo ayudar con una llamada o una primera consulta sin hablar por la otra persona.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-03

@@ -1,6 +1,7 @@
 ---
 titulo: 'No puedo dejar de pensar'
 descripcion: 'Qué es la rumiación mental, por qué los pensamientos se repiten en bucle y qué técnicas validadas ayudan a frenar el desgaste cognitivo.'
+descripcionMovil: 'Qué es la rumiación mental y qué técnicas validadas ayudan a frenar el desgaste.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

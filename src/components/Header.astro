@@ -1,185 +1,724 @@
 ---
 import AccessUrgency from './AccessUrgency.astro';
+import Icon from './Icon.astro';
+import { SECCIONES, esPaginaActual, esRutaActual } from '@/data/navegacion';
 
-const path = Astro.url.pathname;
-// El menú lista las entradas al contenido, no las páginas institucionales: `/temas` se
-// alcanza desde cada vivencia de `/siento` y desde el pie.
-const links = [
-  { href: '/empezar', label: 'Empezar' },
-  { href: '/siento', label: 'Lo que sientes' },
-  { href: '/donde', label: 'Dónde consultar' },
-  { href: '/primera-vez', label: 'Primera vez' },
-  { href: '/acompanar', label: 'Acompañar' },
-  { href: '/buscar', label: 'Buscar' },
-  { href: '/sobre', label: 'Sobre el proyecto' },
-];
+const ruta = Astro.url.pathname;
 
-// `/empezar` sigue siendo la sección actual mientras se recorre el orientador.
-const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+// El menú se abre por `:hover`/`:focus-within`, sin JavaScript: el nivel superior es siempre
+// un enlace real a la sección, así que el panel enriquece la navegación pero nunca es la
+// única forma de llegar. En móvil el mismo modelo se recorre con `<details>` anidados, que
+// abren y cierran de forma nativa.
+const ultimos = SECCIONES.length - 2;
 ---
 
-<header class="site-header">
-  <div class="header-inner page-shell">
-    <a class="brand" href="/" aria-label="orientame.cl, ir al inicio">
-      <img src="/orientame-logo.svg" width="42" height="42" alt="" />
+<div class="cabecera-centinela" data-centinela aria-hidden="true"></div>
+
+<header class="cabecera" data-cabecera data-pagefind-ignore>
+  <div class="cabecera-fila page-shell">
+    <a class="marca" href="/" aria-label="orientame.cl, ir al inicio">
+      <img src="/orientame-logo.svg" width="40" height="40" alt="" />
       <span>orientame.cl</span>
     </a>
 
-    <nav class="desktop-nav" aria-label="Navegación principal">
-      {
-        links.map((link) => (
-          <a href={link.href} aria-current={isCurrent(link.href) ? 'page' : undefined}>
-            {link.label}
-          </a>
-        ))
-      }
+    <nav class="nav-escritorio" aria-label="Navegación principal">
+      <ul class="nav-lista">
+        {
+          SECCIONES.map((seccion, indice) => {
+            const enSeccion = [seccion.href, ...seccion.enlaces.map((e) => e.href)].some((href) =>
+              esRutaActual(href, ruta),
+            );
+
+            return (
+              <li class:list={['nav-grupo', { 'panel-a-la-derecha': indice >= ultimos }]}>
+                <a
+                  class="nav-enlace"
+                  href={seccion.href}
+                  data-activa={enSeccion ? 'si' : undefined}
+                  aria-current={esPaginaActual(seccion.href, ruta) ? 'page' : undefined}
+                >
+                  <span>{seccion.etiqueta}</span>
+                  <Icon name="chevron-abajo" size={15} />
+                </a>
+
+                <div class="panel">
+                  <div class="panel-tarjeta">
+                    {/* El destino del nivel superior, escrito. Que la etiqueta del grupo sea
+                        además un enlace no es evidente, y quedarse sin forma de llegar a la
+                        sección es peor que repetir el enlace. */}
+                    <a
+                      class="panel-destino"
+                      href={seccion.href}
+                      aria-current={esPaginaActual(seccion.href, ruta) ? 'page' : undefined}
+                    >
+                      <span class="panel-destino-etiqueta">
+                        {seccion.etiquetaDestino}
+                        <Icon name="flecha-derecha" size={16} />
+                      </span>
+                      <span class="panel-destino-detalle">{seccion.descripcion}</span>
+                    </a>
+
+                    <ul class="panel-lista">
+                      {seccion.enlaces.map((enlace) => (
+                        <li>
+                          <a
+                            href={enlace.href}
+                            aria-current={esPaginaActual(enlace.href, ruta) ? 'page' : undefined}
+                          >
+                            <span class="panel-etiqueta">
+                              {enlace.etiqueta}
+                              <Icon name="flecha-derecha" size={16} />
+                            </span>
+                            {enlace.detalle && <span class="panel-detalle">{enlace.detalle}</span>}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
     </nav>
 
-    <div class="urgent-desktop"><AccessUrgency /></div>
-    <div class="urgent-mobile"><AccessUrgency compact /></div>
+    <div class="cabecera-acciones">
+      <a class="boton-buscar" href="/buscar" aria-label="Buscar en orientame.cl">
+        <Icon name="lupa" size={20} />
+      </a>
 
-    <details class="mobile-menu">
-      <summary>Menú</summary>
-      <nav aria-label="Navegación móvil">
-        {
-          links.map((link) => (
-            <a href={link.href} aria-current={isCurrent(link.href) ? 'page' : undefined}>
-              {link.label}
+      <div class="urgencia-escritorio"><AccessUrgency /></div>
+      <div class="urgencia-movil"><AccessUrgency compact /></div>
+
+      <details class="menu-movil" data-menu-movil>
+        <summary aria-label="Menú de secciones">
+          <span class="icono-abrir"><Icon name="menu" size={22} /></span>
+          <span class="icono-cerrar"><Icon name="cerrar" size={22} /></span>
+        </summary>
+
+        <div class="cajon">
+          <nav aria-label="Navegación móvil">
+            <a class="cajon-buscar" href="/buscar">
+              <Icon name="lupa" size={20} />
+              <span>Buscar en el sitio</span>
             </a>
-          ))
-        }
-        <a href="/legal">Información legal</a>
-      </nav>
-    </details>
+
+            <ul class="cajon-lista">
+              {
+                SECCIONES.map((seccion) => (
+                  <li>
+                    <details class="cajon-grupo">
+                      <summary>
+                        <span class="cajon-icono">
+                          <Icon name={seccion.icono} size={20} />
+                        </span>
+                        <span class="cajon-etiqueta">{seccion.etiqueta}</span>
+                        <span class="cajon-chevron">
+                          <Icon name="chevron-abajo" size={18} />
+                        </span>
+                      </summary>
+                      <ul class="cajon-enlaces">
+                        <li>
+                          <a
+                            class="cajon-destino"
+                            href={seccion.href}
+                            aria-current={esPaginaActual(seccion.href, ruta) ? 'page' : undefined}
+                          >
+                            <span>{seccion.etiquetaDestino}</span>
+                            <Icon name="flecha-derecha" size={16} />
+                          </a>
+                        </li>
+                        {seccion.enlaces.map((enlace) => (
+                          <li>
+                            <a
+                              href={enlace.href}
+                              aria-current={esPaginaActual(enlace.href, ruta) ? 'page' : undefined}
+                            >
+                              {enlace.etiqueta}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </div>
+      </details>
+    </div>
   </div>
 </header>
 
-<style>
-  .site-header {
-    position: relative;
-    z-index: 10;
-    padding-block: var(--space-3);
-    border-bottom: 1px solid var(--color-line);
-    background: color-mix(in srgb, var(--color-mist-100) 88%, var(--color-paper));
+<script>
+  // Dos mejoras progresivas sobre un encabezado que ya funciona sin JavaScript:
+  // el estado "con scroll" que aplica el vidrio, y cerrar el cajón móvil con Escape o
+  // tocando fuera, que `<details>` no hace por sí solo.
+  const cabecera = document.querySelector<HTMLElement>('[data-cabecera]');
+  const centinela = document.querySelector<HTMLElement>('[data-centinela]');
+  const menu = document.querySelector<HTMLDetailsElement>('[data-menu-movil]');
+
+  if (cabecera && centinela && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([entrada]) => {
+      cabecera.classList.toggle('con-scroll', !entrada.isIntersecting);
+    }).observe(centinela);
   }
 
-  .header-inner {
+  if (menu) {
+    const cerrar = (devolverFoco: boolean) => {
+      if (!menu.open) return;
+      menu.open = false;
+      if (devolverFoco) menu.querySelector('summary')?.focus();
+    };
+
+    document.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Escape') cerrar(true);
+    });
+
+    document.addEventListener('click', (evento) => {
+      if (evento.target instanceof Node && !menu.contains(evento.target)) cerrar(false);
+    });
+  }
+</script>
+
+<style>
+  /* El centinela marca el borde superior del documento: mientras se ve, la página está
+     arriba del todo y la barra se muestra apoyada, sin vidrio ni sombra. */
+  .cabecera-centinela {
+    height: 1px;
+    margin-bottom: -1px;
+  }
+
+  /* El contenedor fijo no se pinta: sólo aporta el aire que deja la barra separada del borde
+     de la ventana, arriba del todo y también mientras se baja. */
+  .cabecera {
+    position: sticky;
+    z-index: 40;
+    top: 0;
+    padding-block: var(--space-4);
+  }
+
+  /* El aire sobre la tarjeta deja ver el contenido que sube, y las letras cortadas por el
+     borde de la ventana se leen como un error. Esta franja lo tapa con el color de la
+     página, degradando hacia abajo para que el corte no sea una línea dura en los costados
+     de la tarjeta. Sólo existe cuando se ha bajado. */
+  .cabecera::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 auto 0;
+    height: calc(var(--space-4) + var(--space-3));
+    background: linear-gradient(to bottom, var(--color-paper) 0 62%, transparent);
+    opacity: 0;
+    content: '';
+  }
+
+  .cabecera.con-scroll::before {
+    opacity: 1;
+  }
+
+  /* La barra es una tarjeta del ancho del contenido, no una banda de lado a lado
+     (`estilos.md` §Moodboard). El desenfoque queda siempre declarado y al bajar sólo cambia
+     la opacidad del fondo: pasar de `none` a un filtro no interpola, así que animarlo de
+     esta forma es lo que hace continua la transición al vidrio. */
+  .cabecera-fila {
+    position: relative;
     display: flex;
     min-height: 3.25rem;
     align-items: center;
     gap: var(--space-6);
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-100);
+    backdrop-filter: blur(18px) saturate(180%);
   }
 
-  .brand {
+  .cabecera.con-scroll .cabecera-fila {
+    border-color: color-mix(in srgb, var(--color-line) 70%, transparent);
+    background: color-mix(in srgb, var(--color-mist-100) 78%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--color-white) 65%, transparent),
+      0 14px 30px -20px rgb(22 33 29 / 55%);
+  }
+
+  /* Sin `backdrop-filter` un fondo translúcido dejaría leer el contenido a través de la
+     barra. En ese caso se queda opaca. */
+  @supports not (backdrop-filter: blur(2px)) {
+    .cabecera.con-scroll .cabecera-fila {
+      background: var(--color-mist-100);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cabecera::before {
+      transition: opacity 220ms ease;
+    }
+
+    .cabecera-fila {
+      transition:
+        background-color 220ms ease,
+        border-color 220ms ease,
+        box-shadow 220ms ease;
+    }
+  }
+
+  .marca {
     display: inline-flex;
     min-height: 2.75rem;
     flex: none;
     align-items: center;
     gap: var(--space-3);
     color: var(--color-green-900);
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     text-decoration: none;
   }
 
-  .brand img {
-    width: 2.625rem;
-    height: 2.625rem;
+  .marca img {
+    width: 2.375rem;
+    height: 2.375rem;
   }
 
-  /* Con siete entradas, la fila completa (marca + menú + acceso a urgencia) sólo cabe en
-     el ancho máximo de `page-shell`. La separación cede antes que el texto para que ningún
-     enlace se corte ni aparezca scroll horizontal. */
-  .desktop-nav {
+  /* Navegación de escritorio y mega-menú */
+
+  /* La navegación y cada grupo ocupan toda la altura de la fila para que el panel nazca
+     pegado al borde inferior del encabezado y el puntero llegue hasta él sin cruzar una
+     franja sin `:hover`. */
+  .nav-escritorio {
     display: flex;
     margin-left: auto;
-    align-items: center;
-    gap: clamp(var(--space-3), 1.4vw, var(--space-4));
+    align-self: stretch;
   }
 
-  .desktop-nav a {
-    min-height: 2.75rem;
+  .nav-lista,
+  .nav-grupo {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .nav-lista {
+    gap: clamp(var(--space-2), 1vw, var(--space-4));
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .nav-grupo {
+    position: relative;
+  }
+
+  .nav-enlace {
     display: inline-flex;
+    min-height: 2.75rem;
     align-items: center;
+    gap: var(--space-1);
+    padding-inline: var(--space-2);
+    border-radius: var(--radius-sm);
     color: var(--color-ink-900);
     font-size: var(--text-sm);
     font-weight: 600;
     text-decoration: none;
   }
 
-  .desktop-nav a:hover,
-  .desktop-nav a[aria-current='page'] {
+  .nav-enlace :global(svg) {
+    color: var(--color-sage-400);
+  }
+
+  /* El subrayado al apuntar es lo que dice que el nivel superior también es un enlace. */
+  .nav-enlace:hover,
+  .nav-grupo:focus-within .nav-enlace {
     color: var(--color-green-900);
+    background: color-mix(in srgb, var(--color-white) 70%, transparent);
     text-decoration: underline;
     text-underline-offset: 0.35em;
   }
 
-  .urgent-mobile,
-  .mobile-menu {
+  .nav-enlace[data-activa] {
+    color: var(--color-green-900);
+    text-decoration: underline;
+    text-underline-offset: 0.4em;
+    text-decoration-thickness: 0.1em;
+  }
+
+  .panel {
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    padding-top: var(--space-4);
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .panel-a-la-derecha .panel {
+    left: auto;
+    right: 0;
+  }
+
+  .nav-grupo:hover .panel,
+  .nav-grupo:focus-within .panel {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .panel-tarjeta {
+    width: max-content;
+    max-width: 24rem;
+    min-width: 18rem;
+    padding: var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-paper);
+    box-shadow: 0 1.5rem 2.5rem -1.25rem rgb(22 33 29 / 28%);
+  }
+
+  /* Enlace a la sección: se ve como un bloque accionable, no como la bajada del panel. */
+  .panel-destino {
+    display: grid;
+    gap: 0.15rem;
+    padding: var(--space-3);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-mist-50);
+    text-decoration: none;
+  }
+
+  .panel-destino:hover {
+    border-color: var(--color-green-700);
+    background: var(--color-mist-100);
+  }
+
+  .panel-destino-etiqueta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    color: var(--color-green-900);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .panel-destino:hover .panel-destino-etiqueta {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .panel-destino:hover .panel-destino-etiqueta :global(svg) {
+    transform: translateX(0.15rem);
+  }
+
+  .panel-destino[aria-current='page'] .panel-destino-etiqueta {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .panel-destino-detalle {
+    color: var(--color-ink-600);
+    font-size: var(--text-xs);
+    line-height: 1.45;
+  }
+
+  .panel-lista {
+    display: grid;
+    gap: var(--space-1);
+    padding: 0;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-line);
+    list-style: none;
+  }
+
+  .panel-lista a {
+    display: grid;
+    gap: 0.1rem;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-900);
+    text-decoration: none;
+  }
+
+  .panel-lista a:hover {
+    background: var(--color-mist-50);
+  }
+
+  .panel-etiqueta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-green-900);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  /* La flecha aparece al apuntar: en reposo la lista se lee como texto y no como una fila
+     de flechas repetidas. */
+  .panel-etiqueta :global(svg) {
+    opacity: 0;
+    transform: translateX(-0.25rem);
+  }
+
+  .panel-lista a:hover .panel-etiqueta :global(svg),
+  .panel-lista a:focus-visible .panel-etiqueta :global(svg) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .panel-lista a[aria-current='page'] .panel-etiqueta {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .panel-detalle {
+    color: var(--color-ink-600);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .panel {
+      transition:
+        opacity 160ms ease,
+        visibility 160ms;
+    }
+
+    .panel-etiqueta :global(svg),
+    .panel-destino-etiqueta :global(svg) {
+      transition:
+        opacity 160ms ease,
+        transform 160ms ease;
+    }
+
+    .panel-destino {
+      transition:
+        border-color 160ms ease,
+        background-color 160ms ease;
+    }
+  }
+
+  /* Acciones de la derecha */
+
+  .cabecera-acciones {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .boton-buscar {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    color: var(--color-green-900);
+    background: color-mix(in srgb, var(--color-white) 60%, transparent);
+    text-decoration: none;
+  }
+
+  .boton-buscar:hover {
+    border-color: var(--color-green-700);
+    background: var(--color-white);
+  }
+
+  .urgencia-movil,
+  .menu-movil {
     display: none;
   }
 
-  .mobile-menu summary {
+  /* Cajón móvil */
+
+  .menu-movil > summary {
     display: inline-flex;
-    min-height: 2.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
     align-items: center;
-    padding-inline: var(--space-3);
+    justify-content: center;
     border: 1px solid var(--color-green-900);
     border-radius: var(--radius-sm);
     color: var(--color-green-900);
-    font-size: var(--text-sm);
+    background: color-mix(in srgb, var(--color-white) 60%, transparent);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .menu-movil > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .icono-abrir,
+  .icono-cerrar {
+    display: inline-flex;
+  }
+
+  .menu-movil > summary .icono-cerrar,
+  .menu-movil[open] > summary .icono-abrir {
+    display: none;
+  }
+
+  .menu-movil[open] > summary .icono-cerrar {
+    display: inline-flex;
+  }
+
+  /* El cajón cuelga de la tarjeta y comparte su ancho: es la misma pieza, desplegada. */
+  .cajon {
+    position: absolute;
+    inset: calc(100% + var(--space-2)) 0 auto 0;
+    max-height: calc(100dvh - 8rem);
+    overflow-y: auto;
+    padding: var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-paper);
+    box-shadow: 0 1.5rem 2.5rem -1.25rem rgb(22 33 29 / 35%);
+  }
+
+  .cajon-buscar {
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    gap: var(--space-3);
+    padding-inline: var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    color: var(--color-green-900);
+    background: var(--color-mist-50);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .cajon-lista {
+    padding: 0;
+    margin-top: var(--space-4);
+    list-style: none;
+  }
+
+  .cajon-grupo > summary {
+    display: flex;
+    min-height: 3.25rem;
+    align-items: center;
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-ink-900);
     font-weight: 700;
     cursor: pointer;
     list-style: none;
   }
 
-  .mobile-menu summary::-webkit-details-marker {
+  .cajon-grupo > summary::-webkit-details-marker {
     display: none;
   }
 
-  .mobile-menu nav {
-    position: absolute;
-    inset: calc(100% + 1px) 0 auto 0;
-    display: grid;
-    padding: var(--space-4) var(--gutter) var(--space-6);
-    border-bottom: 1px solid var(--color-line);
-    background: var(--color-paper);
-    box-shadow: 0 0.5rem 1.5rem rgb(22 33 29 / 10%);
+  .cajon-etiqueta {
+    flex: 1;
   }
 
-  .mobile-menu nav a {
-    min-height: 3rem;
-    display: flex;
-    align-items: center;
+  .cajon-icono,
+  .cajon-chevron {
+    display: inline-flex;
+  }
+
+  .cajon-icono {
+    color: var(--color-green-700);
+  }
+
+  .cajon-chevron {
+    color: var(--color-sage-400);
+  }
+
+  .cajon-grupo[open] > summary .cajon-chevron {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cajon-chevron {
+      transition: transform 160ms ease;
+    }
+  }
+
+  .cajon-enlaces {
+    display: grid;
+    padding: var(--space-2) 0 var(--space-3) var(--space-8);
+    margin: 0;
     border-bottom: 1px solid var(--color-line);
-    color: var(--color-ink-900);
-    font-weight: 600;
+    list-style: none;
+  }
+
+  .cajon-enlaces a {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
     text-decoration: none;
   }
 
-  @media (max-width: 78rem) {
-    .header-inner {
-      gap: var(--space-3);
+  .cajon-enlaces a:hover,
+  .cajon-enlaces a[aria-current='page'] {
+    color: var(--color-green-900);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  /* Mismo motivo que en el panel de escritorio: al abrir el grupo, el destino de la sección
+     aparece escrito y no depende de que se entienda que el título es además un enlace. */
+  .cajon-destino {
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-block: var(--space-2);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-mist-50);
+  }
+
+  .cajon-enlaces .cajon-destino {
+    color: var(--color-green-900);
+    font-weight: 700;
+  }
+
+  /* Por debajo de este ancho la fila completa dejaría de caber, así que el mismo modelo de
+     secciones se recorre en el cajón. */
+  @media (max-width: 76rem) {
+    .cabecera {
+      padding-block: var(--space-3);
     }
 
-    .desktop-nav,
-    .urgent-desktop {
+    .cabecera::before {
+      height: calc(var(--space-3) + var(--space-3));
+    }
+
+    .cabecera-fila {
+      gap: var(--space-3);
+      padding-inline: var(--space-3);
+      border-radius: var(--radius-md);
+    }
+
+    .cajon {
+      border-radius: var(--radius-md);
+    }
+
+    .nav-escritorio,
+    .urgencia-escritorio {
       display: none;
     }
 
-    .urgent-mobile {
-      display: block;
+    .cabecera-acciones {
       margin-left: auto;
     }
 
-    .mobile-menu {
+    .urgencia-movil,
+    .menu-movil {
       display: block;
     }
   }
 
-  @media (max-width: 40rem) {
-    .brand span {
+  @media (max-width: 30rem) {
+    .marca span {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -187,8 +726,8 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
       clip: rect(0, 0, 0, 0);
     }
 
-    .header-inner {
-      gap: var(--space-2);
+    .boton-buscar {
+      display: none;
     }
   }
 </style>

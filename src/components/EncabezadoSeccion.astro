@@ -1,0 +1,34 @@
+---
+// Encabezado de una página de sección: ojal, `h1` y bajada.
+//
+// Existe para que las diez páginas índice compartan el mismo ritmo vertical —antes cada una
+// repetía sus propias reglas— y para resolver en un solo lugar la bajada de móvil: en una
+// pantalla angosta una bajada de cinco líneas empuja el contenido fuera de la primera vista.
+// Cuando `descripcionMovil` no se declara, se muestra la misma en ambos anchos; es lo
+// correcto cuando acortarla perdería una precisión que importa.
+
+interface Props {
+  eyebrow?: string;
+  titulo: string;
+  descripcion: string;
+  descripcionMovil?: string;
+  /** Marca el título como el que indexa Pagefind, en las páginas que forman parte del índice. */
+  indexable?: boolean;
+}
+
+const { eyebrow, titulo, descripcion, descripcionMovil, indexable = false } = Astro.props;
+---
+
+<header class="seccion-encabezado">
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h1 data-pagefind-meta={indexable ? 'title' : undefined}>{titulo}</h1>
+  <p class:list={['lede', { 'texto-amplio': descripcionMovil }]}>{descripcion}</p>
+  {
+    descripcionMovil && (
+      <p class="lede texto-movil" data-pagefind-ignore>
+        {descripcionMovil}
+      </p>
+    )
+  }
+  <slot />
+</header>

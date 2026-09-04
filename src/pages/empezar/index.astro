@@ -52,4 +52,12 @@ if (!inicio || inicio.tipo !== 'paso') {
     padding-top: var(--space-8);
     border-top: 1px solid var(--color-line);
   }
+
+  /* Mismo recorte de aire que el resto del sitio en móvil: la pregunta tiene que entrar en
+     la primera pantalla junto con las primeras opciones. */
+  @media (max-width: 48rem) {
+    .empezar {
+      padding-top: var(--space-6);
+    }
+  }
 </style>

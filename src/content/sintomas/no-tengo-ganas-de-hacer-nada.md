@@ -1,6 +1,7 @@
 ---
 titulo: 'No tengo ganas de hacer nada'
 descripcion: 'Qué significa perder la motivación y el placer por actividades habituales, cuándo prestarle atención y qué alternativas de apoyo tienen respaldo.'
+descripcionMovil: 'Qué significa perder la motivación y el placer, y qué opciones de apoyo tienen respaldo.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

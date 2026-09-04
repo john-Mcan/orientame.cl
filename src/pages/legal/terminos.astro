@@ -1,6 +1,6 @@
 ---
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import PageIntro from '@components/PageIntro.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Base from '@layouts/Base.astro';
 ---
 
@@ -13,12 +13,14 @@ import Base from '@layouts/Base.astro';
         { label: 'Términos de uso' },
       ]}
     />
+
+    <EncabezadoSeccion
+      eyebrow="Términos · Actualizados el 31 de agosto de 2026"
+      titulo="Condiciones para usar este preview"
+      descripcion="Estos términos son un borrador operativo para la primera etapa y deberán revisarse jurídicamente antes del lanzamiento público."
+      descripcionMovil="Borrador operativo de la primera etapa; se revisará jurídicamente antes del lanzamiento."
+    />
   </div>
-  <PageIntro
-    eyebrow="Términos · Actualizados el 31 de agosto de 2026"
-    title="Condiciones para usar este preview"
-    description="Estos términos son un borrador operativo para la primera etapa y deberán revisarse jurídicamente antes del lanzamiento público."
-  />
 
   <div class="reading-shell">
     <section class="content-section">

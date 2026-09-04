@@ -106,6 +106,23 @@ export interface FiltrosRecursos {
   tipo?: string;
   costo?: string;
   modalidad?: string;
+  /** Búsqueda libre, pensada sobre todo para escribir el nombre de una comuna. */
+  texto?: string;
+}
+
+/** Sin tildes y en minúsculas: quien escribe "nunoa" tiene que encontrar Ñuñoa. */
+export function normalizarTexto(valor: string): string {
+  return valor.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+}
+
+/**
+ * Texto sobre el que trabaja la búsqueda libre del directorio. Se escribe en la ficha como
+ * `data-busqueda` para que el island filtre sin recibir el dataset completo.
+ */
+export function textoBusqueda(recurso: Recurso): string {
+  return normalizarTexto(
+    [recurso.nombre, recurso.comuna, recurso.region, recurso.direccion].filter(Boolean).join(' '),
+  );
 }
 
 /**
@@ -118,12 +135,16 @@ export interface AtributosFicha {
   tipo?: string;
   costo?: string;
   modalidad?: string;
+  busqueda?: string;
 }
 
 /** Las fichas sin comuna se agrupan bajo `nacional`, que es el valor que emite `FichaRecurso`. */
 export function coincideConFiltros(ficha: AtributosFicha, filtros: FiltrosRecursos): boolean {
   const comparar = (valor: string | undefined, filtro: string | undefined, comodin: string) =>
     !filtro || filtro === comodin || valor === filtro;
+
+  const consulta = normalizarTexto(filtros.texto ?? '');
+  if (consulta && !(ficha.busqueda ?? '').includes(consulta)) return false;
 
   return (
     comparar(ficha.comuna, filtros.comuna, 'todas') &&
@@ -139,6 +160,7 @@ export function atributosDe(recurso: Recurso): AtributosFicha {
     tipo: recurso.tipo,
     costo: recurso.costo,
     modalidad: recurso.modalidad,
+    busqueda: textoBusqueda(recurso),
   };
 }
 

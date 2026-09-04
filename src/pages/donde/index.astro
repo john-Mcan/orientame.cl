@@ -1,7 +1,9 @@
 ---
 import Base from '@layouts/Base.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import Notice from '@components/Notice.astro';
+import Desplegable from '@components/Desplegable.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
+import Icon from '@components/Icon.astro';
 import FichaRecurso from '@components/FichaRecurso.astro';
 import ResourceFinder from '@components/islands/ResourceFinder';
 import { getRecursos, COMUNAS_PILOTO } from '@/lib/resources';
@@ -48,17 +50,14 @@ const valeLaPenaFiltrar = recursos.length > 6;
   <div class="reading-shell">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Dónde consultar' }]} />
 
-    <header class="seccion-encabezado">
-      <p class="eyebrow">Directorio y piloto de acceso</p>
-      <h1>Dónde encontrar atención de salud mental en Chile</h1>
-      <p class="lede">
-        Las alternativas públicas, gratuitas y de bajo costo van primero. Cada ficha indica de qué
-        fuente oficial salieron sus datos y cuándo la consultamos.
-      </p>
-    </header>
+    <EncabezadoSeccion
+      eyebrow="Directorio y piloto de acceso"
+      titulo="Dónde encontrar atención de salud mental en Chile"
+      descripcion="Las alternativas públicas, gratuitas y de bajo costo van primero. Cada ficha indica de qué fuente oficial salieron sus datos y cuándo la consultamos."
+    />
 
     <div class="aviso-niveles">
-      <Notice title="Qué significa cada sello en este directorio">
+      <Desplegable titulo="¿Qué significa cada sello en este directorio?">
         <p>
           Cada ficha dice en qué estado de comprobación está, para que sepas cuánto puedes apoyarte
           en ella:
@@ -78,7 +77,7 @@ const valeLaPenaFiltrar = recursos.length > 6;
           El directorio es todavía corto a propósito. Preferimos pocas fichas comprobadas antes que
           una lista larga con datos que no hemos verificado.
         </p>
-      </Notice>
+      </Desplegable>
     </div>
   </div>
 
@@ -88,15 +87,25 @@ const valeLaPenaFiltrar = recursos.length > 6;
       {
         COMUNAS_PILOTO.map((c) => (
           <a href={`/donde/${c.regionSlug}/${c.slug}`} class="tarjeta-comuna">
-            <span class="comuna-nombre">{c.nombre}</span>
             <span class="comuna-region">{c.region}</span>
+            <span class="comuna-nombre">
+              {c.nombre}
+              <span class="comuna-flecha">
+                <Icon name="flecha-derecha" size={18} />
+              </span>
+            </span>
             <span class="comuna-detalle">{c.descripcion}</span>
           </a>
         ))
       }
       <a href="/donde/clinicas-universitarias" class="tarjeta-comuna especial">
-        <span class="comuna-nombre">Clínicas universitarias</span>
         <span class="comuna-region">Atención docente-asistencial</span>
+        <span class="comuna-nombre">
+          Clínicas universitarias
+          <span class="comuna-flecha">
+            <Icon name="flecha-derecha" size={18} />
+          </span>
+        </span>
         <span class="comuna-detalle"
           >Centros docentes de facultades de psicología, con atención supervisada.</span
         >
@@ -108,15 +117,21 @@ const valeLaPenaFiltrar = recursos.length > 6;
     <div class="buscador-cabecera">
       <h2 id="buscador-titulo">Recursos disponibles</h2>
       <p>
-        Puedes acotar la lista por comuna, tipo de centro, modalidad y costo. Lo que eliges en estos
-        filtros se resuelve en tu dispositivo y orientame.cl no lo almacena.
+        Escribe una comuna o el nombre de un centro, o acota la lista por tipo, modalidad y costo.
+        Lo que escribes y eliges aquí se resuelve en tu dispositivo y orientame.cl no lo almacena.
       </p>
     </div>
 
     {
+      /* `client:idle` y no `client:visible`: el island no pinta nada hasta montar —para no
+        mostrar filtros que todavía no filtran— y `client:visible` observa los hijos que el
+        servidor dejó dentro de `<astro-island>`. Sin hijos no hay nada que observar y los
+        filtros no aparecían nunca. */
+    }
+    {
       valeLaPenaFiltrar && (
         <ResourceFinder
-          client:visible
+          client:idle
           comunas={COMUNAS_PILOTO}
           tipos={tipos}
           costos={costos}
@@ -132,46 +147,8 @@ const valeLaPenaFiltrar = recursos.length > 6;
 </Base>
 
 <style>
-  .seccion-encabezado {
-    margin-block: var(--space-8) var(--space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .eyebrow {
-    font-size: var(--text-xs);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-green-700);
-    margin: 0;
-  }
-
-  h1 {
-    line-height: 1.2;
-    color: var(--color-ink-900);
-    margin: 0;
-  }
-
-  .lede {
-    font-size: var(--text-lg);
-    line-height: 1.6;
-    color: var(--color-ink-600);
-    margin: 0;
-  }
-
   .aviso-niveles {
     margin-bottom: var(--space-8);
-  }
-
-  .aviso-niveles ul {
-    margin: var(--space-2) 0 0;
-    padding-left: 1.25rem;
-  }
-
-  .aviso-niveles li + li {
-    margin-top: var(--space-2);
   }
 
   .seccion-comunas-piloto {
@@ -206,10 +183,31 @@ const valeLaPenaFiltrar = recursos.length > 6;
     border-color: var(--color-green-700);
   }
 
+  /* La flecha dice que la tarjeta lleva a otra página: sin ella se leía como un recuadro
+     informativo más. */
   .comuna-nombre {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
     font-size: var(--text-lg);
     font-weight: 700;
-    color: var(--color-ink-900);
+    color: var(--color-green-900);
+  }
+
+  .comuna-flecha {
+    display: inline-flex;
+    color: var(--color-sage-400);
+  }
+
+  .tarjeta-comuna:hover .comuna-nombre {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .tarjeta-comuna:hover .comuna-flecha {
+    color: var(--color-green-700);
+    transform: translateX(0.2rem);
   }
 
   .comuna-region {
@@ -217,6 +215,18 @@ const valeLaPenaFiltrar = recursos.length > 6;
     font-weight: 600;
     color: var(--color-green-700);
     text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tarjeta-comuna,
+    .comuna-flecha {
+      transition:
+        border-color 150ms ease,
+        background-color 150ms ease,
+        color 150ms ease,
+        transform 150ms ease;
+    }
   }
 
   .comuna-detalle {
@@ -269,6 +279,25 @@ const valeLaPenaFiltrar = recursos.length > 6;
     flex-direction: column;
     gap: var(--space-3);
     margin-bottom: var(--space-6);
+  }
+
+  /* Búsqueda libre del directorio: es el control principal del bloque, así que se ve como
+     un campo de búsqueda completo y no como un filtro más. */
+  .seccion-buscador :global(.finder-texto label) {
+    color: var(--color-ink-900);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .seccion-buscador :global(.finder-texto input) {
+    min-width: 0;
+    min-height: 3rem;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-900);
+    background: var(--color-paper);
+    font: inherit;
   }
 
   .seccion-buscador :global(.finder-filtros) {

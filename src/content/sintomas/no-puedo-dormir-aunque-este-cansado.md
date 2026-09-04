@@ -1,6 +1,7 @@
 ---
 titulo: 'No puedo dormir aunque esté cansado'
 descripcion: 'Qué significa pasar la noche en vela a pesar del agotamiento, cuándo prestarle atención y qué alternativas de ayuda tienen respaldo científico.'
+descripcionMovil: 'Qué significa pasar la noche en vela pese al agotamiento y qué alternativas tienen respaldo.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

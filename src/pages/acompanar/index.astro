@@ -1,6 +1,7 @@
 ---
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import Card from '@components/Card.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Notice from '@components/Notice.astro';
 import Base from '@layouts/Base.astro';
 import { getCollection } from 'astro:content';
@@ -24,14 +25,13 @@ const piezas = (await getCollection('acompanamiento'))
     data-pagefind-body
     data-pagefind-filter="seccion:Acompañar a alguien"
   >
-    <header class="seccion-encabezado">
-      <p class="eyebrow">Para personas cercanas</p>
-      <h1 data-pagefind-meta="title">Acompañar a alguien</h1>
-      <p class="lede">
-        No necesitas tener todas las respuestas. Estas guías ofrecen formas concretas de escuchar y
-        ayudar respetando las decisiones de la otra persona y tus propios límites.
-      </p>
-    </header>
+    <EncabezadoSeccion
+      eyebrow="Para personas cercanas"
+      titulo="Acompañar a alguien"
+      descripcion="No necesitas tener todas las respuestas. Estas guías ofrecen formas concretas de escuchar y ayudar respetando las decisiones de la otra persona y tus propios límites."
+      descripcionMovil="Formas concretas de escuchar y ayudar respetando lo que decide la otra persona."
+      indexable
+    />
 
     <div class="aviso-alcance">
       <Notice title="Estas guías tienen un alcance acotado">
@@ -65,14 +65,6 @@ const piezas = (await getCollection('acompanamiento'))
 <style>
   .pagina-acompanar {
     padding-bottom: var(--space-16);
-  }
-
-  /* Mismo encabezado de sección que `/siento`, `/temas`, `/donde` y `/primera-vez`. */
-  .seccion-encabezado {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    margin-block: var(--space-8) var(--space-6);
   }
 
   .aviso-alcance {

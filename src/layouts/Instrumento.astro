@@ -61,7 +61,14 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
     <header class="instrumento-encabezado">
       <EditorialStatus status={selloEditorial} date={fechaVerificacion} />
       <h1 data-pagefind-meta="title">{data.titulo}</h1>
-      <p class="lede">{data.descripcion}</p>
+      <p class:list={['lede', { 'texto-amplio': data.descripcionMovil }]}>{data.descripcion}</p>
+      {
+        data.descripcionMovil && (
+          <p class="lede texto-movil" data-pagefind-ignore>
+            {data.descripcionMovil}
+          </p>
+        )
+      }
     </header>
 
     <Notice title="Una herramienta opcional, no una evaluación clínica">
@@ -325,6 +332,14 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
     .instrumento-ficha dl div,
     .instrumento-test :global(.test-opciones) {
       grid-template-columns: 1fr;
+    }
+  }
+
+  /* En móvil el artículo arrancaba a 3,5 rem de las migas; el título tiene que entrar en la
+     primera pantalla junto con el comienzo del texto. */
+  @media (max-width: 48rem) {
+    .instrumento {
+      margin-top: var(--space-4);
     }
   }
 </style>

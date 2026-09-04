@@ -2,7 +2,9 @@
 import Base from '@layouts/Base.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import Card from '@components/Card.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Notice from '@components/Notice.astro';
+import Buscador from '@components/islands/Buscador';
 import { getCollection } from 'astro:content';
 import { visibleEnEntorno } from '@/lib/editorial';
 
@@ -19,25 +21,16 @@ const sintomasPublicables = todasLasEntradas
   <div class="reading-shell">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Lo que sientes' }]} />
 
-    <header class="seccion-encabezado">
-      <p class="eyebrow">Entrada por vivencias</p>
-      <h1>Lo que estás sintiendo, en palabras simples</h1>
-      <p class="lede">
-        No necesitas conocer un término clínico para buscar orientación. Estas páginas explican en
-        lenguaje cotidiano qué puede significar lo que estás viviendo, cuándo prestarle atención y
-        qué opciones de apoyo tienen respaldo.
-      </p>
-    </header>
-
-    <div class="aviso-alcance">
-      <Notice title="Sin etiquetas diagnósticas">
-        <p>
-          Un síntoma o una vivencia difícil no equivale a un trastorno. Estas páginas buscan
-          orientarte y reducir la incertidumbre, no ponerte una etiqueta ni sustituir una consulta
-          profesional.
-        </p>
-      </Notice>
-    </div>
+    <EncabezadoSeccion
+      eyebrow="Entrada por vivencias"
+      titulo="Lo que estás sintiendo, en palabras simples"
+      descripcion="No necesitas conocer un término clínico para buscar orientación. Estas páginas explican en lenguaje cotidiano qué puede significar lo que estás viviendo, cuándo prestarle atención y qué opciones de apoyo tienen respaldo."
+      descripcionMovil="No necesitas un término clínico para buscar orientación. Aquí se explica en lenguaje cotidiano qué puede significar lo que vives."
+    >
+      <div class="buscador-vivencias">
+        <Buscador compacto client:load />
+      </div>
+    </EncabezadoSeccion>
   </div>
 
   {
@@ -77,40 +70,25 @@ const sintomasPublicables = todasLasEntradas
       en <a href="/donde">dónde encontrar ayuda en Chile</a>.
     </p>
   </section>
+
+  {
+    /* El alcance cierra la página: es una aclaración que se entiende mejor después de ver
+      de qué hablan estas vivencias, y arriba retrasaba el listado en móvil. */
+  }
+  <div class="aviso-alcance reading-shell">
+    <Notice title="Sin etiquetas diagnósticas">
+      <p>
+        Un síntoma o una vivencia difícil no equivale a un trastorno. Estas páginas buscan
+        orientarte y reducir la incertidumbre, no ponerte una etiqueta ni sustituir una consulta
+        profesional.
+      </p>
+    </Notice>
+  </div>
 </Base>
 
 <style>
-  .seccion-encabezado {
-    margin-block: var(--space-8) var(--space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .eyebrow {
-    font-size: var(--text-xs);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-green-700);
-    margin: 0;
-  }
-
-  h1 {
-    line-height: 1.2;
-    color: var(--color-ink-900);
-    margin: 0;
-  }
-
-  .lede {
-    font-size: var(--text-lg);
-    line-height: 1.6;
-    color: var(--color-ink-600);
-    margin: 0;
-  }
-
-  .aviso-alcance {
-    margin-bottom: var(--space-8);
+  .buscador-vivencias {
+    margin-top: var(--space-2);
   }
 
   .seccion-vacia {
@@ -121,11 +99,11 @@ const sintomasPublicables = todasLasEntradas
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
     gap: var(--space-6);
-    margin-bottom: var(--space-12);
+    margin-block: var(--space-8) var(--space-12);
   }
 
   .seccion-ayuda-adicional {
-    margin-block: var(--space-8) var(--space-16);
+    margin-block: var(--space-8) var(--space-8);
     padding-top: var(--space-8);
     border-top: 1px solid var(--color-line);
   }
@@ -141,5 +119,9 @@ const sintomasPublicables = todasLasEntradas
     color: var(--color-ink-600);
     line-height: 1.6;
     margin: 0;
+  }
+
+  .aviso-alcance {
+    padding-bottom: var(--space-16);
   }
 </style>

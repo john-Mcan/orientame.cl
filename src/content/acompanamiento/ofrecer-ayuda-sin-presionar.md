@@ -1,6 +1,7 @@
 ---
 titulo: 'Ofrecer ayuda sin presionar'
 descripcion: 'Opciones concretas para acompañar a una persona adulta respetando lo que decide y lo que tú realmente puedes ofrecer.'
+descripcionMovil: 'Opciones concretas para acompañar respetando lo que decide la otra persona.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-03

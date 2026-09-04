@@ -1,6 +1,7 @@
 ---
 titulo: 'Agotamiento y burnout'
 descripcion: 'Qué es el síndrome de desgaste ocupacional según la CIE-11, cómo se distingue del cansancio común y qué estrategias tienen respaldo.'
+descripcionMovil: 'Qué es el desgaste ocupacional según la CIE-11 y cómo se distingue del cansancio común.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

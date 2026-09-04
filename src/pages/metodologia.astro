@@ -2,7 +2,7 @@
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import EditorialStatus from '@components/EditorialStatus.astro';
 import Notice from '@components/Notice.astro';
-import PageIntro from '@components/PageIntro.astro';
+import EncabezadoSeccion from '@components/EncabezadoSeccion.astro';
 import Base from '@layouts/Base.astro';
 ---
 
@@ -12,12 +12,14 @@ import Base from '@layouts/Base.astro';
 >
   <div class="reading-shell">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Metodología' }]} />
+
+    <EncabezadoSeccion
+      eyebrow="Metodología editorial"
+      titulo="Cada afirmación debe poder rastrearse"
+      descripcion="La confianza no depende de un sello decorativo. Depende de fuentes identificables, límites claros y un proceso de revisión proporcional al riesgo."
+      descripcionMovil="Fuentes identificables, límites claros y una revisión proporcional al riesgo."
+    />
   </div>
-  <PageIntro
-    eyebrow="Metodología editorial"
-    title="Cada afirmación debe poder rastrearse"
-    description="La confianza no depende de un sello decorativo. Depende de fuentes identificables, límites claros y un proceso de revisión proporcional al riesgo."
-  />
 
   <div class="reading-shell">
     <section class="content-section">

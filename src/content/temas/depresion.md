@@ -1,6 +1,7 @@
 ---
 titulo: 'Depresión'
 descripcion: 'Qué es el episodio depresivo, cómo opera la garantía explícita AUGE-GES en Chile y qué opciones de tratamiento cuentan con respaldo.'
+descripcionMovil: 'Qué es el episodio depresivo y cómo opera la garantía AUGE-GES en Chile.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

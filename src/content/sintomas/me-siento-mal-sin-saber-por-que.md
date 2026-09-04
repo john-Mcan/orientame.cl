@@ -1,6 +1,7 @@
 ---
 titulo: 'Me siento mal pero no sé por qué'
 descripcion: 'Qué significa experimentar tristeza o inquietud difusa sin una causa evidente, cómo procesarlo y cuándo es útil consultar a un profesional.'
+descripcionMovil: 'Qué significa la tristeza o inquietud sin causa evidente y cuándo es útil consultar.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-01

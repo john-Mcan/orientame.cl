@@ -120,3 +120,94 @@ verdad sobre propósito y límites sigue siendo `descripcion-inicial.md`.
   aislada de trastorno, conservando la indicación de urgencia de MedlinePlus ante dolor de pecho y
   sin afirmar qué le ocurre a quien lee.
 - **Archivos:** `src/content/temas/crisis-de-panico.md` y las dos vivencias relacionadas.
+
+## D33 — El encabezado pasa a mega-menú fijo con un modelo de navegación único
+
+- **Qué se descubrió:** el encabezado listaba siete enlaces planos y se quedó sin `/autoevaluacion`
+  ni `/temas` cuando la fase 4 los publicó, porque mantenía su propia lista. El pie y la portada
+  mantenían otras dos. Con la cobertura de la v1 completa, una fila plana ya no ordena el sitio.
+- **Qué afecta:** encabezado, pie, portada y cualquier sección nueva que se publique después.
+- **Impacto:** `src/data/navegacion.ts` pasa a ser la única lista de secciones. Sólo declara rutas
+  que existen como página estática, así que un enlace del menú no puede terminar en 404. El panel se
+  abre por `:hover`/`:focus-within` y el nivel superior sigue siendo un enlace real, de modo que la
+  navegación completa funciona sin JavaScript; en móvil el mismo modelo se recorre con `<details>`
+  anidados.
+- **Alternativa más simple:** agregar los dos enlaces que faltaban a la fila plana. Deja nueve
+  entradas sin jerarquía, no cabe en el ancho máximo y repite el problema en la siguiente sección.
+- **Decisión:** cinco grupos (Empezar, Dónde consultar, Primera vez, Acompañar, El proyecto), más
+  acceso directo a búsqueda y a urgencia. El encabezado queda fijo y aplica el efecto de vidrio al
+  bajar; el estado lo marca un `IntersectionObserver` sobre un centinela y sin JavaScript el
+  encabezado sigue fijo, sólo que sin vidrio.
+- **Archivos:** `src/data/navegacion.ts`, `src/lib/iconos.ts`, `Header.astro`, `Footer.astro`,
+  `src/pages/index.astro`.
+
+## D34 — `client:visible` no sirve para un island que no pinta nada en el servidor
+
+- **Qué se descubrió:** los filtros de `/donde` nunca se hidrataron. `client:visible` observa los
+  hijos que el servidor dejó dentro de `<astro-island>`, no la etiqueta —que es `display: contents`
+  y no tiene caja—; `ResourceFinder` devuelve `null` hasta montar, para no mostrar controles que
+  todavía no controlan nada, así que no había nada que observar.
+- **Qué afecta:** `/donde` y cualquier island futuro que siga la misma regla de progressive
+  enhancement.
+- **Impacto:** el listado de fichas se renderiza en el servidor, así que la página nunca estuvo
+  rota, pero la promesa de filtrar por comuna no se cumplía.
+- **Alternativa más simple:** renderizar los controles en el servidor y activarlos al hidratar;
+  serían controles que no controlan nada hasta que llegue el JavaScript, que es exactamente la
+  affordance falsa que el proyecto prohíbe.
+- **Decisión:** usar `client:idle` y dejar un test de build que falla si aparece un
+  `<astro-island client="visible">` sin contenido servido.
+- **Archivos:** `src/pages/donde/index.astro`, `tests/build-verification.test.ts`, `AGENTS.md`.
+
+## D35 — Una bajada breve para móvil, declarada y no recortada
+
+- **Qué se descubrió:** en una pantalla de 390 px, la bajada de una página índice ocupaba cinco
+  líneas y empujaba el primer contenido fuera de la primera vista. Recortarla con CSS parte la
+  frase, y usar una sola versión corta empobrece la lectura en escritorio.
+- **Qué afecta:** las diez páginas índice, los cuatro layouts de artículo y el schema editorial.
+- **Impacto:** `descripcionMovil` es opcional y limitada a 110 caracteres. No es contenido nuevo:
+  es la misma afirmación con menos palabras, y no toca `descripcion`, que sigue siendo la meta
+  description. La versión oculta lleva `data-pagefind-ignore` para no duplicar el índice.
+- **Alternativa más simple:** reducir el cuerpo tipográfico en móvil. Ayuda, pero no resuelve una
+  bajada de 165 caracteres; se aplicó además de esto.
+- **Decisión:** declarar la versión breve donde acortar no pierde precisión. `/donde` y
+  `/primera-vez` conservan la bajada completa en todos los anchos por decisión del proyecto.
+- **Archivos:** `src/content.config.ts`, `EncabezadoSeccion.astro`, los cuatro layouts, las 24
+  piezas de contenido y `src/styles/global.css`.
+
+## D36 — Barra y portada como tarjetas de color sobre fondo blanco
+
+- **Qué se descubrió:** la barra de lado a lado y la portada como banda a sangre no coinciden con
+  la dirección visual de [`estilos.md`](./estilos.md) ni con
+  [`public/moodboard/estilo-colores.png`](../../public/moodboard/estilo-colores.png), donde la página
+  es blanca y las secciones son tarjetas de color del ancho del contenido, separadas del borde.
+- **Qué afecta:** `Header.astro` y la portada; el resto del sitio ya estaba sobre fondo blanco.
+- **Impacto:** la barra pasa a ser una tarjeta `page-shell` con esquina redondeada, separada del
+  borde de la ventana arriba del todo y también mientras se baja. La portada y el bloque
+  institucional de la portada se vuelven tarjetas de `mist-100` y `mist-50`. El acceso a urgencia y
+  el recorrido del orientador no cambian.
+- **Alternativa más simple:** dejar la banda y sólo cambiar los colores. No resuelve lo que el
+  moodboard define, que es la separación entre página y sección.
+- **Decisiones técnicas que no son cosméticas:**
+  1. el `backdrop-filter` queda siempre declarado y al bajar sólo cambia la opacidad del fondo,
+     porque una transición de `none` a un filtro no interpola y el vidrio aparecería de golpe;
+  2. una franja del color de la página cubre el aire sobre la tarjeta cuando se ha bajado: sin ella
+     el contenido que sube queda cortado por el borde de la ventana y se lee como un defecto;
+  3. sin soporte de `backdrop-filter` la tarjeta se queda opaca, porque un fondo translúcido sin
+     desenfoque dejaría leer el contenido a través de la barra.
+- **Archivos:** `src/components/Header.astro`, `src/pages/index.astro`, `src/styles/global.css`.
+
+## D37 — El destino de cada grupo del menú se escribe dentro del panel
+
+- **Qué se descubrió:** en el mega-menú, la etiqueta del grupo («Empezar») es a la vez título del
+  panel y enlace a la sección. Quien no lo sabe de antemano no tiene cómo deducirlo: el chevron
+  sugiere «esto abre un menú», no «esto además lleva a alguna parte».
+- **Qué afecta:** el encabezado en escritorio y el cajón móvil.
+- **Impacto:** quedarse sin forma visible de llegar a una sección es el peor resultado de una
+  navegación. Ahora cada sección declara `etiquetaDestino` y el panel abre con ese enlace, en un
+  bloque con borde y flecha, antes del resto. El nivel superior además se subraya al apuntarlo.
+- **Alternativa más simple:** repetir el `href` de la sección como primer elemento de la lista. Ya
+  estaba así y no funcionaba: bajo «Empezar» el primer elemento se llamaba «Orientador de primer
+  paso» y nada conectaba ese nombre con el grupo.
+- **Decisión:** `href` deja de repetirse dentro de `enlaces`; el destino del nivel superior se
+  nombra una sola vez, con `etiquetaDestino`, y se muestra destacado en el panel y en el cajón.
+- **Archivos:** `src/data/navegacion.ts`, `src/components/Header.astro`, `src/pages/index.astro`.

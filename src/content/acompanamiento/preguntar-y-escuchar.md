@@ -1,6 +1,7 @@
 ---
 titulo: 'Cómo preguntar y escuchar'
 descripcion: 'Una forma directa y respetuosa de abrir una conversación con una persona adulta que parece estar pasando por un momento difícil.'
+descripcionMovil: 'Una forma directa y respetuosa de abrir la conversación con una persona adulta.'
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-03

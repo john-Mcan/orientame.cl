@@ -5,6 +5,7 @@
   --color-sage-400: #86ad9d;
   --color-mist-100: #e4eeea;
   --color-mist-50: #f3f7f5;
+  /* Blanco roto, no blanco puro: es una decisión, no un descuido. No lo "corrijas" a #fff. */
   --color-paper: #fcfdfc;
   --color-ink-900: #16211d;
   --color-ink-600: #4b5b54;
@@ -28,6 +29,9 @@
   --page-max: 75rem;
   --reading-max: 45rem;
   --gutter: clamp(1rem, 4vw, 2rem);
+  /* Alto de la barra fija, con el aire que la separa del borde de la ventana. Lo usa
+     `scroll-padding-top` para que un enlace a un ancla no deje su encabezado debajo. */
+  --altura-cabecera: 5.25rem;
 
   --bp-sm: 30rem;
   --bp-md: 48rem;
@@ -60,6 +64,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--altura-cabecera) + var(--space-4));
   background: var(--color-paper);
 }
 
@@ -180,6 +185,55 @@ a:hover {
   color: var(--color-ink-600);
   font-size: var(--text-lg);
   line-height: 1.55;
+}
+
+/* Encabezado de sección: ojal, `h1` y bajada.
+   Vivía repetido en diez páginas con valores ligeramente distintos, así que el aire entre
+   las migas y el título cambiaba de una sección a otra. Aquí se define una sola vez y el
+   ritmo de móvil se ajusta en un único lugar. */
+.seccion-encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block: var(--space-8) var(--space-6);
+}
+
+.seccion-encabezado > h1 {
+  line-height: 1.2;
+}
+
+/* Dos redacciones del mismo texto: la extensa en pantallas anchas y una breve en móvil.
+   No es contenido distinto, es la misma información con otra extensión. Se resuelve con CSS
+   y no con JavaScript para que la página siga siendo estática y no haya salto al cargar. */
+.texto-movil {
+  display: none;
+}
+
+/* Las dos redacciones son alternativas, no párrafos consecutivos: `p + p` le sumaría a la
+   visible un margen superior que se ve como un hueco de más bajo el título. */
+.texto-amplio + .texto-movil {
+  margin-top: 0;
+}
+
+@media (max-width: 48rem) {
+  /* En móvil el bloque migas + título ocupaba media pantalla antes del primer contenido.
+     El aire se recorta en los márgenes del bloque, no entre el título y su bajada. */
+  .seccion-encabezado {
+    margin-block: var(--space-4) var(--space-6);
+  }
+
+  .lede {
+    font-size: var(--text-base);
+    line-height: 1.6;
+  }
+
+  .texto-amplio {
+    display: none;
+  }
+
+  .texto-movil {
+    display: revert;
+  }
 }
 
 .stack > * + * {
