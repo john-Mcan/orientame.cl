@@ -6,7 +6,7 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
 ---
 
 <Base
-  title="Qué decir para pedir ayuda: guiones copiables | orientame.cl"
+  title="Qué decir para pedir ayuda: guiones copiables"
   description="Mensajes listos para copiar y adaptar al contactar un CESFAM, pedir hora en una clínica psicológica o conversar con un ser querido."
 >
   <div class="reading-shell">
@@ -28,9 +28,10 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
       <p class="eyebrow">Herramienta práctica</p>
       <h1 data-pagefind-meta="title">Guiones para pedir ayuda sin tener que improvisar</h1>
       <p class="lede">
-        Poner en palabras lo que uno siente cuesta el doble cuando la energía está baja. Puedes
-        copiar estos textos directamente para enviar por WhatsApp, correo o leerlos si llamas por
-        teléfono. Adáptalos con confianza a tu propia voz.
+        Poner en palabras lo que uno siente cuesta el doble cuando la energía está baja. Estos
+        textos se copian tal cual para enviar por WhatsApp o correo, o para leerlos si llamas por
+        teléfono. Cámbialos por lo que te salga más natural: no hay una forma correcta de pedir una
+        hora.
       </p>
     </header>
 
@@ -40,7 +41,7 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
       <div class="lista-guiones">
         <GuionCopiable
           titulo="Pedir primera hora en tu CESFAM (atención primaria pública)"
-          texto="Hola, buenos días. Estoy inscrito/a en este centro y quisiera solicitar una hora para evaluación de salud mental con médico o psicólogo. Es la primera vez que consulto por este motivo."
+          texto="Hola, buenos días. Me atiendo en este centro y quisiera solicitar una hora para evaluación de salud mental con médico o psicólogo. Es la primera vez que consulto por este motivo."
           destino={{
             texto: '¿No sabes cuál te corresponde?',
             etiqueta: 'Ver cómo se accede en tu comuna',
@@ -75,7 +76,7 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
 
         <GuionCopiable
           titulo="Reagendar o cancelar una hora con anticipación"
-          texto="Hola. Te escribo para avisar con anticipación que no podré asistir a mi cita agendada para el [fecha y hora]. Quisiera saber si es posible reagendar para otro día o cancelar el turno para que otra persona pueda ocuparlo. Muchas gracias."
+          texto="Hola. Escribo para avisar con anticipación que no podré asistir a mi hora agendada. Quisiera saber si es posible reagendarla para otro día, o dejarla libre para que otra persona pueda ocuparla. Muchas gracias."
         />
       </div>
     </div>
@@ -90,25 +91,25 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
         />
 
         <GuionCopiable
-          titulo="Avisar a tu círculo cercano que estás iniciando terapia"
-          texto="Quería contarte que decidí empezar a consultar con un psicólogo para trabajar algunas cosas personales que me tenían con mucha carga. Te lo cuento para que sepas por qué a veces ando con menos energía y porque valoro tu apoyo."
+          titulo="Contarle a tu gente cercana que empezaste terapia"
+          texto="Quería contarte que decidí empezar a consultar con un psicólogo, para trabajar algunas cosas que me tenían con harta carga. Te lo cuento para que sepas por qué a veces ando con menos energía."
         />
       </div>
     </div>
 
     <BloqueSiguientePaso
-      titulo="¿Quieres buscar un centro donde aplicar estos guiones?"
-      descripcion="Encuentra centros de atención primaria, clínicas universitarias y líneas oficiales en tu comuna o a nivel nacional."
+      titulo="¿Dónde ocupar estos mensajes?"
+      descripcion="Centros de atención primaria por comuna, clínicas universitarias y líneas nacionales."
       accionPrincipal={{
-        texto: 'Ver centros disponibles en Chile',
+        texto: 'Ver dónde consultar en Chile',
         href: '/donde',
         tipo: 'recorrido',
-        aclaracion: 'Consulta centros por comuna, modalidad y tipo de costo.',
+        aclaracion: 'Por comuna, modalidad y tipo de costo.',
       }}
       pasoMenorCompromiso={{
-        texto: 'Revisar qué ocurre en una primera consulta',
+        texto: 'Saber antes qué pasa en la consulta',
         href: '/primera-vez/que-pasa-en-sesion',
-        descripcion: 'Conoce los tiempos, preguntas habituales y secreto profesional.',
+        descripcion: 'Cuánto dura, qué preguntan y cómo funciona el secreto profesional.',
       }}
     />
   </article>

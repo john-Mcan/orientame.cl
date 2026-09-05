@@ -2,8 +2,8 @@
 import AccessUrgency from '@components/AccessUrgency.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import Icon from '@components/Icon.astro';
+import GuiaOrientador from '@components/GuiaOrientador.astro';
 import PasoOrientador from '@components/PasoOrientador.astro';
-import ResultadoOrientador from '@components/ResultadoOrientador.astro';
 import Base from '@layouts/Base.astro';
 import {
   descripcionDe,
@@ -30,7 +30,10 @@ const padre = nodo.padre ? getNodo(nodo.padre) : undefined;
 const preguntaAnterior = padre?.tipo === 'paso' ? padre.pregunta : undefined;
 ---
 
-<Base title={nodo.tipo === 'paso' ? nodo.etiqueta : nodo.titulo} description={descripcionDe(nodo)}>
+<Base
+  title={nodo.tipo === 'paso' ? (nodo.titulo ?? nodo.etiqueta) : nodo.titulo}
+  description={descripcionDe(nodo)}
+>
   <div class="reading-shell">
     <Breadcrumbs items={migasDe(nodo.id)} />
   </div>
@@ -52,7 +55,7 @@ const preguntaAnterior = padre?.tipo === 'paso' ? padre.pregunta : undefined;
           )}
         </>
       ) : (
-        <ResultadoOrientador resultado={nodo} preguntaAnterior={preguntaAnterior} />
+        <GuiaOrientador guia={nodo} preguntaAnterior={preguntaAnterior} />
       )
     }
   </div>

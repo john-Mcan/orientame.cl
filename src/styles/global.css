@@ -341,6 +341,99 @@ a:hover {
   }
 }
 
+/* Lista de opciones del orientador.
+   Vive aquí porque la consumen dos componentes: `PasoOrientador` (las opciones de una
+   pregunta) y `GuiaOrientador` (las salidas con que cierra una guía). Con estilos de
+   scope por componente los dos podían divergir, y son el mismo control: una tarjeta
+   enlazada con etiqueta, detalle opcional y flecha.
+   El modificador `--salidas` marca que esas opciones salen del recorrido hacia el sitio. */
+.opciones-lista {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.opcion {
+  display: flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-ink-900);
+  text-decoration: none;
+}
+
+.opcion:hover {
+  border-color: var(--color-green-700);
+  background: var(--color-mist-50);
+  color: var(--color-ink-900);
+}
+
+.opcion svg {
+  flex-shrink: 0;
+  color: var(--color-sage-400);
+}
+
+.opcion:hover svg {
+  color: var(--color-green-700);
+}
+
+.opcion-texto {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.opcion-etiqueta {
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.opcion-detalle {
+  color: var(--color-ink-600);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.opciones-lista--salidas .opcion {
+  background: var(--color-paper);
+}
+
+.opcion.urgente {
+  border-color: color-mix(in srgb, var(--color-urgent-700) 40%, var(--color-line));
+  background: var(--color-urgent-50);
+}
+
+.opcion.urgente .opcion-etiqueta,
+.opcion.urgente svg {
+  color: var(--color-urgent-700);
+}
+
+.opcion.urgente:hover {
+  border-color: var(--color-urgent-700);
+  background: var(--color-urgent-50);
+}
+
+.opcion.urgente:hover svg {
+  color: var(--color-urgent-700);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .opcion,
+  .opcion svg {
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+}
+
 /* Línea de orientación.
    Elemento distintivo del proyecto: un trazo con nodos que conecta opciones o etapas
    reales de un recorrido. Cada nodo debe corresponder a una opción real; nunca se usa

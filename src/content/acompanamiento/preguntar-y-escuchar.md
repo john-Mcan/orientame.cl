@@ -5,7 +5,7 @@ descripcionMovil: 'Una forma directa y respetuosa de abrir la conversación con 
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-03
-actualizadoEl: 2026-09-03
+actualizadoEl: 2026-09-04
 revisionRequerida: fuentes
 estadoEditorial: verificado-con-fuentes
 verificadoEl: 2026-09-03
@@ -44,8 +44,8 @@ algo sencillo y basado en lo que observaste, sin explicar por la otra persona lo
 
 Busca un momento con cierta privacidad y sin apuro. Podrías decir:
 
-> He notado que últimamente estás más callado. ¿Te serviría conversar o prefieres que sólo me quede
-> contigo un rato?
+> He notado que últimamente hablas menos. ¿Te serviría conversar, o prefieres que me quede contigo
+> un rato sin más?
 
 La pregunta ofrece opciones. También permite que la persona no quiera hablar ahora.
 

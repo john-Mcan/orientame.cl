@@ -1,0 +1,376 @@
+---
+// Guía del orientador: el nodo terminal de un recorrido.
+//
+// El orden de los bloques es el contenido de la decisión D38 y no es intercambiable:
+//
+//   1. título y reconocimiento — nombra lo que la persona dijo, sin corregirlo;
+//   2. atajo — quien no quiere leer salta a las acciones, y no pierde el reconocimiento;
+//   3. secciones — la lectura que puede ayudarle a entenderse;
+//   4. cómo funciona en Chile — los hechos verificados, con su fuente;
+//   5. qué puedes hacer hoy — acciones reales, de menor a mayor compromiso;
+//   6. salidas — la persona vuelve a elegir hacia dónde seguir;
+//   7. si hoy no da — el paso de menor compromiso, que incluye detenerse.
+//
+// Antes esto era `ResultadoOrientador`: dos párrafos y una lista donde el primer elemento
+// solía ser un trámite. El nombre cambió porque el nodo dejó de ser el "resultado" de una
+// evaluación —nunca lo fue— y es una guía que reconoce, explica y ofrece.
+
+import { hrefDeDestino, rutaDe, RUTA_BASE, RUTA_URGENCIA, type Guia } from '@/lib/orientador';
+import AccionOrientador from './AccionOrientador.astro';
+import DatoOrientador from './DatoOrientador.astro';
+import EditorialStatus from './EditorialStatus.astro';
+import FuentesLinea from './FuentesLinea.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  guia: Guia;
+  /** Pregunta del paso anterior, para nombrar el enlace de retorno. */
+  preguntaAnterior?: string;
+}
+
+const { guia, preguntaAnterior } = Astro.props;
+const rutaAnterior = rutaDe(guia.padre);
+---
+
+<article class="guia">
+  <h1>{guia.titulo}</h1>
+
+  <div class="guia-reconocimiento">
+    {guia.reconocimiento.map((parrafo) => <p>{parrafo}</p>)}
+  </div>
+
+  {
+    guia.avisoUrgencia && (
+      <aside class="aviso-urgencia">
+        <p class="aviso-texto">
+          <Icon name="alerta" size={20} />
+          <span>{guia.avisoUrgencia}</span>
+        </p>
+        <a class="aviso-enlace" href={RUTA_URGENCIA}>
+          Ver ayuda inmediata
+          <Icon name="flecha-derecha" size={18} />
+        </a>
+      </aside>
+    )
+  }
+
+  {/* Ancla real: funciona sin JavaScript y `scroll-padding-top` la deja bajo la barra. */}
+  <p class="guia-atajo">
+    <a href="#que-puedes-hacer">
+      <span>Si ahora no quieres leer, salta a lo que puedes hacer hoy</span>
+      <Icon name="chevron-abajo" size={18} />
+    </a>
+  </p>
+
+  <div class="guia-lectura">
+    {
+      guia.secciones.map((seccion) => (
+        <section>
+          <h2>{seccion.titulo}</h2>
+          {seccion.parrafos.map((parrafo) => (
+            <p>{parrafo}</p>
+          ))}
+          <FuentesLinea fuenteIds={seccion.fuenteIds} />
+        </section>
+      ))
+    }
+  </div>
+
+  {
+    guia.datos && guia.datos.length > 0 && (
+      <section class="guia-bloque" aria-labelledby="como-funciona">
+        <h2 id="como-funciona">Cómo funciona esto en Chile</h2>
+        <p class="guia-bloque-bajada">
+          Datos verificados, con la fuente oficial y la fecha en que la consultamos.
+        </p>
+        <ul class="guia-datos">
+          {guia.datos.map((dato) => (
+            <li>
+              <DatoOrientador dato={dato} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="guia-bloque" aria-labelledby="que-puedes-hacer">
+    <h2 id="que-puedes-hacer">Qué puedes hacer hoy</h2>
+    <p class="guia-bloque-bajada">
+      Están ordenadas de menor a mayor compromiso. No hace falta hacerlas todas ni en orden.
+    </p>
+    <ul class="linea-orientacion">
+      {
+        guia.acciones.map((accion) => (
+          <li>
+            <AccionOrientador accion={accion} />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    guia.salidas && (
+      <section class="guia-bloque" aria-labelledby="hacia-donde">
+        <h2 id="hacia-donde">{guia.salidas.pregunta}</h2>
+        <ul class="opciones-lista opciones-lista--salidas">
+          {guia.salidas.opciones.map((opcion) => (
+            <li>
+              <a
+                class="opcion"
+                href={hrefDeDestino(opcion.destino)}
+                data-siguiente-paso="recorrido"
+              >
+                <span class="opcion-texto">
+                  <span class="opcion-etiqueta">{opcion.etiqueta}</span>
+                  {opcion.detalle && <span class="opcion-detalle">{opcion.detalle}</span>}
+                </span>
+                <Icon name="chevron-derecha" size={20} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="menor-compromiso" aria-labelledby="menor-compromiso-titulo">
+    <h2 id="menor-compromiso-titulo">Si hoy no da para nada de esto</h2>
+    <p>{guia.menorCompromiso.texto}</p>
+    {
+      guia.menorCompromiso.enlace && (
+        <p class="menor-compromiso-enlace">
+          <a
+            href={hrefDeDestino(guia.menorCompromiso.enlace.destino)}
+            data-siguiente-paso="recorrido"
+          >
+            {guia.menorCompromiso.enlace.etiqueta}
+            <Icon name="flecha-derecha" size={18} />
+          </a>
+        </p>
+      )
+    }
+  </section>
+
+  <nav class="guia-nav" aria-label="Navegación del orientador">
+    <a href={rutaAnterior} class="nav-volver">
+      <Icon name="flecha-izquierda" size={18} />
+      <span>{preguntaAnterior ? `Volver a: ${preguntaAnterior}` : 'Volver al paso anterior'}</span>
+    </a>
+    <a href={RUTA_BASE} class="nav-reiniciar">Empezar de nuevo</a>
+  </nav>
+
+  {/* `EditorialStatus` renderiza un `<span>`, así que puede ir junto a un `<p>`. */}
+  <div class="guia-verificacion">
+    <EditorialStatus status="sources" />
+    <p>
+      Las afirmaciones sobre el sistema de salud citan su fuente oficial junto al dato. Esta página
+      no evalúa tu situación ni registra lo que elegiste.
+    </p>
+  </div>
+</article>
+
+<style>
+  .guia > * + * {
+    margin-top: var(--space-8);
+  }
+
+  /* Reconocimiento: es lo primero que se lee y va un cuerpo más grande que la lectura,
+     para que no compita con el título ni parezca una bajada de relleno. */
+  .guia-reconocimiento {
+    max-width: 40rem;
+    margin-top: var(--space-6);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+  }
+
+  .guia-reconocimiento p + p {
+    margin-top: var(--space-4);
+  }
+
+  /* Atajo a las acciones */
+
+  .guia-atajo {
+    margin-top: var(--space-6);
+  }
+
+  .guia-atajo a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  /* Lectura */
+
+  .guia-lectura {
+    max-width: 40rem;
+    line-height: 1.7;
+  }
+
+  .guia-lectura section + section {
+    margin-top: var(--space-8);
+  }
+
+  .guia-lectura h2 {
+    font-size: var(--text-lg);
+  }
+
+  .guia-lectura p {
+    margin-top: var(--space-3);
+  }
+
+  /* Bloques con encabezado propio: datos, acciones y salidas */
+
+  .guia-bloque {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .guia-bloque h2 {
+    font-size: var(--text-lg);
+  }
+
+  .guia-bloque-bajada {
+    max-width: 38rem;
+    margin-top: var(--space-2);
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  .guia-bloque .linea-orientacion,
+  .guia-bloque .opciones-lista,
+  .guia-datos {
+    margin-top: var(--space-6);
+  }
+
+  .guia-datos {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Aviso de urgencia dentro de una guía */
+
+  .aviso-urgencia {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-6);
+    border: 1px solid color-mix(in srgb, var(--color-urgent-700) 40%, var(--color-line));
+    border-radius: var(--radius-md);
+    background: var(--color-urgent-50);
+  }
+
+  .aviso-texto {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-urgent-700);
+    font-weight: 600;
+  }
+
+  .aviso-enlace {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-2);
+    padding-inline: var(--space-3);
+    color: var(--color-urgent-700);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* Menor compromiso */
+
+  .menor-compromiso {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-mist-50);
+  }
+
+  .menor-compromiso h2 {
+    font-size: var(--text-lg);
+  }
+
+  .menor-compromiso p {
+    margin-top: var(--space-3);
+    color: var(--color-ink-600);
+  }
+
+  .menor-compromiso-enlace a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 600;
+  }
+
+  /* Navegación */
+
+  .guia-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .guia-nav a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .nav-volver span {
+    text-align: left;
+  }
+
+  .nav-reiniciar {
+    margin-left: auto;
+  }
+
+  /* Verificación */
+
+  .guia-verificacion {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: start;
+  }
+
+  .guia-verificacion p {
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 48rem) {
+    .guia-reconocimiento {
+      font-size: var(--text-base);
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .aviso-urgencia {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .guia-nav {
+      flex-direction: column;
+    }
+
+    .nav-reiniciar {
+      margin-left: 0;
+    }
+  }
+</style>

@@ -6,17 +6,39 @@ interface Props {
   paso: Paso;
   /** Encabezado del documento: sólo la primera pregunta de la página usa `h1`. */
   nivel?: 'h1' | 'h2';
+  /**
+   * Oculta el detalle de cada opción. La portada muestra las ocho puertas de entrada en la
+   * primera pantalla, y con el detalle de cada una la lista deja de caber en un móvil.
+   * En `/empezar` el detalle sí se muestra, porque ahí la pregunta es toda la página.
+   */
+  compacto?: boolean;
 }
 
-const { paso, nivel = 'h1' } = Astro.props;
+const { paso, nivel = 'h1', compacto = false } = Astro.props;
+
+// Cuando el paso trae título propio, la página primero nombra lo que la persona eligió y
+// la pregunta baja un nivel. `inicio` no tiene título: ahí la pregunta es el encabezado.
 const Encabezado = nivel;
+const NivelPregunta = paso.titulo ? (nivel === 'h1' ? 'h2' : 'h3') : nivel;
 ---
 
 <div class="paso">
-  <Encabezado class="paso-pregunta">{paso.pregunta}</Encabezado>
+  {paso.titulo && <Encabezado class="paso-titulo">{paso.titulo}</Encabezado>}
+
+  {
+    paso.entrada && (
+      <div class="paso-entrada">
+        {paso.entrada.map((parrafo) => (
+          <p>{parrafo}</p>
+        ))}
+      </div>
+    )
+  }
+
+  <NivelPregunta class="paso-pregunta">{paso.pregunta}</NivelPregunta>
   {paso.ayuda && <p class="paso-ayuda">{paso.ayuda}</p>}
 
-  <ul class="paso-opciones">
+  <ul class="opciones-lista paso-opciones">
     {
       paso.opciones.map((opcion) => {
         const href = hrefDeDestino(opcion.destino);
@@ -27,7 +49,9 @@ const Encabezado = nivel;
             <a href={href} class:list={['opcion', { urgente: esUrgencia }]}>
               <span class="opcion-texto">
                 <span class="opcion-etiqueta">{opcion.etiqueta}</span>
-                {opcion.detalle && <span class="opcion-detalle">{opcion.detalle}</span>}
+                {opcion.detalle && !compacto && (
+                  <span class="opcion-detalle">{opcion.detalle}</span>
+                )}
               </span>
               <Icon name={esUrgencia ? 'alerta' : 'chevron-derecha'} size={20} />
             </a>
@@ -39,8 +63,32 @@ const Encabezado = nivel;
 </div>
 
 <style>
+  .paso-titulo {
+    font-size: var(--text-2xl);
+    line-height: 1.2;
+  }
+
+  /* Reconocimiento del paso intermedio: se lee antes de la siguiente pregunta y por eso
+     va con el mismo cuerpo que el texto de lectura de una guía. */
+  .paso-entrada {
+    max-width: 40rem;
+    margin-top: var(--space-6);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+  }
+
+  .paso-entrada p + p {
+    margin-top: var(--space-4);
+  }
+
   .paso-pregunta {
     font-size: var(--text-xl);
+  }
+
+  .paso-entrada + .paso-pregunta {
+    margin-top: var(--space-12);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-line);
   }
 
   .paso-ayuda {
@@ -49,85 +97,19 @@ const Encabezado = nivel;
     color: var(--color-ink-600);
   }
 
+  /* Las tarjetas de opción viven en `global.css`: las comparte `GuiaOrientador`. */
   .paso-opciones {
-    display: grid;
-    gap: var(--space-3);
-    padding: 0;
     margin-top: var(--space-8);
-    list-style: none;
   }
 
-  .opcion {
-    display: flex;
-    min-height: 3.5rem;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
-    padding: var(--space-4) var(--space-6);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-md);
-    background: var(--color-white);
-    color: var(--color-ink-900);
-    text-decoration: none;
-  }
+  @media (max-width: 48rem) {
+    .paso-entrada {
+      font-size: var(--text-base);
+    }
 
-  .opcion:hover {
-    border-color: var(--color-green-700);
-    background: var(--color-mist-50);
-    color: var(--color-ink-900);
-  }
-
-  .opcion :global(svg) {
-    color: var(--color-sage-400);
-  }
-
-  .opcion:hover :global(svg) {
-    color: var(--color-green-700);
-  }
-
-  .opcion-texto {
-    display: grid;
-    gap: var(--space-1);
-  }
-
-  .opcion-etiqueta {
-    font-size: var(--text-base);
-    font-weight: 600;
-    line-height: 1.35;
-  }
-
-  .opcion-detalle {
-    color: var(--color-ink-600);
-    font-size: var(--text-sm);
-    line-height: 1.45;
-  }
-
-  .opcion.urgente {
-    border-color: color-mix(in srgb, var(--color-urgent-700) 40%, var(--color-line));
-    background: var(--color-urgent-50);
-  }
-
-  .opcion.urgente .opcion-etiqueta,
-  .opcion.urgente :global(svg) {
-    color: var(--color-urgent-700);
-  }
-
-  .opcion.urgente:hover {
-    border-color: var(--color-urgent-700);
-    background: var(--color-urgent-50);
-  }
-
-  .opcion.urgente:hover :global(svg) {
-    color: var(--color-urgent-700);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .opcion,
-    .opcion :global(svg) {
-      transition:
-        border-color 150ms ease,
-        background-color 150ms ease,
-        color 150ms ease;
+    .paso-entrada + .paso-pregunta {
+      margin-top: var(--space-8);
+      padding-top: var(--space-6);
     }
   }
 </style>

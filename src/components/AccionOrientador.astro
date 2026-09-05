@@ -1,6 +1,11 @@
 ---
-import { formatearFecha, resolverFuentes } from '@/data/fuentes';
+// Algo que la persona puede hacer sin salir de la página: copiar un mensaje o llamar a
+// una línea oficial. Los hechos verificados sobre el sistema de salud ya no pasan por
+// aquí (`DatoOrientador.astro`): mezclarlos hacía que el bloque "qué puedes hacer"
+// partiera por un trámite en vez de por una acción.
+
 import type { Accion } from '@/lib/orientador';
+import FuentesLinea from './FuentesLinea.astro';
 import GuionCopiable from './GuionCopiable.astro';
 import Icon from './Icon.astro';
 
@@ -9,62 +14,22 @@ interface Props {
 }
 
 const { accion } = Astro.props;
-const fuentes = accion.tipo === 'guion' ? [] : resolverFuentes(accion.fuenteIds ?? []);
 ---
 
 {
   accion.tipo === 'guion' ? (
     <GuionCopiable titulo={accion.titulo} texto={accion.texto} destino={accion.destino} />
-  ) : accion.tipo === 'enlace' ? (
-    <div class="accion enlace">
+  ) : (
+    <div class="accion llamada">
       <p class="accion-titulo">
+        <Icon name="telefono" size={18} />
         <span>{accion.titulo}</span>
       </p>
       <p class="accion-descripcion">{accion.descripcion}</p>
-      <a class="accion-enlace-btn" href={accion.href} data-siguiente-paso="recorrido">
-        <span>{accion.etiquetaEnlace}</span>
-        <Icon name="flecha-derecha" size={16} />
+      <a class="accion-llamar" href={`tel:${accion.marcar}`} data-siguiente-paso="llamada">
+        Llamar al {accion.numero}
       </a>
-    </div>
-  ) : (
-    <div class:list={['accion', accion.tipo]}>
-      {accion.tipo === 'llamada' ? (
-        <>
-          <p class="accion-titulo">
-            <Icon name="telefono" size={18} />
-            <span>{accion.titulo}</span>
-          </p>
-          <p class="accion-descripcion">{accion.descripcion}</p>
-          <a class="accion-llamar" href={`tel:${accion.marcar}`} data-siguiente-paso="llamada">
-            Llamar al {accion.numero}
-          </a>
-        </>
-      ) : (
-        <>
-          <p class="accion-titulo">{accion.titulo}</p>
-          <p class="accion-descripcion">{accion.descripcion}</p>
-        </>
-      )}
-
-      {fuentes.length > 0 && (
-        <p class="accion-fuentes">
-          {fuentes.map((fuente, indice) => (
-            <>
-              {indice > 0 && <span aria-hidden="true"> · </span>}
-              <a
-                href={fuente.url}
-                rel="external noopener noreferrer"
-                referrerpolicy="no-referrer"
-                title={fuente.titulo}
-              >
-                {fuente.organizacion}
-                <span class="sr-only">, {fuente.titulo} (abre un sitio externo)</span>
-              </a>
-              <span> · consultado el {formatearFecha(fuente.consultadoEl)}</span>
-            </>
-          ))}
-        </p>
-      )}
+      <FuentesLinea fuenteIds={accion.fuenteIds} />
     </div>
   )
 }
@@ -81,14 +46,10 @@ const fuentes = accion.tipo === 'guion' ? [] : resolverFuentes(accion.fuenteIds 
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    color: var(--color-ink-900);
+    color: var(--color-green-900);
     font-size: var(--text-base);
     font-weight: 700;
     line-height: 1.35;
-  }
-
-  .llamada .accion-titulo {
-    color: var(--color-green-900);
   }
 
   .accion-descripcion {
@@ -116,38 +77,6 @@ const fuentes = accion.tipo === 'guion' ? [] : resolverFuentes(accion.fuenteIds 
     border-color: var(--color-green-700);
     background: var(--color-green-700);
     color: var(--color-white);
-  }
-
-  .accion-enlace-btn {
-    display: inline-flex;
-    min-height: 2.75rem;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-4);
-    margin-top: var(--space-4);
-    border: 1px solid var(--color-green-900);
-    border-radius: var(--radius-sm);
-    color: var(--color-green-900);
-    background: transparent;
-    font-size: var(--text-sm);
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .accion-enlace-btn:hover {
-    background: var(--color-mist-100);
-  }
-
-  .accion-fuentes {
-    margin-top: var(--space-4);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-line);
-    color: var(--color-ink-600);
-    font-size: var(--text-xs);
-  }
-
-  .accion-fuentes a {
-    font-weight: 600;
   }
 
   @media (prefers-reduced-motion: no-preference) {

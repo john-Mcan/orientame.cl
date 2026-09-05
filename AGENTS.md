@@ -19,13 +19,14 @@ cuando la persona encuentra una ruta que le sirve.
 
 Ante cualquier duda de alcance, propósito o gobernanza, manda el documento base.
 
-| Documento                                                              | Qué resuelve                                                                            |
-| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [`docs/plan/descripcion-inicial.md`](docs/plan/descripcion-inicial.md) | Propósito, principios, alcance, privacidad, gobernanza editorial. **Fuente de verdad.** |
-| [`docs/plan/plan-desarrollo-v1.md`](docs/plan/plan-desarrollo-v1.md)   | Qué se construye en cada etapa y cómo se verifica                                       |
-| [`docs/plan/estilos.md`](docs/plan/estilos.md)                         | Identidad visual, tokens, componentes, accesibilidad                                    |
-| [`docs/plan/plantilla-contenido.md`](docs/plan/plantilla-contenido.md) | Estructura editorial trazable de cada pieza                                             |
-| [`docs/plan/fase-2-decisiones.md`](docs/plan/fase-2-decisiones.md)     | Decisiones tomadas y **pendientes con dueño de etapa**                                  |
+| Documento                                                              | Qué resuelve                                                                               |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [`docs/plan/descripcion-inicial.md`](docs/plan/descripcion-inicial.md) | Propósito, principios, alcance, privacidad, gobernanza editorial. **Fuente de verdad.**    |
+| [`docs/plan/plan-desarrollo-v1.md`](docs/plan/plan-desarrollo-v1.md)   | Qué se construye en cada etapa y cómo se verifica                                          |
+| [`docs/plan/estilos.md`](docs/plan/estilos.md)                         | Identidad visual, tokens, componentes, accesibilidad                                       |
+| [`docs/plan/plantilla-contenido.md`](docs/plan/plantilla-contenido.md) | Estructura editorial trazable de cada pieza                                                |
+| [`docs/plan/fase-2-decisiones.md`](docs/plan/fase-2-decisiones.md)     | Decisiones tomadas y **pendientes con dueño de etapa**                                     |
+| [`docs/pendientes.md`](docs/pendientes.md)                             | Qué falta hoy, por qué quedó pendiente y qué habría que hacer. **Léelo antes de empezar.** |
 
 Un cambio relevante respecto del plan **se consulta con el usaurio a cargo y se documenta antes de aceptarse**, con el procedimiento de
 `plan-desarrollo-v1.md` §1.3: qué se descubrió, qué afecta, impacto, alternativa más simple,
@@ -33,17 +34,21 @@ decisión, archivos por actualizar. No se cambia el propósito del producto en s
 
 ## Estado actual
 
-**Fase 4 implementada, excepto testimonios autorizados.** La fase 3 se cerró reproduciendo 27
-establecimientos vigentes del registro DEIS como fichas nivel A, sin inventar formas de acceso.
+**Fase 4 implementada, excepto testimonios autorizados**, más una revisión editorial del orientador
+y las guías. La fase 3 se cerró reproduciendo 27 establecimientos vigentes del registro DEIS como
+fichas nivel A, sin inventar formas de acceso.
+
 Lee [`docs/plan/fase-3-decisiones.md`](docs/plan/fase-3-decisiones.md) §Auditoría (D16–D23) y
 [`docs/plan/fase-4-decisiones.md`](docs/plan/fase-4-decisiones.md) antes de tocar `/siento`, `/temas`,
-`/donde`, `/autoevaluacion`, `/acompanar` o `src/data/recursos.json`.
+`/donde`, `/autoevaluacion`, `/acompanar` o `src/data/recursos.json`, y
+[`docs/plan/fase-4-revision-guias.md`](docs/plan/fase-4-revision-guias.md) (D38–D47) antes de tocar
+`/empezar`, `src/lib/orientador.ts` o el lenguaje de cualquier guía.
 
-Rutas que existen hoy (61 páginas estáticas):
+Rutas que existen hoy (65 páginas estáticas):
 
 ```
 /  /urgencia  /404
-/empezar  +  11 rutas del orientador bajo /empezar/[...ruta]   (3 pasos y 9 resultados)
+/empezar  +  15 rutas del orientador bajo /empezar/[...ruta]   (3 pasos intermedios y 12 guías)
 /siento   +  12 vivencias cotidianas bajo /siento/[slug]
 /temas    +  7 cuadros clínicos bajo /temas/[slug]
 /primera-vez  +  4 guías (/que-pasa-en-sesion, /que-decir, /cuanto-cuesta, /como-elegir)
@@ -53,6 +58,12 @@ Rutas que existen hoy (61 páginas estáticas):
 /buscar
 /sobre  /metodologia  /metodologia/protocolo-crisis  /legal  /legal/{privacidad,alcance,terminos}
 ```
+
+**Las siete puertas de `/empezar` corresponden a las siete barreras de §4 del documento base.** Antes
+faltaban tres —§4.2 «quiero resolverlo por mi cuenta», §4.6 «nunca he ido y no sé cómo funciona» y
+§4.7 «todavía no estoy preparado»— y quien entraba con una de ellas caía en una rama cuya única
+salida era pedir hora. Si agregas una puerta o quitas un nodo, hay una prueba que verifica que
+ninguna barrera se quede sin entrada.
 
 **Las URLs citadas hoy en el sitio fueron abiertas y leídas antes de citarse.** Si agregas
 una, ábrela y compruébala: hay un test que bloquea que una misma URL respalde documentos distintos,
@@ -81,14 +92,33 @@ una más pequeña. Detenerse y volver después es una opción válida y se dice 
 nunca es "el paso de menor compromiso".
 
 **Primero se reconoce la barrera, después se ofrece la acción.** Si la persona eligió "no quiero
-preocupar a nadie" o "me da vergüenza", el resultado tiene que hablar de eso —nombrarlo, decir que
-es frecuente— antes de proponer que pida una hora. Saltar directo al trámite convierte lo que dijo
-en un obstáculo administrativo y el recorrido deja de acompañar. Ya pasó: `no-quiero-preocupar-a-nadie`
-respondía sobre confidencialidad ("no tienes que contárselo a nadie") cuando lo que la persona
-suele estar diciendo es que se siente una carga o que su caso no amerita molestar.
+preocupar a nadie" o "me da vergüenza", la guía tiene que hablar de eso —nombrarlo— antes de
+proponer que pida una hora. Saltar directo al trámite convierte lo que dijo en un obstáculo
+administrativo y el recorrido deja de acompañar. Ya pasó dos veces: `no-quiero-preocupar-a-nadie`
+respondía sobre confidencialidad ("no tienes que contárselo a nadie") cuando lo que la persona suele
+estar diciendo es que se siente una carga; y `varias-semanas-o-mas` abría con la inscripción en APS y
+la cobertura de Fonasa, que responden una pregunta que esa persona no hizo.
+
+**El orden de una guía del orientador está fijado y no es intercambiable** (D38): título y
+reconocimiento → atajo a las acciones → secciones de lectura → "cómo funciona esto en Chile" con sus
+fuentes → "qué puedes hacer hoy" de menor a mayor compromiso → salidas → "si hoy no da". El
+componente `GuiaOrientador.astro` es el que lo impone; no reordenes los bloques ahí.
 
 Reconocer no es consolar: no se afirma cómo se van a sentir terceros ("no le quita nada a quienes te
 importan"), no se corrige el sentimiento y no se promete alivio.
+
+**No se cuantifican frecuencias sin fuente.** "Es frecuente", "la mayoría", "mucha gente", "una de
+las razones más comunes" son afirmaciones epidemiológicas y pasaban desapercibidas porque suenan a
+consuelo. Si quieres decir que algo es entendible, dilo como juicio editorial; si quieres citar una
+frecuencia, cita la fuente en la sección que la contiene (`Seccion.fuenteIds`). Hay un test que lo
+bloquea en el orientador.
+
+**No se le asume el género a quien lee, tampoco en los guiones copiables.** El orientador habla en
+segunda persona y sus guiones se copian en primera, así que un adjetivo concordado excluye a la mitad
+de quienes lo van a ocupar. La barra tampoco sirve: "Estoy inscrito/a" queda dentro del mensaje que
+la persona envía. Se reescribe evitando la concordancia: "me atiendo en este consultorio", "tener la
+disposición", "tener certeza", "no seguir por tu cuenta". Hay un test con una lista acotada de
+participios; `listo/lista` queda fuera porque casi siempre concuerda con un objeto.
 
 **La crisis no se delega a IA.** No hay chatbot de crisis ni decisiones generativas. **No se
 formulan preguntas que evalúen riesgo ni se bifurca según la respuesta.** El acceso a `/urgencia` es
@@ -208,6 +238,8 @@ Más **revisión manual del recorrido modificado**, en escritorio y móvil.
 - trazabilidad: que toda afirmación cite una fuente que existe;
 - integridad de destinos: que ningún enlace termine en 404;
 - límites clínicos: que no entre lenguaje diagnóstico, persuasión por miedo ni preguntas de riesgo;
+- límites de voz: cuantificadores de frecuencia sin fuente y género asumido (D43, D44);
+- estructura de una guía: que reconozca antes de proponer, tenga lectura real y ofrezca continuación;
 - validez de HTML donde un error rompe el layout.
 
 **No construyas todavía** (corresponden a la etapa 5): suite E2E amplia, matrices de navegadores,
@@ -235,12 +267,14 @@ buscadores pudieran divergir.
 
 **Piezas compartidas que no se duplican:**
 
-| Pieza                | Dónde vive                | Qué resuelve                                                                            |
-| -------------------- | ------------------------- | --------------------------------------------------------------------------------------- |
-| Secciones del sitio  | `src/data/navegacion.ts`  | Única lista. La consumen el encabezado, el mapa de la portada y las comunas del piloto. |
-| Encabezado de página | `EncabezadoSeccion.astro` | Ojal, `h1` y bajada, con el mismo ritmo vertical en las diez páginas índice.            |
-| Trazos de iconos     | `src/lib/iconos.ts`       | `Icon.astro` sólo los dibuja; el modelo de navegación necesita el tipo `IconName`.      |
-| Bloque plegable      | `Desplegable.astro`       | `<details>` nativo para explicaciones que no todo el mundo necesita leer.               |
+| Pieza                 | Dónde vive                | Qué resuelve                                                                                              |
+| --------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Secciones del sitio   | `src/data/navegacion.ts`  | Única lista. La consumen el encabezado, el mapa de la portada y las comunas del piloto.                   |
+| Encabezado de página  | `EncabezadoSeccion.astro` | Ojal, `h1` y bajada, con el mismo ritmo vertical en las diez páginas índice.                              |
+| Trazos de iconos      | `src/lib/iconos.ts`       | `Icon.astro` sólo los dibuja; el modelo de navegación necesita el tipo `IconName`.                        |
+| Bloque plegable       | `Desplegable.astro`       | `<details>` nativo para explicaciones que no todo el mundo necesita leer.                                 |
+| Referencia de fuentes | `FuentesLinea.astro`      | Organización, enlace y fecha de consulta. La usan líneas, datos y secciones de una guía.                  |
+| Tarjeta de opción     | `.opcion` en `global.css` | La comparten las opciones de un paso y las salidas de una guía; con scope por componente iban a divergir. |
 
 Diez páginas repetían su propio `.seccion-encabezado` con valores distintos y el aire entre las
 migas y el título cambiaba de una sección a otra. Ahora la regla está una vez en `global.css`. No la
@@ -294,9 +328,16 @@ tarjetas a 45rem da dos columnas, que es suficiente. Hay un test que lo bloquea.
 - Una sola acción primaria por bloque. El rojo se reserva a urgencia y peligro real, nunca para
   aumentar conversión.
 - El acceso a urgencia permanece visible en todas las páginas, discreto y sin animación intermitente.
-- Voz: español claro y directo para Chile, activa, frases breves, controles nombrados por lo que
+- Voz: español de Chile, cercano y directo, activa, frases breves, controles nombrados por lo que
   hacen. Sin lenguaje promocional. No asumas diagnóstico, género, capacidad de pago ni disposición a
   terapia.
+- **Los títulos nombran la situación, no buscan el ingenio.** "Cuando da vergüenza tener que explicar
+  por qué", no "Se puede pedir una hora con la vergüenza puesta". Un título ingenioso suena escrito
+  por alguien que en ese momento no está sintiendo lo que describe, y cuatro de nueve repetían la
+  misma plantilla ("No necesitas X para Y"). Las frases con gracia sirven dentro de un párrafo.
+- **El `title` que se pasa a `Base` no incluye el nombre del sitio.** `Base.astro` ya agrega
+  " · orientame.cl". Doce páginas y cuatro layouts lo repetían y la pestaña decía
+  "… | orientame.cl · orientame.cl". Hay un test de build que lo bloquea.
 
 ## Convenciones del repo
 
@@ -311,6 +352,9 @@ tarjetas a 45rem da dos columnas, que es suficiente. Hay un test que lo bloquea.
 - **No hagas commit ni push salvo que se pida explícitamente.**
 
 ## Pendientes con dueño de etapa
+
+La lista completa y actualizada, con qué falta y por qué, está en
+[`docs/pendientes.md`](docs/pendientes.md). Lo de abajo es el resumen por etapa.
 
 - **Etapa 4 — testimonios.** `/historias/` queda pendiente hasta contar con consentimiento,
   procedencia y reglas editoriales verificables.

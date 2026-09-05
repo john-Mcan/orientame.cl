@@ -8,7 +8,7 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
 ---
 
 <Base
-  title="Primera vez buscando apoyo psicológico | orientame.cl"
+  title="Primera vez buscando apoyo psicológico"
   description="Qué ocurre en una primera consulta, cuánto cuesta en Chile, qué decir al pedir hora y cómo elegir profesional."
 >
   <div class="reading-shell">
@@ -21,15 +21,15 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
     <EncabezadoSeccion
       eyebrow="Guía de inicio"
       titulo="Antes de tu primera consulta"
-      descripcion="Pedir ayuda por primera vez genera dudas legítimas: no saber cuánto va a costar, qué te van a preguntar o cómo explicar lo que te pasa. Esta sección reúne información práctica para que des el paso con tranquilidad y a tu propio ritmo."
+      descripcion="Consultar por primera vez deja varias dudas abiertas: cuánto va a costar, qué preguntan, cuánto dura, cómo explicar lo que te pasa. Acá está lo que se puede resolver leyendo, para que decidas con la información en la mano y a tu ritmo."
     />
 
     <div class="aviso-tranquilidad">
-      <Notice title="No tienes que tener todo resuelto para consultar">
+      <Notice title="No tienes que llegar con todo resuelto">
         <p>
-          Muchas personas postergan consultar creyendo que deben llegar con un discurso ordenado o
-          saber exactamente qué les ocurre. El trabajo del profesional es justamente ayudarte a
-          desenredar lo que sientes en un espacio confidencial y seguro.
+          Es fácil postergar la consulta pensando que primero hay que ordenar la historia o saber
+          exactamente qué te ocurre. Ordenar lo que sientes es parte de lo que se hace en la
+          consulta, no un requisito para llegar a una.
         </p>
       </Notice>
     </div>
@@ -68,18 +68,18 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
     </section>
 
     <BloqueSiguientePaso
-      titulo="¿Quieres saber dónde consultar en tu comuna?"
-      descripcion="Revisa las líneas oficiales, las clínicas universitarias y cómo se accede a la atención pública en tu comuna."
+      titulo="¿Dónde se pide la hora?"
+      descripcion="Establecimientos vigentes por comuna, clínicas universitarias y líneas nacionales, con lo que hemos podido comprobar de cada uno."
       accionPrincipal={{
-        texto: 'Ver centros y recursos disponibles',
+        texto: 'Ver dónde consultar en Chile',
         href: '/donde',
         tipo: 'recorrido',
-        aclaracion: 'Líneas oficiales y cómo se entra a la atención pública por comuna.',
+        aclaracion: 'Por comuna, tipo de centro y modalidad de costo.',
       }}
       pasoMenorCompromiso={{
-        texto: 'Explorar guiones copiables para pedir hora',
+        texto: 'Dejar el mensaje escrito antes de llamar',
         href: '/primera-vez/que-decir',
-        descripcion: 'Mensajes sencillos para escribir o llamar sin tener que improvisar.',
+        descripcion: 'Guiones para copiar y adaptar, para no tener que improvisar.',
       }}
     />
   </div>

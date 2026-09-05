@@ -2,7 +2,15 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, it } from 'node:test';
-import { nodosConRutaPropia, rutaDe, todosLosPasos, hrefDeDestino } from '../src/lib/orientador.ts';
+import {
+  hrefDeDestino,
+  nodosConRutaPropia,
+  opcionesDe,
+  rutaDe,
+  todasLasGuias,
+  todosLosNodos,
+  todosLosPasos,
+} from '../src/lib/orientador.ts';
 
 const distDir = path.resolve(process.cwd(), 'dist');
 
@@ -111,17 +119,34 @@ describe('El orientador se genera completo como HTML estático', () => {
     }
   });
 
-  it('cada opción de cada paso queda como enlace navegable en el HTML', () => {
-    for (const paso of todosLosPasos()) {
-      const html = leer(archivoDe(rutaDe(paso.id)));
+  it('cada opción y cada salida queda como enlace navegable en el HTML', () => {
+    for (const nodo of todosLosNodos()) {
+      const html = leer(archivoDe(rutaDe(nodo.id)));
 
-      for (const opcion of paso.opciones) {
+      for (const opcion of opcionesDe(nodo)) {
         const href = hrefDeDestino(opcion.destino);
         assert.ok(
           html.includes(`href="${href}"`),
-          `El paso "${paso.id}" no enlaza a "${href}" en el HTML generado`,
+          `El nodo "${nodo.id}" no enlaza a "${href}" en el HTML generado`,
         );
       }
+    }
+  });
+
+  it('cada guía deja el atajo a las acciones como ancla real, con destino existente', () => {
+    // Quien llega sin ganas de leer tiene que poder saltar sin depender de JavaScript, y
+    // el ancla tiene que apuntar a un id que exista en la misma página.
+    for (const guia of todasLasGuias()) {
+      const html = leer(archivoDe(rutaDe(guia.id)));
+
+      assert.ok(
+        html.includes('href="#que-puedes-hacer"'),
+        `La guía "${guia.id}" no ofrece el atajo a las acciones`,
+      );
+      assert.ok(
+        html.includes('id="que-puedes-hacer"'),
+        `El atajo de "${guia.id}" apunta a un id que no existe en la página`,
+      );
     }
   });
 
@@ -277,6 +302,22 @@ describe('La portada abre el recorrido sin controles engañosos', () => {
       assert.ok(
         !islaVacia.test(fs.readFileSync(pagina, 'utf8')),
         `${path.relative(distDir, pagina)} tiene un island client:visible sin contenido servido; usa client:idle`,
+      );
+    }
+  });
+
+  it('ningún título repite el nombre del sitio', () => {
+    // `Base.astro` ya agrega " · orientame.cl". Doce páginas lo traían además en su propio
+    // `title`, así que la pestaña, el resultado de búsqueda y la tarjeta social decían
+    // "… | orientame.cl · orientame.cl".
+    for (const pagina of paginasGeneradas()) {
+      const titulo = /<title>([\s\S]*?)<\/title>/.exec(fs.readFileSync(pagina, 'utf8'))?.[1];
+      if (!titulo) continue;
+
+      const apariciones = titulo.match(/orientame\.cl/g)?.length ?? 0;
+      assert.ok(
+        apariciones <= 1,
+        `${path.relative(distDir, pagina)} repite el nombre del sitio en su título: "${titulo}"`,
       );
     }
   });

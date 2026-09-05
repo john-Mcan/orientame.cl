@@ -5,7 +5,7 @@ descripcionMovil: 'Cómo ayudar con una llamada o una primera consulta sin habla
 autor: 'Equipo editorial orientame.cl'
 creadoConIA: true
 creadoEl: 2026-09-03
-actualizadoEl: 2026-09-03
+actualizadoEl: 2026-09-04
 revisionRequerida: fuentes
 estadoEditorial: verificado-con-fuentes
 verificadoEl: 2026-09-03
@@ -57,5 +57,6 @@ la experiencia tendrá un resultado determinado.
 
 ## Si no saben qué centro corresponde
 
-[Salud Responde](/donde) puede orientar sobre establecimientos, direcciones y horarios. Si llamar hoy
-parece demasiado, pueden dejar anotado el número y volver cuando la persona decida.
+En [dónde consultar](/donde) están las líneas nacionales que orientan sobre establecimientos,
+direcciones y horarios, junto con los centros vigentes por comuna. Si llamar hoy parece demasiado,
+pueden dejar anotado el número y volver cuando la persona decida.

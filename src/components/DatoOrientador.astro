@@ -1,0 +1,42 @@
+---
+// Hecho verificado sobre el sistema de salud, con su fuente al lado.
+//
+// Va en su propio bloque de la guía ("Cómo funciona esto en Chile") y no entre las
+// acciones, porque no es algo que la persona haga: es lo que necesita saber para decidir.
+
+import type { Dato } from '@/lib/orientador';
+import FuentesLinea from './FuentesLinea.astro';
+
+interface Props {
+  dato: Dato;
+}
+
+const { dato } = Astro.props;
+---
+
+<div class="dato">
+  <p class="dato-titulo">{dato.titulo}</p>
+  <p class="dato-descripcion">{dato.descripcion}</p>
+  <FuentesLinea fuenteIds={dato.fuenteIds} />
+</div>
+
+<style>
+  .dato {
+    padding: var(--space-6);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+  }
+
+  .dato-titulo {
+    color: var(--color-ink-900);
+    font-size: var(--text-base);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .dato-descripcion {
+    margin-top: var(--space-3);
+    color: var(--color-ink-600);
+  }
+</style>

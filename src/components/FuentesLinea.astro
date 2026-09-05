@@ -1,0 +1,51 @@
+---
+// Referencia de fuentes junto al dato que respaldan.
+//
+// Vive como componente propio porque la consumen tres lugares del orientador —líneas
+// telefónicas, datos verificados del sistema de salud y secciones de lectura que afirman
+// algo comprobable—, y la fecha de consulta tiene que verse igual en los tres.
+
+import { formatearFecha, resolverFuentes } from '@/data/fuentes';
+
+interface Props {
+  fuenteIds?: readonly string[];
+}
+
+const fuentes = resolverFuentes(Astro.props.fuenteIds ?? []);
+---
+
+{
+  fuentes.length > 0 && (
+    <p class="fuentes-linea">
+      {fuentes.map((fuente, indice) => (
+        <>
+          {indice > 0 && <span aria-hidden="true"> · </span>}
+          <a
+            href={fuente.url}
+            rel="external noopener noreferrer"
+            referrerpolicy="no-referrer"
+            title={fuente.titulo}
+          >
+            {fuente.organizacion}
+            <span class="sr-only">, {fuente.titulo} (abre un sitio externo)</span>
+          </a>
+          <span> · consultado el {formatearFecha(fuente.consultadoEl)}</span>
+        </>
+      ))}
+    </p>
+  )
+}
+
+<style>
+  .fuentes-linea {
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-line);
+    color: var(--color-ink-600);
+    font-size: var(--text-xs);
+  }
+
+  .fuentes-linea a {
+    font-weight: 600;
+  }
+</style>

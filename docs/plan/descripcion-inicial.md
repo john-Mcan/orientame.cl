@@ -388,6 +388,14 @@ qué opciones tienes y cuál podría ser tu siguiente paso.
                       [ Necesito ayuda ahora ]
 ```
 
+Este boceto quedó con cinco puertas. La implementación tiene **siete más el acceso a urgencia**, una
+por cada barrera de §4: faltaban §4.2, §4.6 y §4.7, y quien entraba con una de ellas terminaba en una
+rama cuya única salida era pedir hora. Ver
+[`fase-4-revision-guias.md`](./fase-4-revision-guias.md), D39.
+
+En la portada esas puertas se muestran sin su detalle, para que las ocho quepan en la primera
+pantalla de un móvil; el detalle se muestra en `/empezar`. Ver D45.
+
 No se deben esconder:
 
 * `/siento/`;
@@ -439,16 +447,26 @@ Idealmente:
 
 **1 a 4 decisiones antes de ofrecer algo útil.**
 
-El resultado puede ser:
+El nodo terminal de un recorrido es una **guía**, no un «resultado»: el orientador no evalúa nada, así
+que no hay nada de qué esa página sea el resultado. Una guía reconoce lo que la persona dijo, lo
+explica, muestra cómo funciona el sistema con su fuente, ofrece lo que se puede hacer hoy y devuelve
+la decisión de hacia dónde seguir. El orden está fijado en
+[`fase-4-revision-guias.md`](./fase-4-revision-guias.md), D38, y el componente lo impone.
 
-* una página `/siento/`;
-* una guía de primera sesión;
+Las salidas de una guía pueden ser:
+
+* una página `/siento/` o `/temas/`;
+* una guía de `/primera-vez/`;
 * una autoevaluación opcional;
 * un recurso;
 * `/donde/`;
 * `/acompanar/`;
+* otro nodo del orientador;
 * un guion;
 * una línea de orientación.
+
+Los guiones y las líneas telefónicas se ofrecen en la propia página, porque son cosas que se hacen
+ahí mismo; el resto son salidas.
 
 No guarda estado en servidor ni en el navegador.
 
@@ -560,6 +578,16 @@ como técnica de persuasión.
 No:
 
 > “Necesitas ir al psicólogo.”
+
+No, si no hay una fuente que lo respalde en esa población y ese alcance:
+
+> “Sentir vergüenza al consultar por salud mental es frecuente.”
+
+> “Es una de las razones más comunes para no consultar.”
+
+Son afirmaciones epidemiológicas y pasan desapercibidas porque suenan a consuelo. Decir que algo es
+entendible es un juicio editorial y se puede sostener; decir con qué frecuencia ocurre necesita
+fuente. Ver [`fase-4-revision-guias.md`](./fase-4-revision-guias.md), D43.
 
 Preferir:
 

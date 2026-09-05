@@ -161,6 +161,9 @@ ficha oficial describe. No se le atribuye apoyo psicológico, porque la fuente n
 
 ## D6. Componentes previstos que no se construyeron
 
+> Nota posterior: `ResultadoOrientador.astro` ya no existe. Lo reemplaza `GuiaOrientador.astro`, con
+> otra estructura de bloques; ver [`fase-4-revision-guias.md`](./fase-4-revision-guias.md), D38.
+
 **`BloqueSiguientePaso.astro`.** Su función la cumple `ResultadoOrientador.astro` junto con la
 utilidad compartida `.linea-orientacion` de `global.css`. Construir además una versión genérica sin
 conocer a su consumidor real —las páginas `/siento/` de la etapa 3— habría fijado una API a ciegas.

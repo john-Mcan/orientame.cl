@@ -74,7 +74,13 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
       </div>
 
       <div class="portada-entrada">
-        <PasoOrientador paso={inicio} nivel="h2" />
+        <PasoOrientador paso={inicio} nivel="h2" compacto />
+        <p class="portada-entrada-pie">
+          <a href="/empezar">
+            <span>Ver estas opciones explicadas</span>
+            <Icon name="flecha-derecha" size={16} />
+          </a>
+        </p>
       </div>
     </div>
   </section>
@@ -202,6 +208,21 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
 
   .portada-entrada :global(.paso-opciones) {
     margin-top: var(--space-6);
+  }
+
+  /* La portada muestra las puertas sin su detalle para que las ocho quepan en la primera
+     pantalla; este enlace lleva a la versión explicada, en `/empezar`. */
+  .portada-entrada-pie {
+    margin-top: var(--space-4);
+  }
+
+  .portada-entrada-pie a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
   }
 
   /* Mapa de secciones: qué existe en el sitio, en una sola vista. */
