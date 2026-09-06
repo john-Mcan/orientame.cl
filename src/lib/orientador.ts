@@ -218,7 +218,7 @@ const pasos: readonly Paso[] = [
     id: 'inicio',
     segmento: '',
     etiqueta: 'Empezar',
-    pregunta: '¿Qué es lo que más te pesa ahora?',
+    pregunta: '¿Con qué te identificas más ahora?',
     ayuda:
       'No tienes que saber cómo se llama lo que te pasa ni tener certeza de nada. Elige lo que más se parezca a tu situación; si no era, vuelves atrás y listo.',
     opciones: [

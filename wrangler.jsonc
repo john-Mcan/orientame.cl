@@ -5,5 +5,12 @@
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page",
+    // Astro usa `trailingSlash: 'never'` y enlaza `/urgencia`, pero el default de Static Assets
+    // ("auto-trailing-slash") redirigía 307 a `/urgencia/`: un salto extra en cada navegación
+    // interna y una URL final que contradecía el canonical y el sitemap. Debe seguir a Astro.
+    "html_handling": "drop-trailing-slash",
   },
+  // El apex se declara acá y no en el panel para que el destino del sitio viva en el repo:
+  // `wrangler deploy` crea el registro DNS y la ruta. La zona estaba vacía al conectarla.
+  "routes": [{ "pattern": "orientame.cl", "custom_domain": true }],
 }

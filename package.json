@@ -10,7 +10,7 @@
     "typecheck": "astro check",
     "test": "node --test --experimental-strip-types tests/**/*.test.ts",
     "build:site": "astro build",
-    "build": "npm run build:site && pagefind --site dist",
+    "build": "npm run build:site && pagefind --site dist && node scripts/csp-hashes.mjs",
     "preview": "astro preview",
     "check": "npm run lint && npm run typecheck && npm run build && npm run test"
   },
