@@ -401,6 +401,14 @@ a:hover {
   line-height: 1.45;
 }
 
+/* El detalle que la portada reserva para pantallas anchas: en móvil las ocho puertas ya no
+   caben con él, que es para lo que existe el modo compacto. */
+@media (max-width: 48rem) {
+  .opcion-detalle--ancho {
+    display: none;
+  }
+}
+
 .opciones-lista--salidas .opcion {
   background: var(--color-paper);
 }

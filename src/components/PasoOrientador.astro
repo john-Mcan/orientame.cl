@@ -58,8 +58,15 @@ const NivelPregunta = paso.titulo ? (nivel === 'h1' ? 'h2' : 'h3') : nivel;
             <a href={href} class:list={['opcion', { urgente: esUrgencia }]}>
               <span class="opcion-texto">
                 <span class="opcion-etiqueta">{opcion.etiqueta}</span>
-                {opcion.detalle && !compacto && (
-                  <span class="opcion-detalle">{opcion.detalle}</span>
+                {/* En modo compacto el detalle no se borra: se reserva para pantallas anchas.
+                    Es lo único que distingue una puerta de otra —ocho etiquetas del mismo
+                    largo y el mismo peso se leen como un formulario—, y en la portada de
+                    escritorio hay sitio de sobra. Bajo 48 rem sí estorba, que era el motivo
+                    original de `compacto`. */}
+                {opcion.detalle && (
+                  <span class:list={['opcion-detalle', { 'opcion-detalle--ancho': compacto }]}>
+                    {opcion.detalle}
+                  </span>
                 )}
               </span>
               <Icon name={esUrgencia ? 'alerta' : 'chevron-derecha'} size={20} />

@@ -430,3 +430,40 @@ verdad sobre propósito y límites sigue siendo `descripcion-inicial.md`.
   la prueba de concepto se acepte.
 - **Archivos:** `src/pages/donde/index.astro`, `src/components/FichaRecurso.astro`,
   `src/components/islands/ResourceFinder.tsx`.
+
+## D58 — La portada muestra lo que el sitio ofrece, no sólo lo que no es
+
+- **Qué se descubrió:** medida a 390×844, contando sólo lo realmente visible —descartando lo que
+  tiene caja pero está oculto en el menú—, **la primera pantalla tenía una sola acción: el botón
+  «Buscar»**. Ni un destino, ni una sección, ni una de las ocho puertas. En escritorio había nueve
+  acciones y las nueve eran el selector de barreras más el buscador: ninguna sección del sitio. El
+  bloque «Todo lo que puedes encontrar aquí» quedaba a 1,2 pantallas en escritorio y a 2,1 en móvil.
+  Quien entraba entendía de un vistazo qué no somos, no qué ofrecemos.
+- **Qué afecta:** la portada, que es la puerta de entrada al proyecto.
+- **Impacto:** en móvil pasa de 1 a 5 acciones visibles, cuatro de ellas destinos reales; en
+  escritorio de 9 a 11, ahora incluyendo las secciones.
+- **Decisión:**
+  - **Atajos en el hero.** Dónde consultar · Primera vez · Autoevaluaciones · Acompañar a alguien,
+    bajo el buscador. Salen del mismo modelo de navegación que el menú, así que no hay una lista
+    paralela que se desactualice. Ocupan además el hueco que dejaba la columna izquierda.
+  - **Fuera la línea «Proyecto sin fines de lucro…» del hero.** Costaba unos 90 px de la primera
+    pantalla y está desarrollada completa en el bloque «Qué es orientame.cl», más abajo.
+  - **El título baja su piso tipográfico en móvil.** Tres líneas a 40 px empujaban todo lo
+    accionable fuera de la pantalla.
+  - **Las ocho puertas recuperan su detalle en pantallas anchas.** Eran ocho pastillas idénticas,
+    el control más importante del sitio y el menos diseñado; el detalle es lo único que las
+    distingue. No se les pusieron iconos: tres de las ocho barreras no tienen ninguno razonable en
+    el set y forzarlos habría producido justo el patrón de interfaz genérica que el proyecto evita.
+    Bajo 48 rem el detalle sigue oculto, que era el motivo original del modo compacto.
+  - **La grilla de secciones baja de seis tarjetas a cuatro.** «Buscar» era la tercera vía de
+    búsqueda de la misma página —lupa del encabezado, caja del hero y tarjeta— y «El proyecto»
+    estaba repetido como sección completa justo debajo. Cuatro columnas en vez de tres, para que
+    no quede una tarjeta sola en la segunda fila.
+  - **Fuera las micro-listas gris claro** de cada tarjeta: casi ilegibles y repetían el mega-menú.
+  - «Ver estas opciones explicadas» pasa a decir a dónde va: «Ir al orientador…».
+- **Descartado tras probarlo:** centrar verticalmente las dos columnas del hero. Parecía la forma
+  de repartir la diferencia de alto, y deja unos 450 px de fondo vacío **encima** del título y
+  empuja los atajos fuera de la primera pantalla. El vacío bajo el texto es preferible: abajo es
+  sólo fondo, arriba es la primera impresión.
+- **Archivos:** `src/pages/index.astro`, `src/components/PasoOrientador.astro`,
+  `src/styles/global.css`.

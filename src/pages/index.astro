@@ -18,33 +18,42 @@ if (!inicio || inicio.tipo !== 'paso') {
 
 // El mapa de secciones sale del mismo modelo que el menú: si mañana se publica una sección
 // nueva aparece en los dos sitios a la vez.
-const tarjetaBuscar = {
-  href: '/buscar',
-  icono: 'lupa' as const,
-  titulo: 'Buscar',
-  descripcion:
-    'Busca una palabra o una frase en todo lo publicado. La búsqueda no interpreta lo que escribes ni evalúa tu situación.',
-  descripcionMovil: 'Busca una palabra en todo lo publicado.',
-  contiene: 'Vivencias · Temas · Guías · Recursos',
-};
+//
+// Quedan fuera dos tarjetas que antes estaban acá. «Buscar» era la tercera vía de búsqueda de
+// la misma página —la lupa del encabezado, la caja del hero y la tarjeta—, y «El proyecto»
+// está desarrollado como sección completa inmediatamente debajo de esta grilla.
+const tarjetasPortada = SECCIONES.filter((seccion) => seccion.id !== 'proyecto').map((seccion) => ({
+  href: seccion.href,
+  icono: seccion.icono,
+  titulo: seccion.etiqueta,
+  descripcion: seccion.descripcion,
+  descripcionMovil: seccion.descripcionMovil,
+}));
 
-const tarjetasPortada = SECCIONES.flatMap((seccion) => {
-  const tarjeta = {
-    href: seccion.href,
-    icono: seccion.icono,
-    titulo: seccion.etiqueta,
-    descripcion: seccion.descripcion,
-    descripcionMovil: seccion.descripcionMovil,
-    contiene: seccion.enlaces
-      .slice(0, 3)
-      .map((enlace) => enlace.etiqueta)
-      .join(' · '),
-  };
+// Atajos del hero: lo que el sitio ofrece, a la vista en la primera pantalla. Antes había que
+// bajar 2,1 pantallas en móvil para enterarse de que existían. Salen del mismo modelo de
+// navegación; `Autoevaluaciones` cuelga de «Empezar» y sólo aporta acá su icono.
+const seccionPorId = (id: string) => SECCIONES.find((seccion) => seccion.id === id);
+const autoevaluacion = seccionPorId('empezar')?.enlaces.find(
+  (enlace) => enlace.href === '/autoevaluacion',
+);
 
-  // La búsqueda es una entrada del sitio aunque no sea una sección de contenido, y entra
-  // antes de la institucional, que es la que menos urge.
-  return seccion.id === 'proyecto' ? [tarjetaBuscar, tarjeta] : [tarjeta];
-});
+const atajos = [
+  { href: seccionPorId('donde')?.href, etiqueta: 'Dónde consultar', icono: 'mapa' as const },
+  {
+    href: seccionPorId('primera-vez')?.href,
+    etiqueta: 'Primera vez',
+    icono: 'calendario' as const,
+  },
+  { href: autoevaluacion?.href, etiqueta: autoevaluacion?.etiqueta, icono: 'lista-check' as const },
+  {
+    href: seccionPorId('acompanar')?.href,
+    etiqueta: 'Acompañar a alguien',
+    icono: 'personas' as const,
+  },
+].filter((atajo): atajo is { href: string; etiqueta: string; icono: typeof atajo.icono } =>
+  Boolean(atajo.href && atajo.etiqueta),
+);
 ---
 
 <Base
@@ -68,16 +77,32 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
           <Buscador compacto client:load />
         </div>
 
-        <p class="portada-nota">
-          Proyecto sin fines de lucro. Sin cuentas, sin publicidad y sin recomendaciones pagadas.
-        </p>
+        {
+          /* La línea «Proyecto sin fines de lucro…» salió de acá: costaba unos 90 px de la
+            primera pantalla y está desarrollada completa en el bloque «Qué es orientame.cl»,
+            más abajo. En su lugar va lo que el sitio ofrece. */
+        }
+        <nav class="portada-atajos" aria-label="Secciones principales">
+          <ul>
+            {
+              atajos.map((atajo) => (
+                <li>
+                  <a href={atajo.href}>
+                    <Icon name={atajo.icono} size={18} />
+                    <span>{atajo.etiqueta}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
       </div>
 
       <div class="portada-entrada">
         <PasoOrientador paso={inicio} nivel="h2" compacto />
         <p class="portada-entrada-pie">
           <a href="/empezar">
-            <span>Ver estas opciones explicadas</span>
+            <span>Ir al orientador y ver cada opción explicada</span>
             <Icon name="flecha-derecha" size={16} />
           </a>
         </p>
@@ -102,7 +127,9 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
               <span class="tarjeta-titulo">{tarjeta.titulo}</span>
               <span class="tarjeta-texto texto-amplio">{tarjeta.descripcion}</span>
               <span class="tarjeta-texto texto-movil">{tarjeta.descripcionMovil}</span>
-              <span class="tarjeta-contiene">{tarjeta.contiene}</span>
+              {/* La lista de sub-enlaces en gris claro salió de acá: era casi ilegible y
+                  repetía el mega-menú. Lo que valía la pena de esa lista —autoevaluaciones—
+                  subió al hero como atajo. */}
               <span class="tarjeta-ir">
                 <span>Ver sección</span>
                 <Icon name="flecha-derecha" size={16} />
@@ -163,6 +190,10 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
     background: var(--color-mist-100);
   }
 
+  /* `start` y no `center`. La columna de las puertas es más alta que la del mensaje, así que
+     centrar parecía la forma de repartir la diferencia: deja unos 450 px de fondo vacío
+     ENCIMA del título y empuja los atajos fuera de la primera pantalla. El vacío bajo el
+     texto es preferible, porque abajo es sólo fondo y arriba es la primera impresión. */
   .portada-inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
@@ -184,13 +215,47 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
     margin-top: var(--space-8);
   }
 
-  .portada-nota {
-    max-width: 30rem;
+  /* Lo que el sitio ofrece, en la primera pantalla y en los dos anchos. En escritorio además
+     ocupa el hueco que dejaba la columna izquierda: terminaba a un tercio de la altura del
+     bloque mientras la columna de las puertas se desbordaba. */
+  .portada-atajos {
     margin-top: var(--space-8);
     padding-top: var(--space-6);
     border-top: 1px solid var(--color-line);
-    color: var(--color-ink-600);
+  }
+
+  .portada-atajos ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .portada-atajos a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: var(--space-2);
+    padding-inline: var(--space-4);
+    border: 1px solid var(--color-sage-400);
+    border-radius: 999px;
+    color: var(--color-green-900);
     font-size: var(--text-sm);
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    background: var(--color-white);
+  }
+
+  .portada-atajos a:hover {
+    border-color: var(--color-green-700);
+    background: var(--color-mist-50);
+  }
+
+  .portada-atajos svg {
+    color: var(--color-green-700);
   }
 
   /* En la portada el título es el foco principal, así que la pregunta del orientador
@@ -252,9 +317,11 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
     }
   }
 
+  /* Cuatro secciones en cuatro columnas: con tres quedaba una tarjeta sola en la segunda
+     fila, que se lee como un hueco y no como una grilla. */
   @media (min-width: 64rem) {
     .secciones-lista {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
@@ -296,12 +363,6 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
     color: var(--color-ink-600);
     font-size: var(--text-sm);
     line-height: 1.5;
-  }
-
-  .tarjeta-contiene {
-    color: var(--color-ink-600);
-    font-size: var(--text-xs);
-    line-height: 1.45;
   }
 
   /* Indicador explícito de destino: la tarjeta completa es un enlace y tiene que decirlo. */
@@ -388,8 +449,19 @@ const tarjetasPortada = SECCIONES.flatMap((seccion) => {
     }
 
     .portada-buscador,
-    .portada-nota {
+    .portada-atajos {
       margin-top: var(--space-6);
+    }
+
+    .portada-atajos {
+      padding-top: var(--space-4);
+    }
+
+    /* El título ocupaba tres líneas a 40 px y empujaba todo lo accionable fuera de la primera
+       pantalla: a 390 px la única acción visible era el botón de buscar. Se baja el piso del
+       `clamp` de `--text-2xl` sólo acá; el techo lo sigue fijando el token. */
+    .portada h1 {
+      font-size: clamp(2rem, 8vw, 2.5rem);
     }
 
     .portada-entrada {
