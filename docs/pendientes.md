@@ -8,6 +8,44 @@ hecho: si algo se resuelve, se saca de esta lista y se registra donde correspond
 
 ---
 
+## 0. Bloqueante antes de cargar más establecimientos
+
+### 0.1 `/donde` sirve todas las fichas en el HTML y no llega a escala nacional
+
+**Qué pasa.** `/donde` renderiza en el documento una ficha completa por cada establecimiento y el
+filtro sólo las oculta con `hidden`: el navegador las construye todas igual. Hoy son 31 registros,
+133 KB y 11.500 px de alto. Medido por ficha son ~4 KB.
+
+**Cuándo revienta.** El objetivo declarado es cubrir las 346 comunas. Con los ~2.500
+establecimientos de atención primaria del registro DEIS, esa misma página serían **~10 MB de HTML
+y del orden de 1,8 millones de píxeles**. No es un problema de diseño que se arregle con CSS: la
+ficha ya se comprimió de 1.100 px a 260 px plegando el detalle en un `<details>` (D57) y eso
+mejora el alto, no el peso, porque el marcado sigue estando entero en el documento.
+
+**Qué habría que hacer.** La ruta acordada es que el índice busque **comunas** y las fichas vivan
+en la página de cada comuna, que es lo que ya existe (`/donde/<region>/<comuna>`). Con eso el
+índice pesa lo mismo con 3 comunas que con 346 y cada página carga sólo sus 5–30 establecimientos.
+El paso 1 ya está hecho: las páginas por comuna entran al índice de búsqueda y son encontrables
+por nombre (D56). Falta mover las fichas y convertir `/donde` en buscador de comuna más líneas
+nacionales.
+
+**Umbral concreto para actuar.** Antes de subir el dataset por sobre **una o dos comunas nuevas**,
+o en cuanto `/donde/index.html` pase de ~300 KB. Cargar el DEIS completo sobre la estructura
+actual deja la página inservible en un teléfono.
+
+**Descartado por ahora.** Un backend de búsqueda en el borde: `connect-src 'self'` ya lo
+permitiría sin tocar la CSP, pero a 2.500 registros sólo agrega tolerancia a errores de tipeo y
+geo en servidor, a cambio de introducir un runtime que hoy no existe. Se revisa si el conjunto
+supera las decenas de miles.
+
+**Relacionado y sin resolver.** El dataset no tiene coordenadas —los campos son `id, nombre, tipo,
+region, comuna, direccion, costo, modalidad…`—, así que «centros cerca de mí» no es posible hoy.
+Se puede hacer entero en el cliente, sin que la coordenada salga del dispositivo, pero requiere
+traerlas del DEIS o geocodificar, y además `Permissions-Policy: geolocation=()` en
+`public/_headers` desactiva hoy la API por completo.
+
+---
+
 ## 1. Verificación que no se pudo hacer en esta sesión
 
 ### 1.1 Revisión manual del recorrido en escritorio y móvil — **bloqueante antes de desplegar**

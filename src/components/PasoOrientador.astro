@@ -12,9 +12,14 @@ interface Props {
    * En `/empezar` el detalle sí se muestra, porque ahí la pregunta es toda la página.
    */
   compacto?: boolean;
+  /**
+   * Entra al índice de búsqueda. Es opt-in porque la portada también pinta el paso inicial:
+   * indexarla ahí duplicaría `/empezar` en los resultados con el mismo contenido.
+   */
+  indexable?: boolean;
 }
 
-const { paso, nivel = 'h1', compacto = false } = Astro.props;
+const { paso, nivel = 'h1', compacto = false, indexable = false } = Astro.props;
 
 // Cuando el paso trae título propio, la página primero nombra lo que la persona eligió y
 // la pregunta baja un nivel. `inicio` no tiene título: ahí la pregunta es el encabezado.
@@ -22,7 +27,11 @@ const Encabezado = nivel;
 const NivelPregunta = paso.titulo ? (nivel === 'h1' ? 'h2' : 'h3') : nivel;
 ---
 
-<div class="paso">
+<div
+  class="paso"
+  data-pagefind-body={indexable ? true : undefined}
+  data-pagefind-filter={indexable ? 'seccion:Empezar' : undefined}
+>
   {paso.titulo && <Encabezado class="paso-titulo">{paso.titulo}</Encabezado>}
 
   {

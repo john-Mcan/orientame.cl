@@ -14,7 +14,7 @@ const clinicas = getRecursosClinicasUniversitarias();
   title="Clínicas psicológicas universitarias en Chile"
   description="Cómo funcionan las clínicas psicológicas universitarias en Chile, qué preguntar antes de contar con ellas y cuáles hemos podido comprobar."
 >
-  <div class="reading-shell">
+  <div class="reading-shell" data-pagefind-body data-pagefind-filter="seccion:Dónde consultar">
     <Breadcrumbs
       items={[
         { label: 'Inicio', href: '/' },
@@ -24,6 +24,7 @@ const clinicas = getRecursosClinicasUniversitarias();
     />
 
     <EncabezadoSeccion
+      indexable
       eyebrow="Alternativa accesible"
       titulo="Clínicas psicológicas universitarias a bajo costo"
       descripcion="Varias facultades de psicología atienden público general en sus centros docentes. Suelen ser una vía más barata que la consulta privada, pero cada una fija sus propias condiciones, así que conviene preguntarlas antes de contar con ellas."

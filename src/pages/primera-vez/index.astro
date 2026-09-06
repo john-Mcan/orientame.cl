@@ -11,7 +11,7 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
   title="Primera vez buscando apoyo psicológico"
   description="Qué ocurre en una primera consulta, cuánto cuesta en Chile, qué decir al pedir hora y cómo elegir profesional."
 >
-  <div class="reading-shell">
+  <div class="reading-shell" data-pagefind-body data-pagefind-filter="seccion:Primera vez">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Primera vez' }]} />
 
     {
@@ -19,6 +19,7 @@ import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
         hace que la persona se reconozca en la sección. */
     }
     <EncabezadoSeccion
+      indexable
       eyebrow="Guía de inicio"
       titulo="Antes de tu primera consulta"
       descripcion="Consultar por primera vez deja varias dudas abiertas: cuánto va a costar, qué preguntan, cuánto dura, cómo explicar lo que te pasa. Acá está lo que se puede resolver leyendo, para que decidas con la información en la mano y a tu ritmo."

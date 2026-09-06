@@ -34,7 +34,7 @@ const recursosComuna = getRecursosPorComuna(comunaInfo.regionSlug, comunaInfo.sl
   title={`Salud mental en ${comunaInfo.nombre}`}
   description={`Cómo se accede a la atención de salud mental pública si vives o trabajas en ${comunaInfo.nombre} (${comunaInfo.region}): por dónde se entra, qué cubre Fonasa y a quién preguntar.`}
 >
-  <div class="reading-shell">
+  <div class="reading-shell" data-pagefind-body data-pagefind-filter="seccion:Dónde consultar">
     <Breadcrumbs
       items={[
         { label: 'Inicio', href: '/' },
@@ -44,6 +44,7 @@ const recursosComuna = getRecursosPorComuna(comunaInfo.regionSlug, comunaInfo.sl
     />
 
     <EncabezadoSeccion
+      indexable
       eyebrow="Red de salud comunal"
       titulo={`Salud mental en ${comunaInfo.nombre}`}
       descripcion={`${comunaInfo.descripcion} Aquí explicamos por dónde se entra a la atención de salud mental si vives o trabajas en la comuna, y qué hemos podido confirmar hasta ahora.`}

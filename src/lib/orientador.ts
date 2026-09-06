@@ -343,7 +343,7 @@ const pasos: readonly Paso[] = [
       },
       {
         etiqueta: 'Sé que en algún momento voy a pedir ayuda, pero no ahora',
-        detalle: 'No es que no quiera. Es que no todavía.',
+        detalle: 'No es que no quiera. Es que «no todavía».',
         destino: 'todavia-no',
       },
     ],
@@ -397,8 +397,9 @@ const guias: readonly Guia[] = [
         SALIDA_SIENTO,
         SALIDA_AUTOEVALUACION,
         {
-          etiqueta: 'Saber cómo funciona una consulta, por si más adelante',
-          detalle: 'Sin pedir nada todavía.',
+          etiqueta: 'Saber cómo funciona una consulta, por si la necesito más adelante',
+          detalle:
+            'Cómo es la sesión, qué decir y cuánto cuesta. Leerlo ahora no implica pedir hora.',
           destino: '/primera-vez',
         },
       ],
@@ -458,7 +459,7 @@ const guias: readonly Guia[] = [
         SALIDA_SIENTO,
         {
           etiqueta: 'Preparar qué decir al pedir la hora',
-          detalle: 'Si el problema es esa parte y no la decisión.',
+          detalle: 'Si lo que cuesta es la frase y no la decisión.',
           destino: 'no-se-que-decir',
         },
       ],

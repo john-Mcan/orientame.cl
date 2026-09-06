@@ -80,9 +80,10 @@ export default function ResourceFinder({ comunas, tipos, costos, total }: Props)
         />
       </div>
 
-      <fieldset class="finder-filtros">
-        <legend class="finder-leyenda">Acotar la lista</legend>
-
+      {/* Sin `fieldset` con borde ni leyenda: ese marco más los cuatro selects apilados con su
+          etiqueta medían 408 px en móvil, media pantalla dedicada a controles antes de ver un
+          solo resultado. Ahora los cuatro entran en una grilla que se acomoda al ancho. */}
+      <div class="finder-filtros" role="group" aria-label="Acotar la lista">
         <div class="campo-filtro">
           <label for="filtro-comuna">Comuna o cobertura</label>
           <select
@@ -147,7 +148,7 @@ export default function ResourceFinder({ comunas, tipos, costos, total }: Props)
             ))}
           </select>
         </div>
-      </fieldset>
+      </div>
 
       <p class="finder-estado" aria-live="polite">
         {visibles === total

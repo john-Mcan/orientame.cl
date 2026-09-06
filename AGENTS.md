@@ -53,7 +53,7 @@ Rutas que existen hoy (65 páginas estáticas):
 /temas    +  7 cuadros clínicos bajo /temas/[slug]
 /primera-vez  +  4 guías (/que-pasa-en-sesion, /que-decir, /cuanto-cuesta, /como-elegir)
 /donde    +  3 comunas piloto (/donde/metropolitana/{santiago,providencia,puente-alto}) y /donde/clinicas-universitarias
-/autoevaluacion  +  2 instrumentos (/oms-5, /gad-7)
+/autoevaluacion  +  3 instrumentos (/oms-5, /gad-7, /phq-8)
 /acompanar  +  3 guías iniciales
 /buscar
 /sobre  /metodologia  /metodologia/protocolo-crisis  /legal  /legal/{privacidad,alcance,terminos}
@@ -68,6 +68,13 @@ ninguna barrera se quede sin entrada.
 **Las URLs citadas hoy en el sitio fueron abiertas y leídas antes de citarse.** Si agregas
 una, ábrela y compruébala: hay un test que bloquea que una misma URL respalde documentos distintos,
 porque así se detectó que 16 citas colgaban de dos PDFs de MINSAL inventados.
+
+**`/donde` no aguanta el dataset nacional y hay que rehacerla antes de cargarlo.** Sirve una ficha
+completa por establecimiento dentro del documento y el filtro sólo las oculta con `hidden`, así que
+el navegador las construye todas. Con 31 registros son 133 KB; con los ~2.500 establecimientos del
+DEIS serían ~10 MB. Plegar el detalle bajó el alto, no el peso. Antes de subir más de una o dos
+comunas, lee `docs/pendientes.md` §0.1: la ruta acordada es que el índice busque comunas y las
+fichas vivan en la página de cada comuna.
 
 **La ruta que NO existe es `/historias/`.** No la enlaces hasta contar con testimonios cuyo
 consentimiento y procedencia estén documentados. Enviar a alguien a un 404 al final de un recorrido
@@ -119,6 +126,14 @@ de quienes lo van a ocupar. La barra tampoco sirve: "Estoy inscrito/a" queda den
 la persona envía. Se reescribe evitando la concordancia: "me atiendo en este consultorio", "tener la
 disposición", "tener certeza", "no seguir por tu cuenta". Hay un test con una lista acotada de
 participios; `listo/lista` queda fuera porque casi siempre concuerda con un objeto.
+
+**Ningún instrumento formula una pregunta de riesgo.** Es la razón de publicar el PHQ-8 y no el
+PHQ-9: el noveno ítem del PHQ-9 pregunta por ideación suicida, y una pregunta así sólo tiene sentido
+donde alguien puede hacerse cargo de la respuesta. Antes esto vivía sólo en D25 y nada impedía que
+un instrumento nuevo la trajera; ahora hay un test sobre el contenido publicado que lo bloquea.
+Cada instrumento publicado declara además, en el campo `adaptacion`, si reproduce una versión
+oficial o si su redacción es propia — y eso va **al final**, en la ficha de procedencia, nunca sobre
+el cuestionario.
 
 **La crisis no se delega a IA.** No hay chatbot de crisis ni decisiones generativas. **No se
 formulan preguntas que evalúen riesgo ni se bifurca según la respuesta.** El acceso a `/urgencia` es
@@ -205,6 +220,15 @@ los hijos que el servidor dejó dentro de `<astro-island>` —la etiqueta es `di
 tiene caja propia—, así que un componente que devuelve `null` antes de montar no deja nada que
 observar y nunca se hidrata. Le pasó a `ResourceFinder`: los filtros de `/donde` estaban en el HTML
 y no aparecieron jamás. Para esos casos, `client:idle` o `client:load`. Hay un test que lo bloquea.
+
+**`compressHTML` se queda en `true` y no vuelve al default.** El default de Astro 7 es `'jsx'`, que
+descarta el nodo de espacio entre un texto y un elemento en línea en vez de colapsarlo. Como
+Prettier reparte las etiquetas largas en varias líneas, el único separador suele ser ese salto de
+línea, y el HTML servido pegaba la palabra al enlace: «Puedes revisarlo que estás sintiendo», «ver
+directamentedónde consultar en Chile». Eran trece frases en cinco páginas, invisibles en el fuente y
+en `astro dev`. Hay un test que lo bloquea. Si mides el efecto de este ajuste, borra
+`node_modules/.astro` y `node_modules/.vite` antes de reconstruir: sin limpiar la caché, parte de
+las plantillas conserva el ajuste anterior y las mediciones mienten.
 
 **Accesibilidad: WCAG 2.2 AA como mínimo, desde el diseño.** Navegación completa por teclado, foco
 visible con separación, targets de 44 px, reflow a 320 px sin scroll horizontal, landmarks y

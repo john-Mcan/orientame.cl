@@ -16,16 +16,36 @@ const instrumentos = (await getCollection('instrumentos'))
   title="Autoevaluaciones orientativas"
   description="Instrumentos breves con fuente, versión, población, licencia y scoring verificados. Los resultados se calculan en tu dispositivo y no son diagnósticos."
 >
-  <div class="reading-shell">
+  <div class="reading-shell" data-pagefind-body data-pagefind-filter="seccion:Autoevaluaciones">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Autoevaluaciones' }]} />
 
     <EncabezadoSeccion
+      indexable
       eyebrow="Herramientas opcionales"
       titulo="Una medición puede orientar, no definirte"
       descripcion="Estas autoevaluaciones sirven para observar un aspecto concreto de las últimas semanas. No son la puerta principal del sitio ni sustituyen una evaluación profesional."
       descripcionMovil="Sirven para observar las últimas semanas. No son un diagnóstico ni sustituyen una evaluación profesional."
     />
 
+    <section class="autoevaluaciones-lista" aria-labelledby="lista-titulo">
+      <h2 id="lista-titulo" class="seccion-titulo">Instrumentos disponibles</h2>
+      <div class="grilla-instrumentos">
+        {
+          instrumentos.map((instrumento) => (
+            <Card title={instrumento.data.titulo} href={`/autoevaluacion/${instrumento.id}`}>
+              <p>{instrumento.data.descripcionMovil ?? instrumento.data.descripcion}</p>
+              <p class="detalle">{instrumento.data.preguntas.length} preguntas · sin guardar</p>
+            </Card>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      /* El aviso de privacidad iba antes de las tarjetas y era el tercer bloque de preámbulo
+        seguido. Lo que hay que saber para elegir cabe en la tarjeta; el detalle de qué pasa
+        con las respuestas se lee acá abajo o en la página del instrumento. */
+    }
     <div class="aviso-alcance">
       <Notice title="Tus respuestas no se guardan">
         <p>
@@ -34,20 +54,6 @@ const instrumentos = (await getCollection('instrumentos'))
         </p>
       </Notice>
     </div>
-
-    <section class="autoevaluaciones-lista" aria-labelledby="lista-titulo">
-      <h2 id="lista-titulo" class="seccion-titulo">Instrumentos disponibles</h2>
-      <div class="grilla-instrumentos">
-        {
-          instrumentos.map((instrumento) => (
-            <Card title={instrumento.data.titulo} href={`/autoevaluacion/${instrumento.id}`}>
-              <p>{instrumento.data.descripcion}</p>
-              <p class="detalle">{instrumento.data.preguntas.length} preguntas · sin guardar</p>
-            </Card>
-          ))
-        }
-      </div>
-    </section>
 
     <section class="seccion-ayuda-adicional">
       <h2>¿Prefieres no responder un cuestionario?</h2>
@@ -61,8 +67,10 @@ const instrumentos = (await getCollection('instrumentos'))
 </Base>
 
 <style>
+  /* El aviso pasó a ir debajo de las tarjetas, así que su aire tiene que estar arriba: con el
+     `margin-bottom` heredado de cuando iba primero quedaba pegado a la última tarjeta. */
   .aviso-alcance {
-    margin-bottom: var(--space-8);
+    margin-block: var(--space-8) var(--space-16);
   }
 
   .seccion-titulo {

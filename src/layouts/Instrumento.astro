@@ -4,7 +4,6 @@ import Base from './Base.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import BloqueSiguientePaso from '@components/BloqueSiguientePaso.astro';
 import EditorialStatus from '@components/EditorialStatus.astro';
-import Notice from '@components/Notice.astro';
 import SourceList from '@components/SourceList.astro';
 import Test from '@components/islands/Test';
 
@@ -69,30 +68,23 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
           </p>
         )
       }
+
+      {
+        /* Lo que hace falta saber antes de responder cabe en dos frases. Lo demás —qué mide,
+          cómo se calcula, sus límites y su procedencia— queda bajo el cuestionario, que es
+          donde sirve. Antes había 255 palabras y cinco encabezados sobre la primera pregunta.
+          Va como texto corrido y no como lista de datos separados por puntos: a 390 px cada
+          dato caía en su propia línea y el separador quedaba colgando al principio, como si
+          fueran viñetas rotas. */
+      }
+      <p class="instrumento-meta">
+        {data.preguntas.length} preguntas. Se responde y se calcula en tu dispositivo. No es un diagnóstico.
+        <a href="#sobre-el-cuestionario">Qué mide y qué límites tiene</a>
+      </p>
     </header>
 
-    <Notice title="Una herramienta opcional, no una evaluación clínica">
-      <p>
-        Tú decides si responderla. El puntaje describe un rango dentro de este instrumento: no
-        entrega un diagnóstico ni indica por sí solo qué atención necesitas.
-      </p>
-    </Notice>
-
-    <div class="instrumento-contenido">
-      <slot />
-    </div>
-
-    <section class="instrumento-ficha" aria-labelledby="ficha-titulo">
-      <h2 id="ficha-titulo">Antes de responder</h2>
-      <dl>
-        <div><dt>Versión</dt><dd>{data.version}</dd></div>
-        <div><dt>Población y alcance</dt><dd>{data.poblacion}</dd></div>
-        <div><dt>Condición de uso</dt><dd>{data.licencia}</dd></div>
-      </dl>
-    </section>
-
     <section class="instrumento-test" aria-labelledby="responder-titulo">
-      <h2 id="responder-titulo">Responder la autoevaluación</h2>
+      <h2 id="responder-titulo" class="sr-only">Responder la autoevaluación</h2>
       <Test
         client:load
         instrumentoId={data.instrumentoId}
@@ -121,6 +113,34 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
       }}
     />
 
+    <section
+      class="instrumento-contenido"
+      id="sobre-el-cuestionario"
+      aria-labelledby="sobre-titulo"
+    >
+      <h2 id="sobre-titulo">Sobre este cuestionario</h2>
+      <slot />
+    </section>
+
+    <section class="instrumento-ficha" aria-labelledby="ficha-titulo">
+      <h2 id="ficha-titulo">Procedencia y condiciones de uso</h2>
+      <dl>
+        <div><dt>Versión</dt><dd>{data.version}</dd></div>
+        <div><dt>Población y alcance</dt><dd>{data.poblacion}</dd></div>
+        <div><dt>Condición de uso</dt><dd>{data.licencia}</dd></div>
+        {
+          data.adaptacion && (
+            <div>
+              <>
+                <dt>Redacción usada acá</dt>
+                <dd>{data.adaptacion}</dd>
+              </>
+            </div>
+          )
+        }
+      </dl>
+    </section>
+
     <footer>
       <SourceList sources={fuentes} />
     </footer>
@@ -148,7 +168,17 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
     border-bottom: 1px solid var(--color-line);
   }
 
-  .instrumento-contenido :global(h2) {
+  .instrumento-meta {
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  .instrumento-meta a {
+    color: var(--color-green-900);
+    font-weight: 700;
+  }
+
+  .instrumento-contenido :global(* + h2) {
     margin-top: var(--space-6);
   }
 
@@ -184,7 +214,9 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
     color: var(--color-ink-600);
   }
 
-  .instrumento-test {
+  /* El cuestionario va inmediatamente después del encabezado, que ya cierra con una línea:
+     un borde propio acá dibujaba dos separadores seguidos. */
+  .instrumento-contenido {
     padding-top: var(--space-8);
     border-top: 1px solid var(--color-line);
   }
@@ -199,6 +231,12 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
 
   .instrumento-test :global(.test-instrucciones) {
     color: var(--color-ink-600);
+  }
+
+  .instrumento-test :global(.test-valor) {
+    margin-left: auto;
+    color: var(--color-ink-600);
+    font-variant-numeric: tabular-nums;
   }
 
   .instrumento-test :global(.test-error) {
@@ -216,24 +254,47 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
 
   .instrumento-test :global(.test-preguntas) {
     display: grid;
-    gap: var(--space-6);
-    margin-top: var(--space-8);
+    gap: var(--space-4);
+    padding: 0;
+    margin-top: var(--space-6);
+    list-style: none;
   }
 
-  .instrumento-test :global(.test-pregunta) {
-    min-width: 0;
-    padding: var(--space-6);
+  /* El marco va en el `li` y no en el `fieldset`: un `legend` se dibuja encima del borde
+     superior, así que con una pregunta de dos líneas el borde de la tarjeta cruzaba el texto
+     por la mitad. El `fieldset` se conserva —es lo que agrupa los radios para el lector de
+     pantalla— pero sin caja propia. */
+  .instrumento-test :global(.test-preguntas > li) {
+    padding: var(--space-4);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-md);
   }
 
+  .instrumento-test :global(.test-pregunta) {
+    min-width: 0;
+    padding: 0;
+    border: none;
+  }
+
+  /* El número sale del enunciado y pasa a ser una columna propia: cuando la pregunta ocupa
+     tres líneas —el caso del último ítem del PHQ-8— el texto queda alineado en bloque y no
+     colgando bajo el número. */
   .instrumento-test :global(.test-pregunta legend) {
-    padding-inline: var(--space-2);
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding: 0;
     font-weight: 700;
   }
 
-  .instrumento-test :global(.test-pregunta legend span) {
+  .instrumento-test :global(.test-numero) {
+    flex: none;
     color: var(--color-green-700);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .instrumento-test :global(.test-enunciado) {
+    min-width: 0;
   }
 
   .instrumento-test :global(.test-opciones) {
@@ -251,6 +312,7 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
     padding: var(--space-2) var(--space-3);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-sm);
+    line-height: 1.3;
     cursor: pointer;
   }
 
@@ -269,16 +331,38 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
   .instrumento-test :global(.test-acciones) {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
-    margin-top: var(--space-8);
+    margin-top: var(--space-6);
   }
 
-  .instrumento-test :global(.test-acciones button) {
+  .instrumento-test :global(.test-botones) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .instrumento-test :global(.test-progreso) {
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  /* `font: inherit` traía también el interlineado del cuerpo (1,75), que en una etiqueta de
+     una línea inflaba el botón a 82 px en móvil, donde además el texto envolvía. Con
+     interlineado propio el alto queda en los 2,75 rem del área táctil, igual que las filas
+     de opción. */
+  .instrumento-test :global(.test-calcular),
+  .instrumento-test :global(.test-borrar) {
+    display: inline-flex;
     min-height: 2.75rem;
-    padding: var(--space-3) var(--space-6);
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-sm);
     font: inherit;
     font-weight: 700;
+    line-height: 1.2;
     cursor: pointer;
   }
 
@@ -299,39 +383,107 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
     flex-direction: column;
     gap: var(--space-4);
     margin-top: var(--space-8);
-    padding: var(--space-8);
+    padding: var(--space-6);
     border: 2px solid var(--color-green-900);
     border-radius: var(--radius-lg);
     background: var(--color-mist-50);
+  }
+
+  .instrumento-test :global(.test-resultado h3) {
+    margin-top: var(--space-2);
   }
 
   .instrumento-test :global(.test-puntaje) {
     font-size: var(--text-lg);
   }
 
-  .instrumento-test :global(.test-siguientes) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-    padding-top: var(--space-2);
-  }
-
-  .instrumento-test :global(.test-siguientes a) {
-    display: inline-flex;
-    min-height: 2.75rem;
-    align-items: center;
-    font-weight: 700;
-  }
-
+  /* La frase técnica del instrumento y la aclaración de alcance acompañan a la explicación en
+     lenguaje corriente, sin competir con ella. */
+  .instrumento-test :global(.test-tecnico),
+  .instrumento-test :global(.test-aclaracion),
   .instrumento-test :global(.test-pausa) {
     color: var(--color-ink-600);
     font-size: var(--text-sm);
   }
 
+  /* La frase para ocupar afuera se ve como lo que es: algo dicho, no una explicación más. */
+  .instrumento-test :global(.test-guion) {
+    padding: var(--space-4);
+    border: 1px solid var(--color-sage-400);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    font-weight: 700;
+  }
+
+  .instrumento-test :global(.test-guion)::before {
+    content: '«';
+  }
+
+  .instrumento-test :global(.test-guion)::after {
+    content: '»';
+  }
+
+  .instrumento-test :global(.test-pasos) {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .instrumento-test :global(.test-pasos li) {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .instrumento-test :global(.test-pasos a) {
+    font-weight: 700;
+  }
+
+  .instrumento-test :global(.test-pasos span) {
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
+  }
+
+  .instrumento-test :global(.test-resultado .test-borrar) {
+    align-self: flex-start;
+  }
+
+  /* A 390 px cada opción ocupa su propia fila: el OMS-5 tiene seis y varias no caben en media
+     pantalla. Lo que se comprime es el aire, no el área táctil, que se mantiene en 2,75 rem.
+     Hubo aquí una barra de acciones fija al borde inferior: se quitó porque los dos botones
+     no caben lado a lado a ese ancho, se apilaban y el bloque tapaba la primera pregunta. */
   @media (max-width: 40rem) {
     .instrumento-ficha dl div,
     .instrumento-test :global(.test-opciones) {
       grid-template-columns: 1fr;
+    }
+
+    .instrumento-ficha {
+      padding: var(--space-4);
+    }
+
+    .instrumento-test :global(.test-preguntas > li) {
+      padding: var(--space-3);
+    }
+
+    .instrumento-test :global(.test-opciones) {
+      gap: var(--space-1);
+      margin-top: var(--space-3);
+    }
+
+    .instrumento-test :global(.test-resultado) {
+      padding: var(--space-4);
+    }
+
+    .instrumento-test :global(.test-acciones) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    /* Sin base fija: caben lado a lado si el texto lo permite y, si no, cada uno pasa a su
+       propia fila con el alto completo, en vez de encogerse hasta envolver. */
+    .instrumento-test :global(.test-botones button) {
+      flex: 1 1 auto;
     }
   }
 
@@ -339,7 +491,17 @@ const puntajeMaximo = data.rangos.reduce((mayor, rango) => Math.max(mayor, rango
      primera pantalla junto con el comienzo del texto. */
   @media (max-width: 48rem) {
     .instrumento {
+      gap: var(--space-6);
       margin-top: var(--space-4);
+    }
+
+    .instrumento-encabezado {
+      gap: var(--space-3);
+      padding-bottom: var(--space-4);
+    }
+
+    .instrumento-contenido {
+      padding-top: var(--space-6);
     }
   }
 </style>

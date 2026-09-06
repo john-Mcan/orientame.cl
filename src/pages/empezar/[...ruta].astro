@@ -42,7 +42,7 @@ const preguntaAnterior = padre?.tipo === 'paso' ? padre.pregunta : undefined;
     {
       nodo.tipo === 'paso' ? (
         <>
-          <PasoOrientador paso={nodo} nivel="h1" />
+          <PasoOrientador paso={nodo} nivel="h1" indexable />
           {padre && (
             <nav class="paso-nav" aria-label="Navegación del orientador">
               <a href={rutaDe(padre.id)}>

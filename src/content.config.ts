@@ -123,7 +123,12 @@ const instruments = defineCollection({
         poblacion: z.string().min(3),
         licencia: z.string().min(3),
         scoringVerificado: z.boolean().default(false),
-        instrumentoId: z.enum(['oms-5', 'gad-7']).optional(),
+        /**
+         * Qué se cambió respecto del original y con qué permiso. Se muestra al final, junto a
+         * la ficha técnica: es procedencia, no algo que haya que leer antes de responder.
+         */
+        adaptacion: z.string().min(20).optional(),
+        instrumentoId: z.enum(['oms-5', 'gad-7', 'phq-8']).optional(),
         instrucciones: z.string().min(20).optional(),
         preguntas: z
           .array(
@@ -147,7 +152,33 @@ const instruments = defineCollection({
               desde: z.number().int().nonnegative(),
               hasta: z.number().int().nonnegative(),
               etiqueta: z.string().min(3),
+              /** Lo que dice el instrumento sobre este rango, en sus propios términos. */
               explicacion: z.string().min(20),
+              /**
+               * Qué significa ese rango para quien lo acaba de obtener. Sin esto el resultado
+               * es una etiqueta —«rango moderado»— y quien responde no se lleva nada.
+               */
+              queSignifica: z.string().min(60),
+              /**
+               * La frase lista para ocupar al pedir una hora o al contárselo a alguien. Es lo
+               * único del resultado que se puede llevar a otra conversación, así que se
+               * escribe por rango: armarla con plantilla producía frases mal construidas
+               * («salí en puntaje bajo el umbral sugerido»).
+               */
+              comoContarlo: z.string().min(20),
+              /**
+               * A dónde puede ir desde acá, según el rango. Un resultado que no continúa en
+               * ninguna parte deja a la persona igual que antes de responder.
+               */
+              pasos: z
+                .array(
+                  z.object({
+                    texto: z.string().min(6),
+                    href: z.string().startsWith('/'),
+                    detalle: z.string().min(10),
+                  }),
+                )
+                .min(1),
             }),
           )
           .default([]),

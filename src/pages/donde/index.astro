@@ -47,15 +47,45 @@ const valeLaPenaFiltrar = recursos.length > 6;
   title="Dónde encontrar ayuda en salud mental en Chile"
   description="Cómo se entra a la atención de salud mental en Chile: líneas oficiales de orientación, atención primaria pública y clínicas universitarias, con la fuente de cada dato."
 >
-  <div class="reading-shell">
+  <div class="reading-shell" data-pagefind-body data-pagefind-filter="seccion:Dónde consultar">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Dónde consultar' }]} />
 
     <EncabezadoSeccion
+      indexable
       eyebrow="Directorio y piloto de acceso"
       titulo="Dónde encontrar atención de salud mental en Chile"
       descripcion="Las alternativas públicas, gratuitas y de bajo costo van primero. Cada ficha indica de qué fuente oficial salieron sus datos y cuándo la consultamos."
     />
+  </div>
 
+  {
+    /* El buscador va inmediatamente después del encabezado. Antes quedaba a 1.541 px en un
+      viewport de 844: había que pasar por el desplegable de sellos y por 665 px de tarjetas de
+      comuna para encontrar el campo. La guía por comuna baja después de los resultados: es
+      lectura de cómo funciona el acceso, no la forma rápida de llegar a un centro. */
+  }
+  <section class="seccion-buscador reading-shell" aria-labelledby="buscador-titulo">
+    <h2 id="buscador-titulo" class="seccion-subtitulo">Buscar un centro</h2>
+
+    {
+      /* `client:idle` y no `client:visible`: el island no pinta nada hasta montar —para no
+        mostrar filtros que todavía no filtran— y `client:visible` observa los hijos que el
+        servidor dejó dentro de `<astro-island>`. Sin hijos no hay nada que observar y los
+        filtros no aparecían nunca. */
+    }
+    {
+      valeLaPenaFiltrar && (
+        <ResourceFinder
+          client:idle
+          comunas={COMUNAS_PILOTO}
+          tipos={tipos}
+          costos={costos}
+          total={recursos.length}
+        />
+      )
+    }
+
+    {/* El sello aparece dentro de cada ficha, así que su explicación vive junto a ellas. */}
     <div class="aviso-niveles">
       <Desplegable titulo="¿Qué significa cada sello en este directorio?">
         <p>
@@ -79,10 +109,18 @@ const valeLaPenaFiltrar = recursos.length > 6;
         </p>
       </Desplegable>
     </div>
-  </div>
+
+    <div class="lista-fichas">
+      {recursos.map((recurso) => <FichaRecurso recurso={recurso} />)}
+    </div>
+  </section>
 
   <section class="seccion-comunas-piloto reading-shell" aria-labelledby="comunas-piloto-titulo">
     <h2 id="comunas-piloto-titulo" class="seccion-subtitulo">Cómo se accede, comuna por comuna</h2>
+    <p class="comunas-bajada">
+      Cada comuna tiene su propia página con la vía de entrada a la red pública y lo que hemos
+      podido confirmar ahí.
+    </p>
     <div class="enlaces-comunas">
       {
         COMUNAS_PILOTO.map((c) => (
@@ -110,38 +148,6 @@ const valeLaPenaFiltrar = recursos.length > 6;
           >Centros docentes de facultades de psicología, con atención supervisada.</span
         >
       </a>
-    </div>
-  </section>
-
-  <section class="seccion-buscador reading-shell" aria-labelledby="buscador-titulo">
-    <div class="buscador-cabecera">
-      <h2 id="buscador-titulo">Recursos disponibles</h2>
-      <p>
-        Escribe una comuna o el nombre de un centro, o acota la lista por tipo, modalidad y costo.
-        Lo que escribes y eliges aquí se resuelve en tu dispositivo y orientame.cl no lo almacena.
-      </p>
-    </div>
-
-    {
-      /* `client:idle` y no `client:visible`: el island no pinta nada hasta montar —para no
-        mostrar filtros que todavía no filtran— y `client:visible` observa los hijos que el
-        servidor dejó dentro de `<astro-island>`. Sin hijos no hay nada que observar y los
-        filtros no aparecían nunca. */
-    }
-    {
-      valeLaPenaFiltrar && (
-        <ResourceFinder
-          client:idle
-          comunas={COMUNAS_PILOTO}
-          tipos={tipos}
-          costos={costos}
-          total={recursos.length}
-        />
-      )
-    }
-
-    <div class="lista-fichas">
-      {recursos.map((recurso) => <FichaRecurso recurso={recurso} />)}
     </div>
   </section>
 </Base>
@@ -300,21 +306,12 @@ const valeLaPenaFiltrar = recursos.length > 6;
     font: inherit;
   }
 
+  /* `minmax(9rem, …)` deja dos columnas ya a 390 px en vez de una sola: los cuatro filtros
+     pasan de cuatro filas a dos, sin marco ni fondo propios. */
   .seccion-buscador :global(.finder-filtros) {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-    gap: var(--space-4);
-    padding: var(--space-4) var(--space-6) var(--space-6);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-md);
-    background: var(--color-mist-50);
-  }
-
-  .seccion-buscador :global(.finder-leyenda) {
-    padding-inline: var(--space-2);
-    color: var(--color-ink-900);
-    font-size: var(--text-sm);
-    font-weight: 700;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--space-3);
   }
 
   .seccion-buscador :global(.campo-filtro) {

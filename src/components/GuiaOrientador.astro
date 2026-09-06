@@ -32,8 +32,8 @@ const { guia, preguntaAnterior } = Astro.props;
 const rutaAnterior = rutaDe(guia.padre);
 ---
 
-<article class="guia">
-  <h1>{guia.titulo}</h1>
+<article class="guia" data-pagefind-body data-pagefind-filter="seccion:Empezar">
+  <h1 data-pagefind-meta="title">{guia.titulo}</h1>
 
   <div class="guia-reconocimiento">
     {guia.reconocimiento.map((parrafo) => <p>{parrafo}</p>)}

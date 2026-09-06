@@ -45,142 +45,153 @@ const modalidadEtiquetas: Record<string, string> = {
   data-modalidad={recurso.modalidad}
   data-busqueda={textoBusqueda(recurso)}
 >
+  {
+    /* Lo que se ve sin abrir nada es lo que sirve para decidir si este centro te sirve y para
+      llegar a él: qué es, dónde queda y a qué número llamar. El resto —requisitos, horarios,
+      pasos, fuente— vive en el desplegable. Antes la ficha mostraba todo y medía 1.100 px en
+      móvil: treinta y una fichas hacían una página de 23.000 px, y el objetivo es cubrir el
+      país entero. */
+  }
   <header class="ficha-encabezado">
-    <div class="ficha-meta">
-      <span class="badge badge-tipo">{tipoEtiquetas[recurso.tipo] ?? recurso.tipo}</span>
-      <span class="badge badge-costo">{costoEtiquetas[recurso.costo]}</span>
-      <span class="badge badge-modalidad">{modalidadEtiquetas[recurso.modalidad]}</span>
-    </div>
+    <p class="ficha-meta">
+      <span class="ficha-tipo">{tipoEtiquetas[recurso.tipo] ?? recurso.tipo}</span>
+      {recurso.comuna && <span>{recurso.comuna}</span>}
+      <span>{costoEtiquetas[recurso.costo]}</span>
+    </p>
     <h3 id={`titulo-${recurso.id}`} class="ficha-titulo">{recurso.nombre}</h3>
-    <div class="ficha-sello">
-      <SelloRevision nivel={recurso.nivel} estado={recurso.estado} fecha={recurso.verificadoEl} />
-    </div>
   </header>
 
-  <div class="ficha-cuerpo">
-    <dl class="ficha-datos">
-      {
-        recurso.direccion && (
-          <div class="dato-fila">
-            <dt class="dato-termino">Ubicación</dt>
-            <dd class="dato-valor">
-              {recurso.direccion}
-              {recurso.comuna && <span> ({recurso.comuna})</span>}
-            </dd>
-          </div>
-        )
-      }
-
-      {
-        recurso.telefono && (
-          <div class="dato-fila">
-            <dt class="dato-termino">Teléfono</dt>
-            <dd class="dato-valor">
-              <a
-                href={`tel:${recurso.telefonoMarcar ?? recurso.telefono.replace(/\s+/g, '')}`}
-                class="enlace-telefono"
-                data-siguiente-paso="llamada"
-              >
-                {recurso.telefono}
-              </a>
-            </dd>
-          </div>
-        )
-      }
-
-      {
-        recurso.web && (
-          <div class="dato-fila">
-            <dt class="dato-termino">Sitio web oficial</dt>
-            <dd class="dato-valor">
-              <a href={recurso.web} rel="external noopener noreferrer" referrerpolicy="no-referrer">
-                Abrir sitio oficial
-                <span class="sr-only"> (enlace externo)</span>
-              </a>
-            </dd>
-          </div>
-        )
-      }
-
-      {
-        recurso.rangoPrecio && (
-          <div class="dato-fila">
-            <dt class="dato-termino">Detalle de costo</dt>
-            <dd class="dato-valor">{recurso.rangoPrecio}</dd>
-          </div>
-        )
-      }
-
-      {
-        recurso.horarios && (
-          <div class="dato-fila">
-            <dt class="dato-termino">Horarios de atención</dt>
-            <dd class="dato-valor">{recurso.horarios}</dd>
-          </div>
-        )
-      }
-    </dl>
-
+  <div class="ficha-resumen">
+    {recurso.direccion && <p class="ficha-direccion">{recurso.direccion}</p>}
     {
-      recurso.requisitos.length > 0 && (
-        <section class="ficha-seccion" aria-labelledby={`requisitos-${recurso.id}`}>
-          <h4 id={`requisitos-${recurso.id}`} class="seccion-subtitulo">
-            Requisitos de acceso
-          </h4>
-          <ul class="lista-requisitos">
-            {recurso.requisitos.map((req) => (
-              <li>{req}</li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
-
-    {
-      recurso.pasosAcceso.length > 0 && (
-        <section class="ficha-seccion" aria-labelledby={`pasos-${recurso.id}`}>
-          <h4 id={`pasos-${recurso.id}`} class="seccion-subtitulo">
-            {recurso.nivel === 'B'
-              ? 'Cómo solicitar atención en este centro'
-              : 'Orientación de acceso'}
-          </h4>
-          <ol class="lista-pasos">
-            {recurso.pasosAcceso.map((paso) => (
-              <li>{paso}</li>
-            ))}
-          </ol>
-        </section>
-      )
-    }
-
-    {
-      recurso.notas && (
-        <div class="ficha-nota">
-          <p>{recurso.notas}</p>
-        </div>
+      recurso.telefono && (
+        <p>
+          <a
+            href={`tel:${recurso.telefonoMarcar ?? recurso.telefono.replace(/\s+/g, '')}`}
+            class="enlace-telefono"
+            data-siguiente-paso="llamada"
+          >
+            Llamar al {recurso.telefono}
+          </a>
+        </p>
       )
     }
   </div>
 
-  <footer class="ficha-pie">
-    <p class="fuente-nota">
-      <span>Fuente: </span>
+  <details class="ficha-detalle">
+    <summary>
+      <span>Requisitos, horarios y fuente</span>
+    </summary>
+
+    <div class="ficha-cuerpo">
+      <div class="ficha-sello">
+        <SelloRevision nivel={recurso.nivel} estado={recurso.estado} fecha={recurso.verificadoEl} />
+      </div>
+
+      <dl class="ficha-datos">
+        <div class="dato-fila">
+          <dt class="dato-termino">Modalidad</dt>
+          <dd class="dato-valor">{modalidadEtiquetas[recurso.modalidad]}</dd>
+        </div>
+
+        {
+          recurso.web && (
+            <div class="dato-fila">
+              <dt class="dato-termino">Sitio web oficial</dt>
+              <dd class="dato-valor">
+                <a
+                  href={recurso.web}
+                  rel="external noopener noreferrer"
+                  referrerpolicy="no-referrer"
+                >
+                  Abrir sitio oficial
+                  <span class="sr-only"> (enlace externo)</span>
+                </a>
+              </dd>
+            </div>
+          )
+        }
+
+        {
+          recurso.rangoPrecio && (
+            <div class="dato-fila">
+              <dt class="dato-termino">Detalle de costo</dt>
+              <dd class="dato-valor">{recurso.rangoPrecio}</dd>
+            </div>
+          )
+        }
+
+        {
+          recurso.horarios && (
+            <div class="dato-fila">
+              <dt class="dato-termino">Horarios de atención</dt>
+              <dd class="dato-valor">{recurso.horarios}</dd>
+            </div>
+          )
+        }
+      </dl>
+
       {
-        recurso.fuente.url ? (
-          <a
-            href={recurso.fuente.url}
-            rel="external noopener noreferrer"
-            referrerpolicy="no-referrer"
-          >
-            {recurso.fuente.nombre}
-          </a>
-        ) : (
-          <span>{recurso.fuente.nombre}</span>
+        recurso.requisitos.length > 0 && (
+          <section class="ficha-seccion" aria-labelledby={`requisitos-${recurso.id}`}>
+            <h4 id={`requisitos-${recurso.id}`} class="seccion-subtitulo">
+              Requisitos de acceso
+            </h4>
+            <ul class="lista-requisitos">
+              {recurso.requisitos.map((req) => (
+                <li>{req}</li>
+              ))}
+            </ul>
+          </section>
         )
       }
-      {recurso.fuente.consultadoEl && <span> (consultado el {recurso.fuente.consultadoEl})</span>}
-    </p>
-  </footer>
+
+      {
+        recurso.pasosAcceso.length > 0 && (
+          <section class="ficha-seccion" aria-labelledby={`pasos-${recurso.id}`}>
+            <h4 id={`pasos-${recurso.id}`} class="seccion-subtitulo">
+              {recurso.nivel === 'B'
+                ? 'Cómo solicitar atención en este centro'
+                : 'Orientación de acceso'}
+            </h4>
+            <ol class="lista-pasos">
+              {recurso.pasosAcceso.map((paso) => (
+                <li>{paso}</li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      {
+        recurso.notas && (
+          <div class="ficha-nota">
+            <p>{recurso.notas}</p>
+          </div>
+        )
+      }
+    </div>
+
+    <footer class="ficha-pie">
+      <p class="fuente-nota">
+        <span>Fuente: </span>
+        {
+          recurso.fuente.url ? (
+            <a
+              href={recurso.fuente.url}
+              rel="external noopener noreferrer"
+              referrerpolicy="no-referrer"
+            >
+              {recurso.fuente.nombre}
+            </a>
+          ) : (
+            <span>{recurso.fuente.nombre}</span>
+          )
+        }
+        {recurso.fuente.consultadoEl && <span> (consultado el {recurso.fuente.consultadoEl})</span>}
+      </p>
+    </footer>
+  </details>
 </article>
 
 <style>
@@ -197,49 +208,72 @@ const modalidadEtiquetas: Record<string, string> = {
   .ficha-encabezado {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-1);
   }
 
+  /* Tipo, comuna y costo en una línea y no en tres etiquetas apiladas: apiladas ocupaban tres
+     renglones en móvil y se leían antes que el nombre del centro.
+     Sin separadores dibujados con `::before`: al envolver, el punto caía al principio del
+     renglón siguiente y parecía una viñeta rota. Separan el espacio y el color. */
   .ficha-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: var(--space-1) var(--space-3);
+    color: var(--color-ink-600);
+    font-size: var(--text-sm);
   }
 
-  .badge {
-    display: inline-block;
-    padding: 0.15rem 0.5rem;
-    border-radius: var(--radius-sm);
-    font-size: var(--text-xs);
+  .ficha-tipo {
+    color: var(--color-green-700);
     font-weight: 700;
   }
 
-  .badge-tipo {
-    background: var(--color-mist-100);
-    color: var(--color-green-900);
-  }
-
-  .badge-costo {
-    background: var(--color-paper);
-    border: 1px solid var(--color-line);
-    color: var(--color-ink-900);
-  }
-
-  .badge-modalidad {
-    background: var(--color-mist-50);
-    color: var(--color-ink-600);
-    border: 1px solid var(--color-line);
-  }
-
   .ficha-titulo {
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
     line-height: 1.3;
     color: var(--color-ink-900);
     margin: 0;
   }
 
+  .ficha-resumen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  .ficha-direccion {
+    color: var(--color-ink-600);
+  }
+
+  .ficha-detalle > summary {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    color: var(--color-green-900);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ficha-detalle > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ficha-detalle > summary span::before {
+    display: inline-block;
+    width: 1rem;
+    color: var(--color-sage-400);
+    content: '▸';
+  }
+
+  .ficha-detalle[open] > summary span::before {
+    content: '▾';
+  }
+
   .ficha-sello {
-    margin-top: var(--space-1);
+    margin-bottom: var(--space-4);
   }
 
   .ficha-cuerpo {

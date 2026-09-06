@@ -10,10 +10,11 @@ import Base from '@layouts/Base.astro';
   title="Sobre el proyecto"
   description="Conoce el propósito, los principios y las personas detrás de orientame.cl."
 >
-  <div class="reading-shell">
+  <div class="reading-shell" data-pagefind-body data-pagefind-filter="seccion:El proyecto">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Sobre el proyecto' }]} />
 
     <EncabezadoSeccion
+      indexable
       eyebrow="Sobre orientame.cl"
       titulo="Menos barreras antes de pedir ayuda"
       descripcion="orientame.cl es una iniciativa independiente y sin fines de lucro, creada para aportar a la comunidad en Chile."

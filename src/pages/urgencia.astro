@@ -44,7 +44,22 @@ const sources = [
     </div>
   </header>
 
-  <div class="reading-shell urgency-content">
+  {
+    /* Quien escriba «urgencia» en el buscador tiene que llegar acá. Antes esta página no
+      estaba indexada y esa búsqueda devolvía un artículo de /siento. */
+  }
+  <div
+    class="reading-shell urgency-content"
+    data-pagefind-body
+    data-pagefind-filter="seccion:Ayuda inmediata"
+    data-pagefind-meta="title:Ayuda inmediata en Chile"
+    data-pagefind-weight="10"
+  >
+    {
+      /* El peso no es una regla de riesgo —no hay palabras clave ni inferencia, que están
+        prohibidas en el buscador— sino relevancia de documento: esta página es corta y
+        Pagefind la dejaba bajo un artículo largo que menciona «urgencia» de pasada. */
+    }
     <section class="emergency-card" aria-labelledby="emergencia-medica">
       <div>
         <p class="card-label">Emergencia médica</p>

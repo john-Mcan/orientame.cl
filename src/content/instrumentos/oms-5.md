@@ -40,6 +40,7 @@ nombreInstrumento: 'Índice de Bienestar OMS-5'
 version: 'OMS-5, edición OMS 2024; traducción española de la versión 1998'
 poblacion: 'Personas adultas. La fuente informa uso en distintos idiomas y contextos; no es una validación específica para Chile.'
 licencia: 'CC BY-NC-SA 3.0 IGO para uso no comercial, con atribución y licencia equivalente para adaptaciones.'
+adaptacion: 'Los cinco ítems y las seis opciones reproducen literalmente la traducción española publicada por la OMS. El único cambio es una errata del original: donde dice «fresco y descandado» se escribe «descansado». El enunciado se pasó a segunda persona para que suene como el resto del sitio; las afirmaciones que se puntúan no se tocaron.'
 scoringVerificado: true
 instrumentoId: oms-5
 instrucciones: 'Durante las últimas dos semanas, elige en cada afirmación la opción que mejor describa cómo te has sentido. Los valores mayores representan mayor bienestar en este instrumento.'
@@ -72,10 +73,34 @@ rangos:
     hasta: 12
     etiqueta: 'Puntaje bajo el umbral sugerido'
     explicacion: 'La OMS indica que un puntaje bruto menor que 13 se ha sugerido como señal de bajo bienestar y como motivo para considerar una evaluación adicional.'
+    queSignifica: 'Este cuestionario no pregunta por síntomas: pregunta por lo contrario, por cuánto bienestar hubo en estas dos semanas. Un puntaje bajo el umbral quiere decir que hubo poco —poco ánimo, poco descanso, poca energía, pocas cosas que te interesaran—, y la OMS lo señala como motivo suficiente para mirarlo con más detalle. No dice por qué: eso puede ir desde un período pesado hasta algo que lleva más tiempo, y es justamente lo que se ve en una conversación, no en cinco preguntas.'
+    comoContarlo: 'Respondí el cuestionario de bienestar de la OMS y salí bajo el umbral que ellos señalan.'
+    pasos:
+      - texto: 'Mirar síntomas concretos con otro cuestionario'
+        href: '/autoevaluacion/phq-8'
+        detalle: 'Ocho preguntas sobre ánimo. El OMS-5 mide bienestar, no síntomas.'
+      - texto: 'Poner en palabras lo que estás sintiendo'
+        href: '/siento'
+        detalle: 'Descripciones cotidianas: no poder dormir, no dar más, angustia, desgano.'
+      - texto: 'Ver dónde pedir una hora en Chile'
+        href: '/donde'
+        detalle: 'Atención pública por comuna, clínicas universitarias y líneas nacionales.'
   - desde: 13
     hasta: 25
     etiqueta: 'Puntaje sobre el umbral sugerido'
     explicacion: 'Tu puntaje no queda bajo el umbral sugerido por la OMS. Esto no permite descartar dificultades ni reemplaza lo que tú observas sobre tu vida cotidiana.'
+    queSignifica: 'En estas dos semanas hubo bienestar por sobre el umbral que la OMS sugiere como señal de alerta. Eso es información real, pero es de grano grueso: son cinco preguntas sobre ánimo, descanso, energía e interés, y hay cosas que no aparecen ahí. Si viniste hasta acá porque algo no anda bien, este puntaje no cierra el tema; sólo dice que ese algo no se está expresando como falta de bienestar general.'
+    comoContarlo: 'Respondí un cuestionario de bienestar y salió normal, pero igual hay algo que no anda bien.'
+    pasos:
+      - texto: 'Poner en palabras lo que sí estás sintiendo'
+        href: '/siento'
+        detalle: 'Vivencias cotidianas, sin etiquetas ni puntaje.'
+      - texto: 'Mirar ansiedad o ánimo por separado'
+        href: '/autoevaluacion'
+        detalle: 'El GAD-7 y el PHQ-8 preguntan por síntomas específicos.'
+      - texto: 'Empezar por lo que te trajo hasta acá'
+        href: '/empezar'
+        detalle: 'El recorrido parte de lo que más pesa, no de un puntaje.'
 ---
 
 ## Qué mide

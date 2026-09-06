@@ -17,10 +17,11 @@ const temasPublicables = todosLosTemas
   title="Temas de salud mental"
   description="Explicaciones en lenguaje claro sobre cuadros de salud mental como depresión, insomnio, ansiedad o estrés crónico, con la fuente y la fecha de cada afirmación."
 >
-  <div class="reading-shell">
+  <div class="reading-shell" data-pagefind-body data-pagefind-filter="seccion:Temas">
     <Breadcrumbs items={[{ label: 'Inicio', href: '/' }, { label: 'Temas' }]} />
 
     <EncabezadoSeccion
+      indexable
       eyebrow="Conceptos clínicos"
       titulo="Temas de salud mental explicados en simple"
       descripcion="Qué significa cada concepto, qué se sabe sobre cómo se aborda y cómo se accede a esa atención en Chile. Cada afirmación indica de dónde sale y cuándo la comprobamos."

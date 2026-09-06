@@ -62,6 +62,7 @@ describe('Build output verification', () => {
     'autoevaluacion/index.html',
     'autoevaluacion/oms-5/index.html',
     'autoevaluacion/gad-7/index.html',
+    'autoevaluacion/phq-8/index.html',
     'acompanar/index.html',
     'acompanar/preguntar-y-escuchar/index.html',
     'acompanar/ofrecer-ayuda-sin-presionar/index.html',
@@ -219,6 +220,7 @@ describe('HTML válido en las páginas generadas', () => {
     'autoevaluacion/index.html',
     'autoevaluacion/oms-5/index.html',
     'autoevaluacion/gad-7/index.html',
+    'autoevaluacion/phq-8/index.html',
     'acompanar/index.html',
     'acompanar/preguntar-y-escuchar/index.html',
     'acompanar/ofrecer-ayuda-sin-presionar/index.html',
@@ -231,6 +233,28 @@ describe('HTML válido en las páginas generadas', () => {
       assert.ok(!tieneParrafosAnidados(leer(pagina)), `${pagina} contiene un <p> dentro de otro`);
     });
   }
+
+  it('ninguna palabra queda pegada al texto de un enlace', () => {
+    // El `compressHTML: 'jsx'` que Astro trae por defecto descarta el nodo de espacio entre
+    // un texto y un `<a>` en vez de colapsarlo. Cuando el único separador es el salto de
+    // línea que deja Prettier al repartir la etiqueta en varias líneas, la frase se sirve
+    // pegada: "Puedes revisarlo que estás sintiendo", "ver directamentedónde consultar en
+    // Chile". Eran trece frases en cinco páginas. `astro.config.mjs` fija `true`, que sí
+    // conserva la separación; esto avisa si alguien vuelve al default o escribe un enlace
+    // sin separarlo del texto anterior.
+    const sinCodigo = (html: string): string =>
+      html.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '');
+
+    for (const pagina of paginasGeneradas()) {
+      const pegados = sinCodigo(fs.readFileSync(pagina, 'utf8')).match(/.{0,40}[\p{L}\p{N}]<a\s/gu);
+
+      assert.deepStrictEqual(
+        pegados ?? [],
+        [],
+        `${path.relative(distDir, pagina)} sirve una palabra pegada al texto de un enlace`,
+      );
+    }
+  });
 });
 
 describe('La portada abre el recorrido sin controles engañosos', () => {
@@ -302,6 +326,46 @@ describe('La portada abre el recorrido sin controles engañosos', () => {
       assert.ok(
         !islaVacia.test(fs.readFileSync(pagina, 'utf8')),
         `${path.relative(distDir, pagina)} tiene un island client:visible sin contenido servido; usa client:idle`,
+      );
+    }
+  });
+
+  it('los destinos a los que el sitio manda a la gente están en el índice de búsqueda', () => {
+    // El buscador funcionaba y aun así no servía: sólo 30 de 66 páginas tenían
+    // `data-pagefind-body`, y fuera del índice estaban `/urgencia`, las quince rutas del
+    // orientador y `/donde` con sus comunas. Como Pagefind igual devolvía resultados
+    // plausibles del contenido editorial, el fallo era invisible: buscar «urgencia»
+    // entregaba un artículo de `/siento`, y «puente alto» entregaba el PHQ-8, porque
+    // «alto» aparece en «rango alto».
+    const debenEstarIndexadas = [
+      'urgencia/index.html',
+      'donde/index.html',
+      'donde/metropolitana/puente-alto/index.html',
+      'donde/clinicas-universitarias/index.html',
+      'empezar/index.html',
+      'empezar/me-cuesta-dar-el-paso/me-da-verguenza/index.html',
+      'empezar/no-se-donde-buscar/index.html',
+      'siento/index.html',
+      'temas/index.html',
+      'primera-vez/index.html',
+      'autoevaluacion/index.html',
+    ];
+
+    for (const pagina of debenEstarIndexadas) {
+      assert.ok(
+        leer(pagina).includes('data-pagefind-body'),
+        `${pagina} no entra al índice de búsqueda: quien la busque por su nombre no la encuentra`,
+      );
+    }
+  });
+
+  it('la portada y el buscador no se indexan a sí mismos', () => {
+    // La portada pinta el mismo paso inicial que `/empezar`: indexarla duplicaría cada
+    // resultado. `/buscar` indexada sería el buscador encontrándose a sí mismo.
+    for (const pagina of ['index.html', 'buscar/index.html']) {
+      assert.ok(
+        !leer(pagina).includes('data-pagefind-body'),
+        `${pagina} no debería estar en el índice`,
       );
     }
   });
