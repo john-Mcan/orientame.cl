@@ -14,7 +14,11 @@ const siteName = 'orientame.cl';
 const fullTitle = title === siteName ? title : `${title} · ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const isPublicProduction = import.meta.env.PUBLIC_SITE_ENV === 'production';
-const socialImage = image ? new URL(image, Astro.site) : undefined;
+// Sin `image` propia, cada página comparte la tarjeta del sitio: antes, como ninguna página pasaba
+// el prop, ningún enlace compartido mostraba imagen. Las dimensiones y el alt describen ese archivo
+// concreto, así que sólo se anuncian cuando es el que se está usando.
+const usaImagenPorDefecto = !image;
+const socialImage = new URL(image ?? '/og-image.png', Astro.site);
 ---
 
 <!doctype html>
@@ -36,7 +40,18 @@ const socialImage = image ? new URL(image, Astro.site) : undefined;
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {socialImage && <meta property="og:image" content={socialImage} />}
+    <meta property="og:image" content={socialImage} />
+    {
+      usaImagenPorDefecto && (
+        <>
+          <meta property="og:image:type" content="image/png" />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:image:alt" content="Orientame.cl" />
+        </>
+      )
+    }
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
