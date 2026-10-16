@@ -166,6 +166,12 @@ restringe capacidades del navegador que no necesita. Los detalles públicos se e
 
 ## Licencia
 
-Este repositorio todavía no declara una licencia. Que su contenido sea visible públicamente no
-concede por sí solo permiso para usarlo, modificarlo o redistribuirlo. La licencia del código, el
-contenido editorial y los recursos de terceros debe definirse antes de promover su reutilización.
+El código y los materiales originales del repositorio se publican bajo la
+[Licencia de consulta y contribución de orientame.cl](LICENSE.md). Puedes leerlos, clonar o hacer
+un fork, ejecutar y modificar copias para preparar mejoras, y proponer aportes mediante issues o
+pull requests.
+
+La licencia limita la reutilización en otros productos o servicios y permite incorporar y mantener
+los aportes de forma permanente, conservando la titularidad de quien los envía. Los materiales de
+terceros, incluidos los textos de instrumentos de autoevaluación, conservan sus propias condiciones
+de uso. Consulta el documento completo antes de contribuir o reutilizar materiales.
