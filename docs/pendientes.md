@@ -1,7 +1,8 @@
 # Pendientes
 
 Estado al **4 de septiembre de 2026**, al cerrar la revisión editorial del orientador y las guías
-([`plan/fase-4-revision-guias.md`](./plan/fase-4-revision-guias.md), D38–D47).
+([`plan/fase-4-revision-guias.md`](./plan/fase-4-revision-guias.md), D38–D47). Revisado el
+**31 de octubre de 2026**, con la v1 ya publicada: los puntos siguen abiertos salvo donde se indica.
 
 Cada punto dice qué falta, por qué quedó pendiente y qué habría que hacer. Lo que está aquí no está
 hecho: si algo se resuelve, se saca de esta lista y se registra donde corresponda.
@@ -97,6 +98,14 @@ corrigieron**:
 | `sintomas/siento-angustia-en-el-pecho.md`         | «una de las manifestaciones físicas más comunes y atemorizantes» |
 | `sintomas/no-puedo-dormir-aunque-este-cansado.md` | «Muchas personas describen sentir el cuerpo pesado…»             |
 
+Al revisar este archivo el 31 de octubre aparecieron dos más con la misma forma, tampoco
+corregidos. El segundo está en `/temas`, que la prueba de D43 tampoco cubre:
+
+| Archivo                                | Texto                                                                            |
+| -------------------------------------- | -------------------------------------------------------------------------------- |
+| `sintomas/no-puedo-dejar-de-pensar.md` | «Muchas personas describen esto como "tener un carrusel de ideas en la cabeza"…» |
+| `temas/crisis-de-panico.md`            | «Muchas personas describen la experiencia como algo que llega de golpe…»         |
+
 Los casos con fuente (`me-siento-mal-sin-saber-por-que`, `me-preocupo-por-todo`,
 `siento-que-no-encajo-en-ningun-lugar`) están correctos y no hay que tocarlos.
 
@@ -184,7 +193,8 @@ Ya estaban registrados y siguen abiertos.
 - **Revisión legal previa al lanzamiento**: Ley 21.719 de datos personales, Ley 21.331 de derechos en
   salud mental y licencias de instrumentos.
 - **Suite E2E, matriz de navegadores, CI completo y auditoría automatizada de enlaces** (etapa 5). No
-  se construyen antes.
+  se construyen antes. Desde el 31 de octubre, `npm run check` corre en GitHub Actions en cada push
+  a `main` y en cada pull request (`.github/workflows/ci.yml`); no reemplaza nada de lo anterior.
 - **Nombres de componentes en inglés.** `AccessUrgency`, `EditorialStatus` y `SourceList` siguen en
   inglés y ahora conviven con `GuiaOrientador`, `DatoOrientador` y `FuentesLinea`. Unificarlos sigue
   siendo una decisión pendiente, no una tarea incidental.
