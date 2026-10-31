@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "@astrojs/preact": "^6.0.5",
-    "preact": "^10.29.8"
+    "preact": "^11.1.0"
   }
 }
