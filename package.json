@@ -15,7 +15,8 @@
     "build:site": "astro build",
     "build": "npm run build:site && pagefind --site dist && node scripts/csp-hashes.mjs",
     "preview": "astro preview",
-    "check": "npm run lint && npm run typecheck && npm run build && npm run test"
+    "check": "npm run lint && npm run typecheck && npm run build && npm run test",
+    "deploy": "node scripts/desplegar.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -27,7 +28,8 @@
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.68.0"
+    "typescript-eslint": "^8.68.0",
+    "wrangler": "^4.156.0"
   },
   "dependencies": {
     "@astrojs/preact": "^6.0.5",
