@@ -18,7 +18,7 @@ El documento base continúa siendo la fuente principal para propósito, alcance,
 * alternativas públicas, gratuitas y de bajo costo tratadas como rutas principales;
 * WCAG 2.2 AA como objetivo mínimo;
 * el logo canónico es [`public/orientame-logo.svg`](../../public/orientame-logo.svg);
-* la dirección visual se basa en [`public/moodboard/estilo-colores.png`](../../public/moodboard/estilo-colores.png) y en la guía de estilos.
+* la dirección visual se basa en [`docs/plan/img/estilo-colores.png`](img/estilo-colores.png) y en la guía de estilos.
 
 ### 1.2 Calidad proporcional a la etapa
 

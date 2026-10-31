@@ -1,6 +1,6 @@
 # Guía visual y de estilos — orientame.cl
 
-Esta guía traduce la atmósfera de [`public/moodboard/estilo-colores.png`](../../public/moodboard/estilo-colores.png) a un sistema visual propio para orientame.cl.
+Esta guía traduce la atmósfera de [`docs/plan/img/estilo-colores.png`](img/estilo-colores.png) a un sistema visual propio para orientame.cl.
 
 El moodboard es una referencia de color, suavidad, composición y tono. No se copian su marca, ilustraciones, navegación corporativa, login ni llamados comerciales. orientame.cl no tiene cuentas y su interfaz debe sentirse como una orientación tranquila, no como un SaaS de bienestar.
 

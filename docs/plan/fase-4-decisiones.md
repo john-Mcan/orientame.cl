@@ -178,8 +178,8 @@ verdad sobre propósito y límites sigue siendo `descripcion-inicial.md`.
 
 - **Qué se descubrió:** la barra de lado a lado y la portada como banda a sangre no coinciden con
   la dirección visual de [`estilos.md`](./estilos.md) ni con
-  [`public/moodboard/estilo-colores.png`](../../public/moodboard/estilo-colores.png), donde la página
-  es blanca y las secciones son tarjetas de color del ancho del contenido, separadas del borde.
+  [`docs/plan/img/estilo-colores.png`](img/estilo-colores.png), donde la página es blanca y las
+  secciones son tarjetas de color del ancho del contenido, separadas del borde.
 - **Qué afecta:** `Header.astro` y la portada; el resto del sitio ya estaba sobre fondo blanco.
 - **Impacto:** la barra pasa a ser una tarjeta `page-shell` con esquina redondeada, separada del
   borde de la ventana arriba del todo y también mientras se baja. La portada y el bloque
