@@ -197,7 +197,9 @@ schema.
 ## Reglas técnicas
 
 **Estático primero.** Astro + TypeScript, `output: 'static'`, despliegue en Cloudflare
-(`wrangler.jsonc` sirve `./dist`). No hay runtime de aplicación.
+(`wrangler.jsonc` sirve `./dist`). No hay runtime de aplicación. Se publica con `npm run deploy`,
+que reconstruye con `PUBLIC_SITE_ENV=production`; un `wrangler deploy` suelto sobre lo que dejó
+`npm run build` sube un preview con `noindex`.
 
 **JavaScript sólo cuando la interacción aporta valor**, evaluado componente por componente cuando
 llega su etapa. Un recorrido que sólo cambia de contenido según lo elegido se resuelve con rutas
@@ -249,9 +251,13 @@ Durante el desarrollo **se evita deliberadamente la sobreingeniería de pruebas*
 Obligatorio en cada incremento:
 
 ```bash
-npm run check   # lint (eslint + prettier) -> typecheck (astro check) -> test -> build
+npm run check   # lint (eslint + prettier) -> typecheck (astro check) -> build -> test
 npm run format  # antes de check, si tocaste formato
 ```
+
+El mismo `npm run check` corre en GitHub Actions (`.github/workflows/ci.yml`) en cada push a `main`
+y en cada pull request, sobre el build de preview. Es la verificación de siempre ejecutada en otro
+lado, no el CI completo de la etapa 5.
 
 Más **revisión manual del recorrido modificado**, en escritorio y móvil.
 
