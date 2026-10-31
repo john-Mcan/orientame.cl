@@ -136,7 +136,7 @@ scripts de terceros, y la CSP no permitiría cargarlos.
 
 ## Desarrollo local
 
-Necesitas Node.js 22 (22.19 o superior) y npm. La versión está fijada en [`.nvmrc`](.nvmrc): con
+Necesitas Node.js 22 (22.22 o superior) y npm. La versión está fijada en [`.nvmrc`](.nvmrc): con
 nvm, basta `nvm use`.
 
 ```bash
