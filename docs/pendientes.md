@@ -4,6 +4,10 @@ Estado al **4 de septiembre de 2026**, al cerrar la revisión editorial del orie
 ([`plan/fase-4-revision-guias.md`](./plan/fase-4-revision-guias.md), D38–D47). Revisado el
 **31 de octubre de 2026**, con la v1 ya publicada: los puntos siguen abiertos salvo donde se indica.
 
+La revisión manual del recorrido en escritorio y móvil y el recorrido con lector de pantalla y
+teclado (antes §1) se hicieron antes de publicar la v1 y salieron de esta lista. El resto conserva su
+numeración para no romper referencias.
+
 Cada punto dice qué falta, por qué quedó pendiente y qué habría que hacer. Lo que está aquí no está
 hecho: si algo se resuelve, se saca de esta lista y se registra donde corresponda.
 
@@ -44,35 +48,6 @@ region, comuna, direccion, costo, modalidad…`—, así que «centros cerca de 
 Se puede hacer entero en el cliente, sin que la coordenada salga del dispositivo, pero requiere
 traerlas del DEIS o geocodificar, y además `Permissions-Policy: geolocation=()` en
 `public/_headers` desactiva hoy la API por completo.
-
----
-
-## 1. Verificación que no se pudo hacer en esta sesión
-
-### 1.1 Revisión manual del recorrido en escritorio y móvil — **bloqueante antes de desplegar**
-
-`AGENTS.md` la exige en cada incremento y no se hizo: el entorno de esta sesión no tiene navegador.
-`npm run check` pasa completo (lint, prettier, `astro check`, build de 65 páginas y 165 pruebas), y
-el HTML generado se revisó como texto para confirmar el orden de los bloques, pero **nadie ha visto
-las páginas nuevas renderizadas**.
-
-Qué mirar, concretamente:
-
-- Las cuatro páginas de nodo nuevas: `/empezar/nunca-he-consultado`,
-  `/empezar/prefiero-por-mi-cuenta` y sus dos guías (`entenderlo-primero`, `todavia-no`).
-- El encabezado de un paso intermedio, que ahora tiene `h1` de título, párrafos de reconocimiento y
-  la pregunta como `h2` separada por una línea. Verificar el ritmo vertical en móvil.
-- La portada con ocho puertas en modo compacto (D45): que la primera pantalla siga funcionando a
-  390 px y que el enlace «Ver estas opciones explicadas» no se lea como acción primaria.
-- El atajo `#que-puedes-hacer` (D42): que el salto no deje el encabezado tapado por la barra fija.
-- El bloque de salidas con `.opciones-lista--salidas`: que su fondo se distinga de las opciones de
-  una pregunta y no invite a creer que el cuestionario sigue.
-
-### 1.2 Sin captura de accesibilidad real
-
-No se ejecutó lector de pantalla ni recorrido completo por teclado sobre los nodos nuevos. Los
-`aria-labelledby` de los bloques y los `id` del atajo están puestos y el test de build comprueba que
-el ancla tenga destino, pero eso no reemplaza la prueba.
 
 ---
 
@@ -190,8 +165,14 @@ Ya estaban registrados y siguen abiertos.
   señales de riesgo.
 - **Modo oscuro y cierre de WCAG 2.2 AA** (etapa 5).
 - **Nivel B de recursos** (v2), condicionado a financiamiento para revisión humana y reverificación.
-- **Revisión legal previa al lanzamiento**: Ley 21.719 de datos personales, Ley 21.331 de derechos en
-  salud mental y licencias de instrumentos.
+- **Revisión legal**: Ley 21.719 de datos personales, Ley 21.331 de derechos en salud mental y
+  licencias de instrumentos. Sigue pendiente; el 31 de octubre de 2026 se decidió que no bloquea la
+  v1 publicada.
+- **`/legal/privacidad` y `/legal/terminos` todavía se presentan como borrador previo al
+  lanzamiento.** Privacidad habla de «preview técnico» y dice que el responsable y un canal formal
+  de contacto se publicarán antes del lanzamiento público; términos se describe como borrador «para
+  la primera etapa». Con el sitio en línea e indexado, ese texto quedó desfasado. Es contenido legal:
+  hay que actualizarlo con el responsable y el canal de contacto, no sólo cambiar la redacción.
 - **Suite E2E, matriz de navegadores, CI completo y auditoría automatizada de enlaces** (etapa 5). No
   se construyen antes. Desde el 31 de octubre, `npm run check` corre en GitHub Actions en cada push
   a `main` y en cada pull request (`.github/workflows/ci.yml`); no reemplaza nada de lo anterior.

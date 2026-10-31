@@ -54,5 +54,6 @@ Build output:  dist
 Para previews, mantener `PUBLIC_SITE_ENV=preview`. En producción, definir
 `PUBLIC_SITE_ENV=production` y `PUBLIC_SITE_URL=https://orientame.cl`.
 
-Antes del lanzamiento público se debe completar la revisión clínica de cualquier protocolo de
-urgencia y la revisión jurídica indicada en el plan.
+Ningún protocolo de urgencia puede activarse sin revisión clínica; hoy el borrador está inactivo. La
+revisión jurídica indicada en el plan sigue pendiente y no bloquea la publicación de la v1 (decisión
+del 31 de octubre de 2026; ver [`pendientes.md`](pendientes.md) §4).

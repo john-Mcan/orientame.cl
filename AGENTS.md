@@ -398,5 +398,6 @@ La lista completa y actualizada, con qué falta y por qué, está en
   declara `color-scheme: light` y una sola paleta.
 - **v2 — Nivel B nacional**, condicionado a financiamiento que sostenga revisión humana y
   reverificación periódica.
-- **Previo al lanzamiento** — revisión legal (Ley 21.719 de datos personales, Ley 21.331 de derechos
-  en salud mental, licencias de instrumentos).
+- **Revisión legal** (Ley 21.719 de datos personales, Ley 21.331 de derechos en salud mental,
+  licencias de instrumentos). Pendiente; desde el 31 de octubre de 2026 no bloquea la v1 publicada.
+  `/legal/privacidad` y `/legal/terminos` siguen redactadas como borrador previo al lanzamiento.
